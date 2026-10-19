@@ -1,0 +1,35 @@
+#hi {
+    font-size: 5rem;
+    color: #1e40af;
+
+}
+
+main {
+    width: 100%;
+    display: flex;
+    flex-flow: row;
+    gap: 30px;
+
+}
+
+.coun {
+    width: 700px !important;
+
+}
+
+.wellcome {
+    width: 400px;
+}
+
+#to-home {
+
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    align-items: center;
+    margin-top: 50px;
+    gap: 20px;
+}
+#to-home a:hover{
+    color: #1e40af;
+}
