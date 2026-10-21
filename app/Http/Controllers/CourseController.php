@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCourseRequest;
 use App\Http\Requests\UpdateCourseRequest;
 use App\Models\Course;
+use App\Notifications\courseEnroll;
 use Illuminate\Http\Request; // تأكد أنها Illuminate\Http\Request وليست Support\Facades\Request
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -113,7 +114,7 @@ class CourseController extends Controller
 
             return redirect()->away($session->url);
         } catch (\Exception $e) {
-            return back()->with('error', 'Stripe Error: ' . $e->getMessage());
+            return back()->with('error', "Check Your Data,Internet Connection");
         }
     }
 
@@ -123,7 +124,7 @@ class CourseController extends Controller
     public function paymentSuccess(Request $request)
     {
         Auth::user()->courses()->syncWithoutDetaching($request->course_id);
-
+        Auth::user()->notify(new courseEnroll(Auth::user()->name,Course::find($request->course_id)->title,route("student.myCourses")));
 
         return redirect()->route('dashboard')->with('success', 'Payment successful! You are now enrolled.');
     }

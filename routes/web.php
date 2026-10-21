@@ -5,6 +5,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\dashboard\blogController as dashboard_BlogController;
 use App\Http\Controllers\dashboard\CoursesController as dashboard_CoursesController;
+use App\Http\Controllers\dashboard\coursesController;
 use App\Http\Controllers\dashboard\dashboardController;
 use App\Http\Controllers\dashboard\FAQController as Dashboard_FAQController;
 use App\Http\Controllers\dashboard\instructorsController as dashboard_InstructorController;
@@ -14,6 +15,7 @@ use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\mainController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TagController;
 use Illuminate\Support\Facades\Route;
 
@@ -27,7 +29,7 @@ Route::get('/', function () {
 Route::get('/dashboard', [dashboardController::class, "index"])->name("dashboard")->middleware(['auth', 'verified']);
 
 
-Route::prefix("dashboard")->name("dashboard.")->middleware("auth")->group(function () {
+Route::prefix("dashboard")->name("dashboard.")->middleware(["auth", "role:admin"])->group(function () {
     Route::get("courses", [dashboard_CoursesController::class, "index"])->name("courses.index");
     Route::get("courses/{value}/search", [dashboard_CoursesController::class, "search"])->name("courses.index.search");
     Route::get("courses/create", [dashboard_CoursesController::class, "create"])->name("courses.create");
@@ -38,7 +40,6 @@ Route::prefix("dashboard")->name("dashboard.")->middleware("auth")->group(functi
     Route::resource('users', usersController::class);
     Route::post("users/update_Role", [usersController::class, "update_role"])->name("users.update_role");
     Route::get("users/{user}/search", [usersController::class, "search"])->name("users.search");
-    Route::get("notify/{notify}/mark_as_readed", [usersController::class, "mark_as_readed"])->name("notify.mark_as_readed");
     Route::resource("instractors", dashboard_InstructorController::class);
     Route::resource("blogs", dashboard_BlogController::class);
     Route::get('/blogs/search/{query}', [dashboard_BlogController::class, 'search'])->name('blogs.search');
@@ -47,10 +48,23 @@ Route::prefix("dashboard")->name("dashboard.")->middleware("auth")->group(functi
     Route::get("FAQs/{FAQ}/search", [dashboard_FAQController::class, "search"])->name("FAQs.search");
 });
 
+Route::get("notify/{notify}/mark_as_readed", [mainController::class, "mark_as_readed"])->name("notify.mark_as_readed");
+Route::delete("notify/{notify}/delete_notification", [mainController::class, "delete_notification"])->name("notify.delete_notification");
 
-
-
-
+Route::prefix("student")->name("student.")->middleware(["auth", "role:student"])->group(function () {
+    // Route::get("overview/",[StudentController::class,"overview"])->name("overview");
+    Route::get("myCourses/", [StudentController::class, "myCourses"])->name("myCourses");
+    Route::get("myCourses/{course}/", [StudentController::class, "show"])->name("myCourses.show");
+    Route::get("reviews/", [StudentController::class, "reviews"])->name("reviews");
+    Route::get("notifications/", [StudentController::class, "notifications"])->name("notifications");
+});
+Route::middleware(["auth", "role:student"])->controller(CourseController::class)->group(function () {
+    Route::post("courses/{course}/enroll", 'course_enrollment')->name("courses.enroll");
+    Route::get('/courses/payment/success', [CourseController::class, 'paymentSuccess'])->name('course.payment.success');
+    Route::delete('/enrollments/{enrollment}/refund', [coursesController::class, 'cancelAndRefund'])
+        ->name('enrollments.refund');
+    Route::get('/courses/payment/cancel', fn() => redirect()->route('dashboard')->with('error', 'Payment cancelled.'))->name('course.payment.cancel');
+});
 
 Route::get("home/", [mainController::class, 'index'])->name("home");
 Route::get("about/", [mainController::class, 'about'])->name("about");
@@ -89,9 +103,6 @@ Route::middleware("auth")->group(function () {
         Route::get("courses/create", 'create')->name("courses.create");
         Route::post("courses/", 'store')->name("courses.store");
         Route::delete("courses/{course}", 'destroy')->name("courses.destroy");
-        Route::post("courses/{course}/enroll", 'course_enrollment')->name("courses.enroll");
-        Route::get('/courses/payment/success', [CourseController::class, 'paymentSuccess'])->name('course.payment.success');
-        Route::get('/courses/payment/cancel', fn() => redirect()->route('dashboard')->with('error', 'Payment cancelled.'))->name('course.payment.cancel');;
     });
     // Route::resource('blogs', BlogsController::class);
 });
@@ -101,5 +112,4 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
 require __DIR__ . '/auth.php';

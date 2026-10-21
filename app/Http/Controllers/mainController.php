@@ -8,6 +8,7 @@ use App\Models\Instructor;
 use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Support\Facades\Mail;
 
 class mainController extends Controller
@@ -51,5 +52,26 @@ class mainController extends Controller
         // env("MAIL_FROM_ADDRESS",$request->email);
         // Mail::to(env("MAIL_FROM_ADDRESS"))->repl
         return redirect(route("thank"));
+    }
+
+    public function mark_as_readed(DatabaseNotification $notify)
+    {
+        // dd(Auth::user()->notifications->find($id));
+        // dd(DatabaseNotification::all());
+        // dd($id)
+        // DatabaseNotification::find()
+        // dd($notify);
+        $notify->update([
+            "read_at" => now(),
+        ]);
+    }
+
+
+    public function delete_notification(DatabaseNotification $notify)
+    {
+        $notify->delete();
+        flash()->success("Deleted Sucssesfully");
+
+        return redirect()->back();
     }
 }

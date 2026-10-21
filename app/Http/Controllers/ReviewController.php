@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreReviewRequest;
 use App\Http\Requests\UpdateReviewRequest;
 use App\Models\Review;
+use App\Notifications\reviewdelete;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
@@ -62,7 +63,13 @@ class ReviewController extends Controller
      */
     public function update(UpdateReviewRequest $request, Review $review)
     {
-        //
+        // dd($request);
+        $review->update([
+            "content"=>$request->content,
+            "star_num"=>$request->star_num,
+        ]);
+        flash()->success("Updated Sucssesfully");
+        return redirect()->back();
     }
 
     /**
@@ -70,10 +77,12 @@ class ReviewController extends Controller
      */
     public function destroy(Review $review)
     {
+
         $review->delete();
         Gate::authorize("delete", $review);
 
         flash()->success("Deleted Sucssesfully");
+        $review->user->notify(new reviewdelete($review->user->name,$review->course->name));
         return redirect()->back();
     }
 }

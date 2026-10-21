@@ -35,10 +35,14 @@
                                 <i class="fa fa-star"></i>
                             @endfor
                             <h4><a href="{{ route('courses.show', $course->id) }}">{{ $course->title }}</a></h4>
-                            <p><span class="ti-book"> </span> {{ $course->total_lectures  . ' Lectures' ?? 'Not Avilable' }}
+                            <p><span class="ti-book"> </span> {{ $course->total_lectures . ' Lectures' ?? 'Not Avilable' }}
                             </p>
-                            <p><span class="ti-alarm-clock"> </span>{{ $course->duration  ?? 'Not Avilable' }}</p>
+                            <p><span class="ti-alarm-clock"> </span>{{ $course->duration ?? 'Not Avilable' }}</p>
+                            @if (auth()->user()->courses->contains($course->id))
+                            <div class="price" style="font-weight: bold;color: rgb(130, 0, 0);font-size: large;text-decoration: underline;">Enrolled</div>
+                            @else
                             <div class="price">Course Fee - {{ $course->price }} $</div>
+                            @endif
                         </div>
                     </div><!-- END COL -->
                 @empty

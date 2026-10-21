@@ -80,19 +80,26 @@
                                         allowfullscreen></iframe> --}}
                                     <p>{{ $course->overview ?? 'Not available' }}</p>
                                     <div class="details-buttons-area">
-                                        <form action="{{ route('courses.enroll', $course->id) }}" method="POST">
-                                            <button class="custom-button theme-one">Enroll Now <svg
-                                                    style="margin-bottom: 3px" xmlns="http://www.w3.org/2000/svg"
-                                                    width="23" height="23" viewBox="0 0 24 24" fill="none"
-                                                    stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
-                                                    stroke-linejoin="round">
-                                                    <circle cx="9" cy="7" r="3.5" />
-                                                    <path d="M2.5 20v-1.5a6.5 6.5 0 0 1 13 0V20z" />
-                                                    <circle cx="18" cy="17" r="4" />
-                                                    <path d="M18 15v4M16 17h4" />
-                                                </svg></button>
-                                        </form>
 
+                                        @if (!auth()->user()->courses->contains($course->id))
+                                            <form action="{{ route('courses.enroll', $course->id) }}" method="POST">
+
+                                                <button class="custom-button theme-one">Enroll Now <svg
+                                                        style="margin-bottom: 3px" xmlns="http://www.w3.org/2000/svg"
+                                                        width="23" height="23" viewBox="0 0 24 24" fill="none"
+                                                        stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+                                                        stroke-linejoin="round">
+                                                        <circle cx="9" cy="7" r="3.5" />
+                                                        <path d="M2.5 20v-1.5a6.5 6.5 0 0 1 13 0V20z" />
+                                                        <circle cx="18" cy="17" r="4" />
+                                                        <path d="M18 15v4M16 17h4" />
+                                                    </svg></button>
+                                            </form>
+                                        @else
+                                            <div
+                                                style="font-weight: bold;color: rgb(130, 0, 0);font-size: large;text-decoration: underline;">
+                                                Already Enrolled</div>
+                                        @endif
                                         <ul class="social-icons">
                                             <li>
                                                 <a href="#0" class="active"><i class="fa fa-facebook"></i></a>
@@ -111,7 +118,8 @@
                                 <div class="overview">
                                     <p>{{ $course->curriculum ?? 'Not available' }} </p>
                                     <div class="details-buttons-area">
-                                        @if (auth()->courses->contains($course->id))
+                                        {{-- @dd(!auth()->user()->courses->contains($course->id)) --}}
+                                        @if (!auth()->user()->courses->contains($course->id))
                                             <form action="{{ route('courses.enroll', $course->id) }}" method="POST">
 
                                                 <button class="custom-button theme-one">Enroll Now <svg
@@ -126,7 +134,8 @@
                                                     </svg></button>
                                             </form>
                                         @else
-                                            <div>Already Enrolled</div>
+                                            <div style="font-weight: bold;color: rgb(130, 0, 0);font-size: large;">Already
+                                                Enrolled</div>
                                         @endif
                                         <ul class="social-icons">
                                             <li>
@@ -277,11 +286,17 @@
                         </ul>
                     </div>
                     <div class="event_info_price">
-                        <h4>Price - {{ $course->price }}</h4>
+                        @if (!auth()->user()->courses->contains($course->id))
+                            @if (auth()->user()->hasRole('student'))
+                                <h4>Price - {{ $course->price }}</h4>
+                            @endif
+                        @else
+                            <div
+                                style="font-weight: bold;color: rgb(130, 0, 0);font-size: large;text-decoration: underline;text-align: center">
+                                Already Enrolled</div>
+                        @endif
                     </div>
-                    <div class="event_info_register">
-                        <a class="btn_one" href="#">Register Today</a>
-                    </div>
+
                     <div class="related_course">
                         <h3>Related Course</h3>
                         @forelse ($related_courses as $related_course)
@@ -299,7 +314,15 @@
                                         style="text-overflow: ellipsis;overflow: hidden;text-wrap:nowrap; "
                                         href="{{ route('courses.show', $related_course->id) }}">{{ $related_course->title }}</a>
                                 </h4>
-                                <span>{{ $related_course->price }} $</span>
+                                @if (!auth()->user()->courses->contains($course->id))
+                                    @if (auth()->user()->hasRole('student'))
+                                        <span>{{ $related_course->price }} $</span>
+                                    @endif
+                                @else
+                                    <div
+                                        style="font-weight: bold;color: rgb(130, 0, 0);font-size: large;text-decoration: underline;text-align: center">
+                                        Already Enrolled</div>
+                                @endif
                             </div><!--- END SINGLE RELATED COURSE -->
                         @empty
                             <div>No Related Course</div>
@@ -307,16 +330,16 @@
                     </div><!--- END RELATED COURSE -->
                     <div class="sidebar-post">
                         <div class="sidebar_title">
-                            <h4>CATEGORIES</h4>
+                            <h4>Tags</h4>
                         </div>
                         <div class="single_category">
                             <ul>
                                 @forelse ($course->tags as $tag)
-                                    <li><a href="#">{{ $tag->name }} <sup>{{ $tag->courses->count() }}</sup></a>
+                                    <li><a href="{{ route("tags.show",$tag->id) }}">{{ $tag->name }} <sup>{{ $tag->courses->count() }}</sup></a>
                                     </li>
 
                                 @empty
-                                    <div>No CATEGORIES AVILABLE</div>
+                                    <div>No Tags AVILABLE</div>
                                 @endforelse
 
                             </ul>

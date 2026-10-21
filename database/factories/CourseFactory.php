@@ -37,9 +37,9 @@ class CourseFactory extends Factory
                 "instructor_id"=>fake()->randomElement(Instructor::all())->id,
             'star_num' => fake()->numberBetween(1, 5),
 
-            'outer_image' => 'assets/img/course/' . fake()->numberBetween(1, 6) . '.png',
+            'outer_image' => 'assets/img/course/' . fake()->numberBetween(3, 6) . '.png',
 
-            'inner_image' => 'assets/img/course/' . fake()->numberBetween(1, 6) . '.png',
+            'inner_image' => 'assets/img/course/' . fake()->numberBetween(3, 6) . '.png',
 
             'duration' => $x ." ". $x2,
 
