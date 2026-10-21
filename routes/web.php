@@ -45,10 +45,6 @@ Route::prefix("dashboard")->name("dashboard.")->middleware("auth")->group(functi
 
     Route::resource("FAQs", dashboard_FAQController::class);
     Route::get("FAQs/{FAQ}/search", [dashboard_FAQController::class, "search"])->name("FAQs.search");
-
-
-
-
 });
 
 
@@ -93,8 +89,9 @@ Route::middleware("auth")->group(function () {
         Route::get("courses/create", 'create')->name("courses.create");
         Route::post("courses/", 'store')->name("courses.store");
         Route::delete("courses/{course}", 'destroy')->name("courses.destroy");
-        Route::get("courses/{course}/enroll", 'course_enrollment')->name("courses.enroll");
-        Route::post("courses/{course}/enroll", 'course_enrollment_data');
+        Route::post("courses/{course}/enroll", 'course_enrollment')->name("courses.enroll");
+        Route::get('/courses/payment/success', [CourseController::class, 'paymentSuccess'])->name('course.payment.success');
+        Route::get('/courses/payment/cancel', fn() => redirect()->route('dashboard')->with('error', 'Payment cancelled.'))->name('course.payment.cancel');;
     });
     // Route::resource('blogs', BlogsController::class);
 });

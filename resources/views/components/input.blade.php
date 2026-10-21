@@ -15,6 +15,7 @@ border:1px solid red; margin-bottom: 0%;
 @error($name)
     <p style="color: red; font-size: smaller; margin: 0%; padding: 0%;">{{ $message }}</p>
 @enderror
+
 @if (isset($type) && $type == 'file' && isset($value))
     <div class="mt-2 flex items-center gap-3 p-2 bg-slate-50 rounded-2xl border border-slate-100 w-fit">
         <img src="{{ asset($value) }}" alt="Current Image"

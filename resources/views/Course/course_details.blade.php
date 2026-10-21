@@ -78,11 +78,21 @@
                                         frameborder="0"
                                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                         allowfullscreen></iframe> --}}
-                                    <p>{{ $course->overview ??"Not available" }}</p>
+                                    <p>{{ $course->overview ?? 'Not available' }}</p>
                                     <div class="details-buttons-area">
-                                        <a href="#0" class="custom-button theme-one">Enroll Now <i
-                                                class="fa fa-angle-right"></i></a>
-                                        <a href="#0" class="custom-button bg-white">get membership</a>
+                                        <form action="{{ route('courses.enroll', $course->id) }}" method="POST">
+                                            <button class="custom-button theme-one">Enroll Now <svg
+                                                    style="margin-bottom: 3px" xmlns="http://www.w3.org/2000/svg"
+                                                    width="23" height="23" viewBox="0 0 24 24" fill="none"
+                                                    stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+                                                    stroke-linejoin="round">
+                                                    <circle cx="9" cy="7" r="3.5" />
+                                                    <path d="M2.5 20v-1.5a6.5 6.5 0 0 1 13 0V20z" />
+                                                    <circle cx="18" cy="17" r="4" />
+                                                    <path d="M18 15v4M16 17h4" />
+                                                </svg></button>
+                                        </form>
+
                                         <ul class="social-icons">
                                             <li>
                                                 <a href="#0" class="active"><i class="fa fa-facebook"></i></a>
@@ -101,9 +111,23 @@
                                 <div class="overview">
                                     <p>{{ $course->curriculum ?? 'Not available' }} </p>
                                     <div class="details-buttons-area">
-                                        <a href="#0" class="custom-button theme-one">Enroll Now <i
-                                                class="fa fa-angle-right"></i></a>
-                                        <a href="#0" class="custom-button bg-white">get membership</a>
+                                        @if (auth()->courses->contains($course->id))
+                                            <form action="{{ route('courses.enroll', $course->id) }}" method="POST">
+
+                                                <button class="custom-button theme-one">Enroll Now <svg
+                                                        style="margin-bottom: 3px" xmlns="http://www.w3.org/2000/svg"
+                                                        width="23" height="23" viewBox="0 0 24 24" fill="none"
+                                                        stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+                                                        stroke-linejoin="round">
+                                                        <circle cx="9" cy="7" r="3.5" />
+                                                        <path d="M2.5 20v-1.5a6.5 6.5 0 0 1 13 0V20z" />
+                                                        <circle cx="18" cy="17" r="4" />
+                                                        <path d="M18 15v4M16 17h4" />
+                                                    </svg></button>
+                                            </form>
+                                        @else
+                                            <div>Already Enrolled</div>
+                                        @endif
                                         <ul class="social-icons">
                                             <li>
                                                 <a href="#0"><i class="fa fa-facebook"></i></a>
@@ -119,21 +143,22 @@
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="instructor">
-                                @if (isset($instructor))
+                                @if (isset($course->instructor))
                                     <div class="overview text-center">
                                         <div class="instructor-item">
                                             <div id="ins-image-Counter" class="instructor-thumb">
                                                 <a href="#0"><img id="ins-image"
-                                                        src="{{ asset($instructor->personal_image) }}" alt="instructor"></a>
+                                                        src="{{ asset($course->instructor->personal_image) }}"
+                                                        alt="instructor"></a>
                                             </div>
                                             <div class="instructor-content">
                                                 <h6 class="title"><a
-                                                        href="{{ route('instractors.show', $instructor->id) }}">{{ $instructor->name }}</a>
+                                                        href="{{ route('instractors.show', $course->instructor->id) }}">{{ $course->instructor->name }}</a>
                                                 </h6>
-                                                <span class="details">{{ $instructor->major }}</span>
+                                                <span class="details">{{ $course->instructor->major }}</span>
                                             </div>
                                         </div>
-                                        <p>{{ $instructor->description }}</p>
+                                        <p>{{ $course->instructor->description }}</p>
                                         <div class="details-buttons-area">
                                             <ul class="social-icons justify-content-center w-100">
                                                 <li>
@@ -150,7 +175,9 @@
                                     </div>
                                     <hr>
                                 @else
-                                    <div>No instructor Yet !</div>
+                                    <div style="font-size: 25px;text-align: center;margin: 40px 0px 20px 0px ">No
+                                        instructor
+                                        Yet !</div>
                                 @endif
 
 
@@ -161,26 +188,43 @@
                                         <h6 class="review-title">Reviews ({{ $course->reviews->count() }})</h6>
                                         <ul class="review-contents">
                                             @forelse ($course->reviews as $review)
-                                                <li>
+                                                <li class="review-item-{{ $review->id }}" style="position: relative;">
                                                     <div class="thumb">
                                                         <img src="{{ asset($review->user->image) }}" alt="course">
                                                     </div>
-                                                    <div class="cont">
-                                                        <h6 class="subtitle">{{ $review->user->name }}</h6>
+                                                    <div class="cont" style="width: 100%;">
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <h6 class="subtitle">{{ $review->user->name }}</h6>
+
+                                                            <!-- زر الحذف -->
+
+                                                            @can('delete', $review)
+                                                                <form action="{{ route('review.destroy', $review->id) }}"
+                                                                    method="POST">
+                                                                    @method('DELETE')
+                                                                    <button type="submit"
+                                                                        class="btn btn-sm btn-outline-danger"
+                                                                        style="border: none; background: transparent; color: #dc3545;"
+                                                                        title="Delete Review">
+                                                                        <i class="fa fa-trash"></i> Delete
+                                                                    </button>
+                                                                </form>
+                                                            @endcan
+                                                        </div>
+
                                                         <div class="ratings cl-theme">
                                                             @for ($i = 0; $i <= $review->star_num; $i++)
                                                                 <span><i class="fa fa-star"></i></span>
                                                             @endfor
                                                         </div>
-                                                        <p>{{ $review->content }}
-                                                        </p>
+                                                        <p>{{ $review->content }}</p>
                                                     </div>
                                                 </li>
-                                                {{-- <div>{{ $course->reviews->links() }}</div> --}}
+                                                <hr>
+                                                <br>
                                             @empty
                                                 <div>No Review Yet</div>
                                             @endforelse
-
                                         </ul>
                                     </div>
                                     <div class="review-form">

@@ -344,7 +344,7 @@
         }
 
         // استدعاء مسار البحث الخاص بك
-        fetch(`courses/${query}/search`)
+        fetch("{{ route('dashboard.courses.index.search',':value') }}".replace(":value",query))
             .then((result) => result.json())
             .then((data) => {
                 ul.innerHTML = "";

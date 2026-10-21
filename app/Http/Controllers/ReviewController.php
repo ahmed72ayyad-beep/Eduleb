@@ -6,6 +6,7 @@ use App\Http\Requests\StoreReviewRequest;
 use App\Http\Requests\UpdateReviewRequest;
 use App\Models\Review;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class ReviewController extends Controller
 {
@@ -28,7 +29,7 @@ class ReviewController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreReviewRequest $request,string $course_id)
+    public function store(StoreReviewRequest $request, string $course_id)
     {
         // dd($request);
         Review::create([
@@ -37,7 +38,7 @@ class ReviewController extends Controller
             "content" => $request->content,
             "star_num" => $request->star_num
         ]);
-        return redirect(route("courses.show",$course_id));
+        return redirect(route("courses.show", $course_id));
     }
 
     /**
@@ -69,6 +70,10 @@ class ReviewController extends Controller
      */
     public function destroy(Review $review)
     {
-        //
+        $review->delete();
+        Gate::authorize("delete", $review);
+
+        flash()->success("Deleted Sucssesfully");
+        return redirect()->back();
     }
 }

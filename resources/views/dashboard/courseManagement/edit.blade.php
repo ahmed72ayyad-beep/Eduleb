@@ -188,9 +188,11 @@
                         <!-- Images Upload -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
                             <div class="space-y-2">
-                                <x-input type="file" name="outer_image" label="Outer Thumbnail Image"
+                                <label for="sss"
+                                    class="block text-xs font-bold uppercase text-gray-600 tracking-wider">Outer
+                                    Thumbnail Image</label>
+                                <input id="sss" type="file" name="outer_image"
                                     value="{{ $course->outer_image }}"
-                                    labelclass="block text-xs font-bold uppercase text-gray-600 tracking-wider"
                                     class="block w-full text-xs text-gray-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100" />
                                 @if ($course->outer_image)
                                     <div
@@ -208,9 +210,11 @@
                             </div>
 
                             <div class="space-y-2">
-                                <x-input type="file" name="inner_image" label="Inner Cover Image"
+                                <label for="ss"
+                                    class="block text-xs font-bold uppercase text-gray-600 tracking-wider">Inner Cover
+                                    Image</label>
+                                <input id="ss" type="file" name="inner_image"
                                     value="{{ $course->inner_image }}"
-                                    labelclass="block text-xs font-bold uppercase text-gray-600 tracking-wider"
                                     class="block w-full text-xs text-gray-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100" />
                                 @if ($course->inner_image)
                                     <div

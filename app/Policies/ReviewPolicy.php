@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\Review;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
+use Illuminate\Support\Facades\Gate;
 
 class ReviewPolicy
 {
@@ -45,7 +46,26 @@ class ReviewPolicy
      */
     public function delete(User $user, Review $review): bool
     {
+        if ($user->id == $review->user_id) {
+            return true;
+        }
+        // Any admin :
+        if ($user->hasRole("admin")) {
+            return true;
+            # code...
+        }
+        // Course instructor :
+        if ($user->hasRole("instructor")) {
+            if ($user->id == $review->course->instructor->user_id) {
+                return true;
+            }
+            # code...
+        }
+
+
+
         return false;
+
     }
 
     /**

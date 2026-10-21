@@ -78,7 +78,8 @@
                             @forelse (auth()->user()->unreadNotifications as $notify)
                                 <div class="flex justify-between items-center ">
                                     <div href="#" class="flex flex-col p-4 ">
-                                        <p class="text-sm font-bold text-gray-800 flex items-center gap-x-1"><span>{{ $notify->data['title'] }}</span><svg
+                                        <p class="text-sm font-bold text-gray-800 flex items-center gap-x-1">
+                                            <span>{{ $notify->data['title'] }}</span><svg
                                                 xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                                 viewBox="0 0 24 24" fill="none">
                                                 <path fill-rule="evenodd" clip-rule="evenodd"
@@ -173,6 +174,9 @@
                     <x-slot name="content">
                         <x-dropdown-link :href="route('profile.edit')">
                             {{ __('Profile') }}
+                        </x-dropdown-link>
+                        <x-dropdown-link :href="route('home')">
+                            {{ __('Go to The Website') }}
                         </x-dropdown-link>
 
                         <!-- Authentication -->

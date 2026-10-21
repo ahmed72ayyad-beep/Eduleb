@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Course;
 use App\Http\Requests\StoreCourseRequest;
 use App\Http\Requests\UpdateCourseRequest;
-use Symfony\Component\HttpKernel\Debug\VirtualRequestStack;
+use App\Models\Course;
+use Illuminate\Http\Request; // تأكد أنها Illuminate\Http\Request وليست Support\Facades\Request
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Stripe\Stripe;
+use Stripe\Checkout\Session; // مهم جداً لاستخدام جلسات سترايب
 
 class CourseController extends Controller
 {
@@ -29,7 +33,6 @@ class CourseController extends Controller
                 ]);
             }
         }
-        // dd($courses);
         return view("Course.courses", compact('courses'));
     }
 
@@ -55,11 +58,8 @@ class CourseController extends Controller
     public function show(Course $course)
     {
         $course->load(["reviews.user", "tags.courses", "instructor", "students"]);
-        // dd($course);
 
-        // $course->reviews->simplePaginate(5);
-
-        $related_courses = Course::where("type", "like", $course->type)->where("id","!=",$course->id)->get();
+        $related_courses = Course::where("type", "like", $course->type)->where("id", "!=", $course->id)->get();
         return view("Course.course_details", compact("course", "related_courses"));
     }
 
@@ -87,15 +87,44 @@ class CourseController extends Controller
         //
     }
 
-
-
-
-    public function course_enrollment(Course $course)
+    /**
+     * Handle course enrollment and redirect to Stripe Checkout.
+     */
+    public function course_enrollment(Request $request, Course $course)
     {
-        // return view("re")
+        Stripe::setApiKey(env('STRIPE_SECRET'));
+
+        try {
+            $session = Session::create([
+                'line_items' => [[
+                    'price_data' => [
+                        'currency' => 'usd',
+                        'product_data' => [
+                            'name' => $course->title,
+                        ],
+                        'unit_amount' => $course->price * 100, // السعر بالسنت
+                    ],
+                    'quantity' => 1,
+                ]],
+                'mode' => 'payment',
+                'success_url' => route('course.payment.success', ['course_id' => $course->id]),
+                'cancel_url' => route('course.payment.cancel'),
+            ]);
+
+            return redirect()->away($session->url);
+        } catch (\Exception $e) {
+            return back()->with('error', 'Stripe Error: ' . $e->getMessage());
+        }
     }
-    public function course_enrollment_data(Course $course)
+
+    /**
+     * Handle successful payment and store enrollment in course_user.
+     */
+    public function paymentSuccess(Request $request)
     {
-        // return view("re")
+        Auth::user()->courses()->syncWithoutDetaching($request->course_id);
+
+
+        return redirect()->route('dashboard')->with('success', 'Payment successful! You are now enrolled.');
     }
 }
