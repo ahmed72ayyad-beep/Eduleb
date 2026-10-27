@@ -9,6 +9,7 @@ use App\Models\Blog;
 use App\Models\Comment;
 use App\Models\Tag;
 use App\Models\User;
+use App\Notifications\blogdelete;
 use App\Notifications\UpdatePost;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -113,6 +114,7 @@ class blogController extends Controller
     {
         File::delete($blog->image);
         $blog->delete();
+        $blog->author->notify(new blogdelete($blog->author->name,$blog->title));
         flash()->success("Deleted Sucssesfully");
         return redirect()->back();
     }

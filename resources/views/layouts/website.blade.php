@@ -21,6 +21,7 @@
 
     <!-- Latest Bootstrap min CSS -->
     <link rel="stylesheet" href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}">
+
     <!-- Google Font -->
     {{-- <link --}}
         {{-- href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" --}}
@@ -48,6 +49,7 @@
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
     @yield('CSS')
+    
 </head>
 
 <body data-spy="scroll" data-offset="80">
@@ -79,7 +81,7 @@
 
                             </li>
 
-                            <li><a href="{{ route('instractors.index') }}">Instructor</a></li>
+                            <li><a href="{{ route('instructors.index') }}">Instructor</a></li>
 
                             <li><a href="{{ route('FAQ.index') }}">Faq</a></li>
                             <li><a href="{{ route('pricing') }}">Pricing Plan</a></li>
@@ -155,7 +157,7 @@
                     <li><a href="{{ route('home') }}">Home </a></li>
                     <li><a href="{{ route('about') }}">About</a></li>
                     <li><a href="{{ route('courses.index') }}">Course</a></li>
-                    <li><a href="{{ route('instractors.index') }}">Instructor</a></li>
+                    <li><a href="{{ route('instructors.index') }}">Instructor</a></li>
                     <li><a href="{{ route('pricing') }}">Pricing Plan</a></li>
                     <li><a href="{{ route('FAQ.index') }}">Faq Page</a></li>
                     <li><a href="{{ route('blogs.index') }}">Blog</a></li>

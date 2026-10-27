@@ -28,6 +28,6 @@ class Course extends Model
     }
     public function students()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class)->withPivot(['id', 'enrollment_id', 'enrolled_at', 'notes','state'])->withTimestamps();
     }
 }

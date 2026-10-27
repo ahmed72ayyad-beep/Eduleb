@@ -168,7 +168,7 @@
                     <h2 class="text-xl font-bold text-slate-900">No reviews yet</h2>
                     <p class="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-600">After taking a course, share what
                         helped you and what future learners should know.</p>
-                    <a href="{{ url('/student/courses') }}"
+                    <a href="{{route("student.myCourses")}}"
                         class="mt-5 inline-flex rounded-lg bg-indigo-700 px-4 py-2.5 text-sm font-bold text-white hover:bg-indigo-800">Go
                         to my courses</a>
                 </div>

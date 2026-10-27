@@ -12,11 +12,12 @@
                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, consectetur adipiscing elit tempor ut
                             labore</p>
                     </div>
+
                     <div class="home_sb">
-                        <form action="#" class="banner_subs">
-                            <input type="text" class="form-control home_si" placeholder="Search your course here"
-                                required="required">
-                            <button type="button" class="subscribe__btn">Search <i
+                        <form action="{{ route('home.search') }}" method="POST" class="banner_subs">
+                            <x-input name="content" type="text" class="form-control home_si"
+                                placeholder="Search your course here" required="required" />
+                            <button type="submit" class="subscribe__btn">Search <i
                                     class="fa fa-paper-plane-o"></i></button>
                         </form>
                     </div>
@@ -57,14 +58,14 @@
                 <div class="col-lg-3 col-sm-6 col-xs-12">
                     <div class="single-counter">
                         <span class="ti-id-badge sc_three"></span>
-                        <h2 class="counter-num">684</h2>
-                        <p>Certified Students</p>
+                        <h2 class="counter-num">{{ $instructors_num }}</h2>
+                        <p>Verified Instructor</p>
                     </div>
                 </div><!-- END COL -->
                 <div class="col-lg-3 col-sm-6 col-xs-12">
                     <div class="single-counter">
                         <span class="ti-user sc_four"></span>
-                        <h2 class="counter-num">{{ $users_num }}</h2>
+                        <h2 class="counter-num">{{ $student_num }}</h2>
                         <p>Enrolled Students</p>
                     </div>
                 </div><!-- END COL -->
@@ -213,7 +214,8 @@
                                 <i class="fa fa-star"></i>
                             @endfor
                             <h4><a href="{{ route('courses.show', $course->id) }}">{{ $course->title }}</a></h4>
-                            <p><span class="ti-book"> </span> {{ $course->total_lectures . ' Lectures' ?? 'Not Avilable' }}
+                            <p><span class="ti-book"> </span>
+                                {{ $course->total_lectures . ' Lectures' ?? 'Not Avilable' }}
                             </p>
                             <p><span class="ti-alarm-clock"> </span>{{ $course->duration ?? 'Not Avilable' }}</p>
                             <div class="price">Course Fee - {{ $course->price }} $</div>
@@ -287,7 +289,7 @@
                         data-wow-offset="0">
                         <div class="our-team">
                             <div class="team-content">
-                                <a href="{{ route('instractors.show', $instructor->id) }}"><img
+                                <a href="{{ route('instructors.show', $instructor->id) }}"><img
                                         src="{{ asset($instructor->personal_image) }}" alt=""></a>
                                 <ul class="social-links">
                                     <li><a href="#"><i class="fa-solid fa-x"></i></a></li>
@@ -306,7 +308,7 @@
                         </div>
                     </div><!--- END COL -->
                 @empty
-                   <div style="font-size:30px" class="col-12 font-semibold text-center p-12">No Instructors Yet!</div>
+                    <div style="font-size:30px" class="col-12 font-semibold text-center p-12">No Instructors Yet!</div>
                 @endforelse
             </div><!--- END ROW -->
         </div><!--- END CONTAINER -->
@@ -471,39 +473,27 @@
                     options and gain new skills! Our school is know.</p>
             </div>
             <div class="row">
-                <div class="col-lg-4 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s"
-                    data-wow-offset="0">
-                    <div class="single_blog">
-                        <img src="{{ asset('assets/img/blog/1.jpg') }}" class="img-fluid" alt="image" />
-                        <div class="content_box">
-                            <span>May 10, 2024 | <a href="blog.html">Education</a></span>
-                            <h2><a href="blog.html">Professional Mobile Painting and Sculpting</a></h2>
-                            <a class="btn_one" href="blog.html">Read More <i class="ti-arrow-top-right"></i></a>
+                @forelse ($blogs as $blog)
+                    <div class="col-lg-4 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s"
+                        data-wow-offset="0">
+                        <div class="single_blog">
+                            <img src="{{ asset($blog->image) }}" class="img-fluid" alt="image" />
+                            <div class="content_box">
+                                @if ($blog->tags->count() > 0)
+                                    <span>{{ $blog->created_at }} | <a
+                                            href="{{ route('tags.show', $blog->tags->first()->id) }}">{{ $blog->tags->first()->name }}</a></span>
+                                @else
+                                    <span>{{ $blog->created_at }} | <span>Eduction</span></span>
+                                @endif
+                                <h2><a href="blog.html">Professional Mobile Painting and Sculpting</a></h2>
+                                <a class="btn_one" href="blog.html">Read More <i class="ti-arrow-top-right"></i></a>
+                            </div>
                         </div>
-                    </div>
-                </div><!-- END COL-->
-                <div class="col-lg-4 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s"
-                    data-wow-offset="0">
-                    <div class="single_blog">
-                        <img src="{{ asset('assets/img/blog/2.jpg') }}" class="img-fluid" alt="image" />
-                        <div class="content_box">
-                            <span>May 16, 2024 | <a href="blog.html">Education</a></span>
-                            <h2><a href="blog.html">Professional Ceramic Moulding for Beginner</a></h2>
-                            <a class="btn_one" href="blog.html">Read More <i class="ti-arrow-top-right"></i></a>
-                        </div>
-                    </div>
-                </div><!-- END COL-->
-                <div class="col-lg-4 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.3s"
-                    data-wow-offset="0">
-                    <div class="single_blog">
-                        <img src="{{ asset('assets/img/blog/3.jpg') }}" class="img-fluid" alt="image" />
-                        <div class="content_box">
-                            <span>May 18, 2024 | <a href="blog.html">Programing</a></span>
-                            <h2><a href="blog.html">Education Is About Create Leaders For Tomorrow </a></h2>
-                            <a class="btn_one" href="blog.html">Read More <i class="ti-arrow-top-right"></i></a>
-                        </div>
-                    </div>
-                </div><!-- END COL-->
+                    </div><!-- END COL-->
+
+                @empty
+                @endforelse
+
             </div><!-- / END ROW -->
         </div><!-- END CONTAINER  -->
     </section>

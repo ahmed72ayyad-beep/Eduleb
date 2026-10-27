@@ -1,5 +1,40 @@
 @extends('layouts.website')
 @section('title', 'Eduleb - Blog ')
+@section('CSS')
+    <style>
+        .blogs-grid>[class*="col-"] {
+            display: flex;
+        }
+
+        .blogs-grid .single_blog {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .blog-image-frame {
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+        }
+
+        .blog-image-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .blogs-grid .content_box {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+        }
+
+        .blogs-grid .blog-read-more {
+            align-self: flex-start;
+            margin-top: auto;
+        }
+    </style>
+@endsection
 @section('content')
     {{-- @dd($blogs) --}}
     <!-- START SECTION TOP -->
@@ -21,13 +56,16 @@
     <!-- START BLOG -->
     <section id="blog" class="blog_area section-padding">
         <div class="container">
-            <div class="row">
+            <div class="row blogs-grid">
                 @forelse ($blogs as $blog)
                     {{-- @dd($blog->tags) --}}
                     <div class="col-lg-4 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s"
                         data-wow-offset="0">
                         <div class="single_blog">
-                            <img src="{{ asset($blog->image) }}" class="img-fluid" alt="image" />
+                            <div class="blog-image-frame">
+                                <img src="{{ filled($blog->image) ? asset($blog->image) : asset('assets/img/blog/1.jpg') }}"
+                                    class="img-fluid" alt="{{ $blog->title }}" />
+                            </div>
                             <div class="content_box">
                                 <span>{{ $blog->created_at->diffForHumans() }} |
                                     @if ($blog->tags->first() != null)
@@ -40,7 +78,7 @@
 
                                 </span>
                                 <h2><a href="{{ route('blogs.show', $blog->id) }}">{{ $blog->title }}</a></h2>
-                                <a class="btn_one" href="{{ route('blogs.show', $blog->id) }}">Read More <i
+                                <a class="btn_one blog-read-more" href="{{ route('blogs.show', $blog->id) }}">Read More <i
                                         class="ti-arrow-top-right"></i></a>
                             </div>
                         </div>

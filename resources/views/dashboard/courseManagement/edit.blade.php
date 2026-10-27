@@ -178,7 +178,7 @@
 
                         <!-- curriculum -->
                         <div class="space-y-2">
-                            <x-textarea name="curriculum" rows="4" label="Curriculum Outline"
+                            <x-textarea id="curriculum" name="curriculum" rows="4" label="Curriculum Outline"
                                 labelclass="block text-xs font-bold uppercase text-gray-600 tracking-wider"
                                 placeholder="Module 1: Introduction, Module 2: Setup..."
                                 class="w-full px-4 py-3 rounded-2xl border border-gray-200 focus:border-indigo-500 focus:ring-indigo-500/20 text-sm"
@@ -233,7 +233,28 @@
                         </div>
                     </div>
                 </div>
+                <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100 space-y-6">
+                    <div class="border-b border-gray-100 pb-4">
+                        <h3 class="text-lg font-bold text-gray-800">4. Tags</h3>
+                        <p class="text-xs text-gray-400">Trinding ,Searching engines and more</p>
+                    </div>
+                    <h3 class="block text-xs font-bold uppercase text-gray-600 tracking-wider m-0">Tags</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-4 md:col-span-2 gap-6">
+                        {{-- <div class="flex flex-wrap justify-evenly items-center w-full"> --}}
+                        @forelse ($tags as $tag)
+                            <div class="basis-3 flex flex-row justify-between">
+                                <label for="{{ $tag->id }}">{{ $tag->name }}</label>
+                                <input id="{{ $tag->id }}" type="checkbox" name="tags[]"
+                                    value="{{ $tag->id }}" @checked($course->tags->contains('id', $tag->id)) />
+                            </div>
 
+                        @empty
+                            <div>No tags</div>
+                        @endforelse
+
+                        {{-- </div> --}}
+                    </div>
+                </div>
                 <!-- Submit Button Bar -->
                 <div class="flex items-center justify-end gap-4">
                     <a onclick="confirm()" href="{{ route('dashboard.courses.index') }}"
@@ -333,4 +354,56 @@
                 console.error("Search error:", err);
             });
     };
+</script>
+<script src="{{ asset('tinymce/tinymce.min.js') }}"></script>
+<script>
+    tinymce.init({
+        selector: '#curriculum',
+
+        license_key: 'gpl',
+
+        height: 400,
+        menubar: 'file edit view insert format tools table help',
+
+        plugins: [
+            'advlist',
+            'autolink',
+            'lists',
+            'link',
+            // 'image',
+            'charmap',
+            'preview',
+            'anchor',
+            'searchreplace',
+            'visualblocks',
+            'code',
+            'fullscreen',
+            'insertdatetime',
+            // 'media',
+            'table',
+            'wordcount'
+        ],
+
+        toolbar: 'undo redo | blocks | ' +
+            'bold italic underline strikethrough | ' +
+            'forecolor backcolor | ' +
+            'alignleft aligncenter alignright alignjustify | ' +
+            'bullist numlist outdent indent | ' +
+            'link image media table | ' +
+            'blockquote charmap | ' +
+            'removeformat code fullscreen',
+
+        // image_title: true,
+
+        automatic_uploads: true,
+
+        // file_picker_types: 'image media',
+
+        content_style: `
+            body {
+                font-family: Arial, sans-serif;
+                font-size: 16px;
+            }
+        `
+    });
 </script>

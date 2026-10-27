@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ContactRequest;
+use App\Models\Blog;
 use App\Models\Course;
 use App\Models\Instructor;
 use App\Models\Tag;
@@ -15,15 +16,18 @@ class mainController extends Controller
 {
     public function index()
     {
-        $users_num = User::count();
+        $student_num = User::Role("student")->count();
+        $blogs = Blog::with("tags")->latest()->limit(3)->get();
         $courses_num = Course::count();
         $courses_sample = Course::limit(6)->get();
         $instructors = Instructor::limit(4)->get();
+        $instructors_num = Instructor::all()->count();
+
         $tags = Tag::with("courses")->get();
         // dd($courses_sample);
         // dd($users_num);
 
-        return view("index", compact("users_num", "courses_num", "courses_sample", "tags", "instructors"));
+        return view("index", compact("student_num", "courses_num", "courses_sample", "tags", "instructors", "instructors_num","blogs"));
     }
 
     public function about()
@@ -66,7 +70,6 @@ class mainController extends Controller
         ]);
     }
 
-
     public function delete_notification(DatabaseNotification $notify)
     {
         $notify->delete();
@@ -74,4 +77,31 @@ class mainController extends Controller
 
         return redirect()->back();
     }
+
+    public function search(Request $request)
+    {
+        $value = $request->content;
+        $course = Course::where("title", $request->content)->orWhere("sub_title", $request->content)->first();
+        $instructor = Instructor::with("courses")->where("name", $request->content)->first();
+        // dd($instractor_courses);
+        // dd($course);
+        if ($course != null) {
+            return redirect(route("courses.show", $course->id));
+        } elseif ($instructor != null) {
+            $instructor_courses = $instructor->courses;
+            return view("search_result", compact("instructor", "instructor_courses"));
+        } else {
+            $instructor_courses = Course::where("title", "like", "%" . $request->content . "%")->orWhere("sub_title", "like", "%" . $request->content . "%")->get();
+            return view("search_result", compact("value", "instructor_courses"));
+        }
+    }
+
+
+
+
+
+
+
+
+    public function search_result() {}
 }

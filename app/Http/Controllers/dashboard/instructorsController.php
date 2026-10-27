@@ -29,32 +29,7 @@ class instructorsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreInstructorRequest $request)
-    {
-
-        // dd($request);
-        // 1 - Store the image :
-        $path = $request->file("personal_image")->store("uploads/courses");
-
-
-        // 2 - create the instructor record  :
-        Instructor::create([
-            "major" => $request->major,
-            "personal_image" => $path,
-            "job_title" => $request->job_title,
-            "portfolio_link" => $request->portfolio_link,
-            "description" => $request->description,
-            "phone" => $request->phone,
-            "user_id" => Auth::id(),
-            "name" => Auth::user()->name,
-            "email" => Auth::user()->email,
-        ]);
-        Auth::user()->syncRoles(["instructor"]);
-
-        // 3- redirect to profile :
-        return redirect(route("dashboard"));
-    }
-
+    
     /**
      * Display the specified resource.
      */

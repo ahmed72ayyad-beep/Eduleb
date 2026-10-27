@@ -34,7 +34,8 @@ class coursesController extends Controller
      */
     public function create()
     {
-        return view("dashboard.courseManagement.create");
+        $tags = Tag::all();
+        return view("dashboard.courseManagement.create", compact("tags"));
     }
 
     /**
@@ -57,7 +58,7 @@ class coursesController extends Controller
 
 
         // 2: Create the course :
-        Course::create([
+        $course = Course::create([
             'title'          => $request->title,
             'sub_title'      => $request->sub_title,
             'instructor_id'  => $request->instructor_id,
@@ -76,7 +77,7 @@ class coursesController extends Controller
             'star_num'    => 0,
 
         ]);
-
+        $course->tags()->attach($request->tags);
         //3 : Redirect the User To Courses :
         return redirect(route("dashboard.courses.index"));
     }
@@ -98,7 +99,8 @@ class coursesController extends Controller
     public function edit(Course $course)
     {
         $course->load(["instructor", "tags"]);
-        return view("dashboard.courseManagement.edit", compact("course"));
+        $tags=Tag::all();
+        return view("dashboard.courseManagement.edit", compact("course","tags"));
     }
 
     /**
@@ -143,7 +145,7 @@ class coursesController extends Controller
             'star_num'    => 0,
 
         ]);
-
+        $course->tags()->sync($request->tags);
         //3 : Redirect the User To Courses :
         return redirect(route("dashboard.courses.index"));
     }

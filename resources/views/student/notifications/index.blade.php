@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <p class="text-sm font-semibold uppercase tracking-wide text-indigo-600">Student dashboard</p>
+        <p class="text-sm font-semibold uppercase tracking-wide text-indigo-600">{{ auth()->user()->roles()->first()->name }} dashboard</p>
         <h1 class="mt-1 text-2xl font-bold text-slate-900">Notifications</h1>
     </x-slot>
 

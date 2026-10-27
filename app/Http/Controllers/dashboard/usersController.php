@@ -70,14 +70,19 @@ class usersController extends Controller
      */
     public function destroy(User $user)
     {
-
+        Instructor::where("user_id", $user->id)->first()->delete();
         if ($user->image != null) {
             File::delete($user->image);
         }
-
         $user->delete();
         return redirect()->back();
     }
+
+
+
+
+
+
     public function update_role(Request $request)
     {
         $user = User::find($request->user_id);
@@ -87,7 +92,7 @@ class usersController extends Controller
                 $user->syncRoles([$request->role]);
                 $user->notify(new newRole($request->role, $user));
             } else {
-                $user->notify(new newRole($request->role, $user,route("dashboard.instractors.create")));
+                $user->notify(new newRole($request->role, $user, route("dashboard.instructors.create")));
             }
         } else {
             $user->syncRoles([$request->role]);

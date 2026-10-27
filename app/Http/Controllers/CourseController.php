@@ -124,7 +124,11 @@ class CourseController extends Controller
     public function paymentSuccess(Request $request)
     {
         Auth::user()->courses()->syncWithoutDetaching($request->course_id);
-        Auth::user()->notify(new courseEnroll(Auth::user()->name,Course::find($request->course_id)->title,route("student.myCourses")));
+        $course = Course::find($request->course_id);
+        $course->update([
+            "available_seats" => $course->available_seats - 1,
+        ]);
+        Auth::user()->notify(new courseEnroll(Auth::user()->name, Course::find($request->course_id)->title, route("student.myCourses")));
 
         return redirect()->route('dashboard')->with('success', 'Payment successful! You are now enrolled.');
     }

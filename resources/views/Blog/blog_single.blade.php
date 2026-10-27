@@ -69,32 +69,30 @@
                     </div><!--- END COMMENTS PART -->
 
 
+                    @auth
+                        <div class="comment_form">
+                            <h3 class="blog_head_title" style="margin-bottom: 4px">Add a Comment</h3>
+                            <div class="contact comment-box">
+                                <form action="{{ route('blogs.comments.store', $blog->id) }}" id="contact-form" method="POST"
+                                    enctype="multipart/form-data">
+                                    <div class="row">
 
-
-                    <div class="comment_form">
-                        <h3 class="blog_head_title" style="margin-bottom: 4px">Add a Comment</h3>
-                        <div class="contact comment-box">
-                            <form action="{{ route('blogs.comments.store', $blog->id) }}" id="contact-form" method="POST"
-                                enctype="multipart/form-data">
-                                <div class="row">
-
-                                    <div class="form-group col-md-12">
-                                         <x-textarea id="textarea" name="content" rows="5"
-                                                    placeholder="Type Here Comment" style="padding-top:15px;" class="form-control" />
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="actions">
-                                            <button type="submit" value="Send message" name="submit" id="submitButton"
-                                                class="btn btn_one" title="Submit Your Message!">Submit Comment</button>
+                                        <div class="form-group col-md-12">
+                                            <x-textarea id="textarea" name="content" rows="5"
+                                                placeholder="Type Here Comment" style="padding-top:15px;"
+                                                class="form-control" />
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="actions">
+                                                <button type="submit" value="Send message" name="submit" id="submitButton"
+                                                    class="btn btn_one" title="Submit Your Message!">Submit Comment</button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div><!--- END COMMENT FORM -->
-
-
-
+                                </form>
+                            </div>
+                        </div><!--- END COMMENT FORM -->
+                    @endauth
 
 
                 </div><!-- END COL-->
@@ -124,8 +122,8 @@
                             <div class="single_popular">
                                 <a href="{{ route('blogs.show', $popular_blog->id) }}"><img
                                         src="{{ asset($popular_blog->image) }}" alt="" /></a>
-                                <h5><a
-                                        href="{{ route('blogs.show', $popular_blog->id) }}" class="hover:text-blue-700 font">{{ $popular_blog->sub_title }}</a>
+                                <h5><a href="{{ route('blogs.show', $popular_blog->id) }}"
+                                        class="hover:text-blue-700 font">{{ $popular_blog->sub_title }}</a>
                                 </h5>
                             </div><!-- END SINGLE POPULAR POST -->
 

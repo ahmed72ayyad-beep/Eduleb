@@ -50,7 +50,7 @@ class User extends Authenticatable
     public function courses()
     {
 
-        return $this->belongsToMany(Course::class);
+        return $this->belongsToMany(Course::class)->withPivot(['id', 'enrollment_id', 'enrolled_at', 'notes','state']);
     }
     // public function instructors()
     // {
@@ -61,6 +61,11 @@ class User extends Authenticatable
     {
 
         return $this->hasMany(FAQ::class, "author_id");
+    }
+    public function applications()
+    {
+
+        return $this->hasMany(Application::class);
     }
 
     public function instructor_Profile()

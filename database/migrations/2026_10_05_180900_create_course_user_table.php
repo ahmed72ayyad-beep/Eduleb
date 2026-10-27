@@ -15,8 +15,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId("course_id")->constrained()->cascadeOnDelete();
             $table->foreignId("user_id")->constrained()->cascadeOnDelete();
-            $table->timestamp('enrolled_at')->nullable(); // تاريخ التسجيل الفعلي
-            $table->text('notes')->nullable(); // ملاحظات الطالب أو الأدمن
             $table->timestamps();
         });
     }

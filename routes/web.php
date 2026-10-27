@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\dashboard\ApplicationController;
 use App\Http\Controllers\BlogsController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CourseController;
@@ -8,7 +9,7 @@ use App\Http\Controllers\dashboard\CoursesController as dashboard_CoursesControl
 use App\Http\Controllers\dashboard\coursesController;
 use App\Http\Controllers\dashboard\dashboardController;
 use App\Http\Controllers\dashboard\FAQController as Dashboard_FAQController;
-use App\Http\Controllers\dashboard\instructorsController as dashboard_InstructorController;
+// use App\Http\Controllers\dashboard\instructorsController as dashboard_InstructorController;
 use App\Http\Controllers\dashboard\usersController;
 use App\Http\Controllers\FAQController;
 use App\Http\Controllers\InstructorController;
@@ -17,6 +18,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TagController;
+use App\Models\Application;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -40,24 +42,43 @@ Route::prefix("dashboard")->name("dashboard.")->middleware(["auth", "role:admin"
     Route::resource('users', usersController::class);
     Route::post("users/update_Role", [usersController::class, "update_role"])->name("users.update_role");
     Route::get("users/{user}/search", [usersController::class, "search"])->name("users.search");
-    Route::resource("instractors", dashboard_InstructorController::class);
     Route::resource("blogs", dashboard_BlogController::class);
     Route::get('/blogs/search/{query}', [dashboard_BlogController::class, 'search'])->name('blogs.search');
-
     Route::resource("FAQs", dashboard_FAQController::class);
     Route::get("FAQs/{FAQ}/search", [dashboard_FAQController::class, "search"])->name("FAQs.search");
+    Route::put("applications/approve/{application}",[ApplicationController::class,"approve"])->name("application.approve");
+    Route::put("applications/reject/{application}",[ApplicationController::class,"reject"])->name("application.reject");
+    // Route::
 });
 
-Route::get("notify/{notify}/mark_as_readed", [mainController::class, "mark_as_readed"])->name("notify.mark_as_readed");
-Route::delete("notify/{notify}/delete_notification", [mainController::class, "delete_notification"])->name("notify.delete_notification");
+Route::prefix("dashboard")->name("dashboard.")->middleware(["auth"])->group(function () {
+    Route::get("instructors/create", [InstructorController::class, "create"])->name("instructors.create");
+    Route::post("instructors/", [InstructorController::class, "store"])->name("instructors.store");
+    Route::delete(" instructors/{instructor}", [InstructorController::class, "desapplications/troy"])->name("instructors.destroy");
+});
 
+
+Route::middleware("auth")->group(function () {
+
+    Route::get("notify/{notify}/mark_as_readed", [mainController::class, "mark_as_readed"])->name("notify.mark_as_readed");
+    Route::delete("notify/{notify}/delete_notification", [mainController::class, "delete_notification"])->name("notify.delete_notification");
+    Route::get("instructors/apply", [InstructorController::class, "instructor_apply"])->name("instructor.apply");
+    Route::post("instructors/apply", [InstructorController::class, "instructor_apply_data"]);
+});
+
+
+Route::name("student.")->middleware("auth")->group(function () {
+Route::resource("applications",ApplicationController::class);
+
+});
 Route::prefix("student")->name("student.")->middleware(["auth", "role:student"])->group(function () {
     // Route::get("overview/",[StudentController::class,"overview"])->name("overview");
     Route::get("myCourses/", [StudentController::class, "myCourses"])->name("myCourses");
     Route::get("myCourses/{course}/", [StudentController::class, "show"])->name("myCourses.show");
     Route::get("reviews/", [StudentController::class, "reviews"])->name("reviews");
-    Route::get("notifications/", [StudentController::class, "notifications"])->name("notifications");
 });
+// Route::get("applications/", [ApplicationController::class, "applications"])->name("applications")->middleware("auth");
+Route::get("notifications/", [StudentController::class, "notifications"])->middleware("auth")->name("notifications");
 Route::middleware(["auth", "role:student"])->controller(CourseController::class)->group(function () {
     Route::post("courses/{course}/enroll", 'course_enrollment')->name("courses.enroll");
     Route::get('/courses/payment/success', [CourseController::class, 'paymentSuccess'])->name('course.payment.success');
@@ -66,13 +87,36 @@ Route::middleware(["auth", "role:student"])->controller(CourseController::class)
     Route::get('/courses/payment/cancel', fn() => redirect()->route('dashboard')->with('error', 'Payment cancelled.'))->name('course.payment.cancel');
 });
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Route::get("home/", [mainController::class, 'index'])->name("home");
+Route::post("home/search", [mainController::class, 'search'])->name("home.search");
+// Route::post("home/search_result", [mainController::class, 'search_result'])->name("home.search_result");
 Route::get("about/", [mainController::class, 'about'])->name("about");
 Route::get("FAQ/", [FAQController::class, 'index'])->name("FAQ.index");
 Route::get("thank/", [mainController::class, 'thank'])->name("thank");
 Route::get("contact/", [mainController::class, 'contact'])->name("contact");
 Route::post("contact/", [mainController::class, 'contact_data']);
 Route::get("pricing/", [mainController::class, 'pricing'])->name("pricing");
+
+Route::get("instructors/", [InstructorController::class, 'index'])->name("instructors.index");
+Route::get("instructors/{instructor}", [InstructorController::class, 'show'])->name("instructors.show");
 
 
 
@@ -85,14 +129,13 @@ Route::resource("blogs", BlogsController::class);
 Route::resource("blogs.comments", CommentController::class)->shallow();
 
 Route::resource("/tags", TagController::class);
-Route::resource('instractors', InstructorController::class);
 Route::get("dashboard/courses/instructors/{instructor}/search", [InstructorController::class, "search"])->name("instructors.search");
 Route::get("dashboard/courses/{course}/instructors/{instructor}/search", [InstructorController::class, "search2"])->name("instructors.search2");
 
 Route::resource('courses.review', ReviewController::class)->shallow();
 
 
-
+// Route::resource("instructors",InstructorController::class);
 
 
 Route::middleware("auth")->group(function () {
@@ -113,3 +156,14 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 require __DIR__ . '/auth.php';
+
+
+
+
+
+
+
+
+// Route::get("sssss/",function () {
+// return view('student.profile');
+// });

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Instructor;
+use App\Http\Requests\instructorApplyQrquest;
 use App\Http\Requests\StoreInstructorRequest;
 use App\Http\Requests\UpdateInstructorRequest;
+use App\Models\Instructor;
+use Illuminate\Support\Facades\Auth;
 
 class InstructorController extends Controller
 {
@@ -23,7 +25,7 @@ class InstructorController extends Controller
      */
     public function create()
     {
-        //
+        return view("dashboard.instructorManagement.create");
     }
 
     /**
@@ -31,7 +33,31 @@ class InstructorController extends Controller
      */
     public function store(StoreInstructorRequest $request)
     {
-        //
+
+        // dd($request);
+        // 1 - Store the image :
+        $path = $request->file("personal_image")->store("uploads/courses");
+
+
+        // 2 - create the instructor record  :
+        Instructor::create([
+            "major" => $request->major,
+            "personal_image" => $path,
+            "job_title" => $request->job_title,
+            "portfolio_link" => $request->portfolio_link,
+            "description" => $request->description,
+            "phone" => $request->phone,
+            "user_id" => Auth::id(),
+            "name" => Auth::user()->name,
+            "email" => Auth::user()->email,
+        ]);
+        Auth::user()->update([
+            "image" => $request->personal_image,
+        ]);
+        Auth::user()->syncRoles(["instructor"]);
+
+        // 3- redirect to profile :
+        return redirect(route("dashboard"));
     }
 
     /**
@@ -72,13 +98,6 @@ class InstructorController extends Controller
 
 
 
-
-
-
-
-
-
-
     public function search(string $instructor)
     {
         $instructor1 = Instructor::where("name", "like", "%" . $instructor . "%")->orWhere("id", $instructor)->get();
@@ -91,4 +110,20 @@ class InstructorController extends Controller
         // dd($instructor1);
         return $instructor1;
     }
+
+
+    public function instructor_apply()
+    {
+        return view("application.instructor_apply");
+    }
+
+
+
+
+
+
+
+
+
+    public function instructor_apply_data(instructorApplyQrquest $request) {}
 }

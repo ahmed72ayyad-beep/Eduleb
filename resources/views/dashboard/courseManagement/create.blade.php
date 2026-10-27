@@ -50,7 +50,9 @@
                         </div>
                         <!-- instructor_id (Searchable Input) -->
                         <div id="instructorSearchCounter" class="space-y-2">
-                            <x-input id="instructorSearch" name="instructor_name" required label="Instructor *" spicialmsgstyle="color:blue" spicialmsg="'You must select from the list that will appear as you type the name."
+                            <x-input id="instructorSearch" name="instructor_name" required label="Instructor *"
+                                spicialmsgstyle="color:blue"
+                                spicialmsg="'You must select from the list that will appear as you type the name."
                                 labelclass="block text-xs font-bold uppercase text-gray-600 tracking-wider"
                                 class="w-full px-4 py-3 rounded-2xl border border-gray-200 focus:border-indigo-500 focus:ring-indigo-500/20 text-sm font-semibold text-gray-700" />
                             <x-input type="hidden" id="my-hidden" name="instructor_id" />
@@ -58,13 +60,18 @@
 
                         <!-- type -->
                         <div class="space-y-2 mt-4">
-                            <x-select spicialmsgstyle="color:blue" spicialmsg="Date Is requerid For Online Type" name="type" required label="Course Type *"
+                            <x-select spicialmsgstyle="color:blue" spicialmsg="Date Is requerid For Online Type"
+                                name="type" required label="Course Type *"
                                 labelclass="block text-xs font-bold uppercase text-gray-600 tracking-wider"
                                 class="w-full  px-4 py-3 rounded-2xl border border-gray-200 focus:border-indigo-500 focus:ring-indigo-500/20 text-sm font-semibold text-gray-700">
                                 <option value="online">Online</option>
                                 <option value="recorded">Recorded</option>
                             </x-select>
                         </div>
+
+
+
+
                     </div>
                 </div>
 
@@ -153,7 +160,7 @@
 
                         <!-- curriculum -->
                         <div class="space-y-2">
-                            <x-textarea name="curriculum" rows="4" label="Curriculum Outline"
+                            <x-textarea id="curriculum" name="curriculum" rows="4" label="Curriculum Outline"
                                 labelclass="block text-xs font-bold uppercase text-gray-600 tracking-wider"
                                 placeholder="Module 1: Introduction, Module 2: Setup..."
                                 class="w-full px-4 py-3 rounded-2xl border border-gray-200 focus:border-indigo-500 focus:ring-indigo-500/20 text-sm" />
@@ -173,6 +180,29 @@
                                     class="block w-full text-xs text-gray-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100" />
                             </div>
                         </div>
+                    </div>
+                </div>
+                <!-- 4. Tags-->
+                <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100 space-y-6">
+                    <div class="border-b border-gray-100 pb-4">
+                        <h3 class="text-lg font-bold text-gray-800">4. Tags</h3>
+                        <p class="text-xs text-gray-400">Trinding ,Searching engines and more</p>
+                    </div>
+                    <h3 class="block text-xs font-bold uppercase text-gray-600 tracking-wider m-0">Tags</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-4 md:col-span-2 gap-6">
+                        {{-- <div class="flex flex-wrap justify-evenly items-center w-full"> --}}
+                        @forelse ($tags as $tag)
+                            <div class="basis-3 flex flex-row justify-between">
+                                <x-input labelclass="text-sm" multiple="12" type="checkbox"
+                                    value="{{ $tag->id }}" name="tags[]" id="{{ $tag->id }}"
+                                    label="{{ $tag->name }}" />
+                            </div>
+
+                        @empty
+                            <div>No tags</div>
+                        @endforelse
+
+                        {{-- </div> --}}
                     </div>
                 </div>
 
@@ -348,4 +378,57 @@
     //     ul.innerHTML = "";
     // };
 </script>
-</script>
+{{-- // images_upload_url: "{{ route('Plog.post.upload_images') }}", --}}
+<script src="{{ asset('tinymce/tinymce.min.js') }}"></script>
+
+    <script>
+        tinymce.init({
+            selector: '#curriculum',
+
+            license_key: 'gpl',
+
+            height: 400,
+            menubar: 'file edit view insert format tools table help',
+
+            plugins: [
+                'advlist',
+                'autolink',
+                'lists',
+                'link',
+                // 'image',
+                'charmap',
+                'preview',
+                'anchor',
+                'searchreplace',
+                'visualblocks',
+                'code',
+                'fullscreen',
+                'insertdatetime',
+                // 'media',
+                'table',
+                'wordcount'
+            ],
+
+            toolbar: 'undo redo | blocks | ' +
+                'bold italic underline strikethrough | ' +
+                'forecolor backcolor | ' +
+                'alignleft aligncenter alignright alignjustify | ' +
+                'bullist numlist outdent indent | ' +
+                'link image media table | ' +
+                'blockquote charmap | ' +
+                'removeformat code fullscreen',
+
+            // image_title: true,
+
+            automatic_uploads: true,
+
+            // file_picker_types: 'image media',
+
+            content_style: `
+            body {
+                font-family: Arial, sans-serif;
+                font-size: 16px;
+            }
+        `
+        });
+    </script>

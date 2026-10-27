@@ -1,6 +1,72 @@
 @extends('layouts.website')
 @section('title', 'Eduleb - Categories')
+@section('CSS')
+    <style>
+        .blogs-grid>[class*="col-"] {
+            display: flex;
+        }
+
+        .blogs-grid .single_blog {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .blog-image-frame {
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+        }
+
+        .blog-image-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .blogs-grid .content_box {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+        }
+
+        .blogs-grid .blog-read-more {
+            align-self: flex-start !important;
+            margin-top: auto !important;
+        }
+
+        .courses-grid>[class*="col-"] {
+            display: flex !important;
+        }
+
+        .courses-grid .single_course {
+            display: flex !important;
+            flex-direction: column !important;
+            width: 100% !important;
+        }
+
+        .courses-grid .course-rating {
+            display: flex !important;
+            justify-content: center !important;
+        }
+
+        .courses-grid .single_c_img {
+            aspect-ratio: 16 / 9 !important;
+            overflow: hidden !important;
+        }
+
+        .courses-grid .single_c_img img {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+        }
+
+        .courses-grid .single_course .price {
+            margin-top: auto;
+        }
+    </style>
+@endsection
 @section('content')
+
 
     <!-- START SECTION TOP -->
     <section class="section-top">
@@ -32,15 +98,15 @@
             </div>
             <!-- نهاية العنوان -->
 
-            <div class="row">
+            <div class="row courses-grid">
                 @if ($tag->courses->count() > 0 || $courses->count() > 0)
 
                     @foreach ($tag->courses as $course)
                         <div class="col-lg-4 col-sm-6 col-xs-12">
                             <div class="single_course">
                                 <div class="single_c_img">
-                                    <img src="{{ asset($course->outer_image) ?? asset('assets/img/course/4.png') }}"
-                                        class="img-fluid" alt="course-image" />
+                                    <img src="{{ filled($course->outer_image) ? asset($course->outer_image) : asset('assets/img/course/4.png') }}"
+                                        alt="course-image" />
                                     <span
                                         style="bottom: none !important;top: none;">{{ $course->type ?? 'Eduction' }}</span>
                                 </div>
@@ -60,7 +126,7 @@
                         <div class="col-lg-4 col-sm-6 col-xs-12">
                             <div class="single_course">
                                 <div class="single_c_img">
-                                    <img src="{{ asset($course->outer_image) ?? asset('assets/img/course/4.png') }}"
+                                    <img src="{{ filled($course->outer_image) ? asset($course->outer_image) : asset('assets/img/course/4.png') }}"
                                         class="img-fluid" alt="course-image" />
                                     <span
                                         style="bottom: none !important;top: none;">{{ $course->type ?? 'Eduction' }}</span>
@@ -108,7 +174,9 @@
                         <div class="col-lg-4 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s"
                             data-wow-offset="0">
                             <div class="single_blog">
-                                <img src="{{ asset($blog->image) }}" class="img-fluid" alt="image" />
+                                <div class="blog-image-frame">
+                                    <img src="{{ asset($blog->image) }}" class="img-fluid" alt="image" />
+                                </div>
                                 <div class="content_box">
                                     <span>{{ $blog->created_at->diffForHumans() }} |
                                         @if ($blog->tags->first() != null)
@@ -117,7 +185,7 @@
                                             #######
                                         @endif
                                     </span>
-                                    <h2><a href="href="{{ route('blogs.show', $blog->id) }}">{{ $blog->title }}</a>
+                                    <h2><a href="{{ route('blogs.show', $blog->id) }}">{{ $blog->title }}</a>
                                     </h2>
                                     <a class="btn_one" href="{{ route('blogs.show', $blog->id) }}">Read More <i
                                             class="ti-arrow-top-right"></i></a>

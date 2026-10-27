@@ -1,3 +1,4 @@
+
 <x-app-layout>
     <x-slot name="header">
         <div class="flex flex-col md:flex-row justify-between items-center gap-4">
@@ -226,6 +227,7 @@
                                                     </x-primary-button>
                                                 </div>
                                             </form>
+                                       
                                         </x-modal>
 
 

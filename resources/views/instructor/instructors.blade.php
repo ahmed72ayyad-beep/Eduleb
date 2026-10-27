@@ -32,7 +32,7 @@
                         data-wow-offset="0">
                         <div class="our-team">
                             <div class="team-content">
-                                <a href="{{ route("instractors.show",$instructor->id) }}"><img src="{{ asset($instructor->personal_image) }}" alt=""></a>
+                                <a href="{{ route("instructors.show",$instructor->id) }}"><img src="{{ asset($instructor->personal_image) }}" alt=""></a>
                                 <ul class="social-links">
                                     <li><a href="#"><i class="fa-solid fa-x"></i></a></li>
                                     <li><a href="#"><i class="fa-brands fa-facebook-f"></i></a></li>

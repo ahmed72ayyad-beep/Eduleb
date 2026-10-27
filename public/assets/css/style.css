@@ -1617,7 +1617,7 @@ ul {
 }
 
 .ratings li a.active {
-    color: #ffc107;
+    color: #ffc107 !important;
 }
 
 /* .review-form .client-form .rating ul li a:active i {

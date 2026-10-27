@@ -21,7 +21,7 @@
     <div class="py-8 bg-gradient-to-br from-slate-50 via-indigo-50/20 to-purple-50/30 min-h-screen">
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8 space-y-8">
 
-            <form action="{{ route('dashboard.instractors.store') }}" method="POST" enctype="multipart/form-data"
+            <form action="{{ route('dashboard.instructors.store') }}" method="POST" enctype="multipart/form-data"
                 class="space-y-8">
                 @csrf
 

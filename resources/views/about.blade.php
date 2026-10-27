@@ -162,7 +162,7 @@
                             <h4>Build Your Career</h4>
                             <h1>Become an Instructor</h1>
                             <p>Learn at your own pace, move the between multiple courses. </p>
-                            <a class="btn_one" href="#">Apply now <i class="ti-arrow-top-right"></i></a>
+                            <a class="btn_one" href="{{ route("instructor.apply") }}">Apply now <i class="ti-arrow-top-right"></i></a>
                         </div>
                     </div>
                 </div><!--- END COL -->
@@ -174,7 +174,7 @@
                             <h4>Build Your Career</h4>
                             <h1>Get Free Courses</h1>
                             <p>Learn at your own pace, move the between multiple courses. </p>
-                            <a class="btn_one" href="#">Contact now <i class="ti-arrow-top-right"></i></a>
+                            <a class="btn_one" href="{{ route("contact") }}">Contact now <i class="ti-arrow-top-right"></i></a>
                         </div>
                     </div>
                 </div><!--- END COL -->

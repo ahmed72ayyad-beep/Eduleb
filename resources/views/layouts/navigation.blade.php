@@ -23,11 +23,15 @@
                             <x-nav-link :href="route('dashboard.users.index')" :active="request()->routeIs('dashboard.users.index')">
                                 {{ __('Users Management') }}
                             </x-nav-link>
+
                             <x-nav-link :href="route('dashboard.blogs.index')" :active="request()->routeIs('dashboard.blogs.index')">
                                 {{ __('Blogs Management') }}
                             </x-nav-link>
                             <x-nav-link :href="route('dashboard.FAQs.index')" :active="request()->routeIs('dashboard.FAQs.index')">
                                 {{ __('FAQs Management') }}
+                            </x-nav-link>
+                                 <x-nav-link :href="route('student.applications.index')" :active="request()->routeIs('student.applications.index')">
+                                {{ __(' Applications Managment') }}
                             </x-nav-link>
                         </div>
                     @elseif (auth()->user()->hasRole('student'))
@@ -45,8 +49,11 @@
                             {{-- <x-nav-link :href="route('student.profile')" :active="request()->routeIs('student.profile')">
                                 {{ __('Profile & settings') }}
                             </x-nav-link> --}}
-                            <x-nav-link :href="route('student.notifications')" :active="request()->routeIs('student.notifications')">
+                            <x-nav-link :href="route('notifications')" :active="request()->routeIs('notifications')">
                                 {{ __('Notifications') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('student.applications.index')" :active="request()->routeIs('student.applications.index')">
+                                {{ __('My Applications') }}
                             </x-nav-link>
                         </div>
                     @endif
@@ -115,7 +122,6 @@
                                         </p>
                                         <span
                                             class="text-[9px] text-indigo-500 font-medium mt-1 inline-block">{{ $notify->created_at }}</span>
-<form action="{{ route("not") }}"></form>
                                         @if ($notify->data['link'] != null)
                                             <a class="flex text-sm items-center gap-3"
                                                 href="{{ $notify->data['link'] }}"><span
@@ -165,7 +171,7 @@
 
                         <!-- زر الانتقال لصفحة كل الإشعارات بالنهاية -->
                         <div class="p-3 bg-slate-50/50 border-t border-gray-100 text-center">
-                            <a href="#"
+                            <a href="{{ route('notifications') }}"
                                 class="text-xs font-bold text-indigo-600 hover:text-indigo-700 transition">
                                 View All Notifications →
                             </a>
@@ -245,6 +251,9 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('student.applications.index')" :active="request()->routeIs('student.applications.index')">
+                {{ __('Applications') }}
             </x-responsive-nav-link>
         </div>
 

@@ -27,11 +27,10 @@ class StudentController extends Controller
     public function reviews()
     {
 
+
         // $reviews=Auth::user()->reviews
         return view("student.reviews.index");
     }
-
-
 
 
 

@@ -37,7 +37,7 @@ class ReviewController extends Controller
             "user_id" => Auth::id(),
             "course_id" => $course_id,
             "content" => $request->content,
-            "star_num" => $request->star_num
+            "star_num" => $request->star_num ?? 0
         ]);
         return redirect(route("courses.show", $course_id));
     }

@@ -26,15 +26,18 @@
                 <div class="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
                     @foreach ($enrolledCourses as $course)
                         <article class="overflow-hidden rounded-xl border border-slate-200 bg-white">
-                            <div class="h-44 bg-slate-200">
+                            <div class="h-44 bg-slate-200 relative">
                                 @if ($course->outer_image)
                                     <img src="{{ asset($course->outer_image) }}" alt="{{ $course->title }}"
                                         class="h-full w-full object-cover">
+                                    <span
+                                        class="capitalize text-white text-sm bg-blue-500 rounded-1xl px-2 py-1.5 mt-3 absolute bottom-0">{{ $course->pivot->state }}</span>
                                 @else
                                     <div
                                         class="flex h-full items-end bg-gradient-to-br from-indigo-700 to-slate-900 p-5 text-white">
                                         <span class="text-xs font-semibold uppercase tracking-widest">Eduleb
-                                            course</span></div>
+                                            course</span>
+                                    </div>
                                 @endif
                             </div>
                             <div class="p-5">
@@ -47,18 +50,28 @@
                                 <h3 class="mt-3 text-lg font-bold text-slate-900">{{ $course->title }}</h3>
                                 <p class="mt-2 line-clamp-3 text-sm leading-6 text-slate-600">
                                     {{ $course->sub_title ?? $course->description }}</p>
-                                <div class="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-4">
+
+                                <div
+                                    class="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-4">
                                     <span
                                         class="text-xs text-slate-500">{{ $course->duration ?? 'Learn at your pace' }}</span>
                                     <div class="flex flex-wrap items-center gap-3">
                                         <a href="{{ route('student.myCourses.show', $course->id) }}"
-                                            class="text-sm font-bold text-indigo-700 hover:text-indigo-900">Course details
-                                            &rarr;</a>
-                                            <form action="{{ route("enrollments.refund") }}"></form>
-                                        <button type="button"
-                                            class="rounded-md border border-red-300 px-3 py-1.5 text-sm font-semibold text-red-700 hover:border-red-400 hover:bg-red-50">
-                                            Cancel enrollment
-                                        </button>
+                                            class="text-sm font-bold text-indigo-700 hover:text-indigo-900 flex items-center gap-x-1">
+                                            <span> Course details</span>
+                                            <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="18"
+                                                height="18" viewBox="0 0 24 24" fill="none">
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M13.4697 5.46967C13.7626 5.17678 14.2374 5.17678 14.5303 5.46967L20.5303 11.4697C20.8232 11.7626 20.8232 12.2374 20.5303 12.5303L14.5303 18.5303C14.2374 18.8232 13.7626 18.8232 13.4697 18.5303C13.1768 18.2374 13.1768 17.7626 13.4697 17.4697L18.1893 12.75H4C3.58579 12.75 3.25 12.4142 3.25 12C3.25 11.5858 3.58579 11.25 4 11.25H18.1893L13.4697 6.53033C13.1768 6.23744 13.1768 5.76256 13.4697 5.46967Z"
+                                                    fill="currentColor" />
+                                            </svg></a>
+                                        {{-- @dd($course->pivot->id) --}}
+                                        <form action="{{ route('enrollments.refund', $course->pivot->id) }}">
+                                            <button type="button"
+                                                class="rounded-md border border-red-300 px-3 py-1.5 text-sm font-semibold text-red-700 hover:border-red-400 hover:bg-red-50">
+                                                Cancel enrollment
+                                            </button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>

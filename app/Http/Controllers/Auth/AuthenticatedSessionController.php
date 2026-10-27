@@ -30,7 +30,8 @@ class AuthenticatedSessionController extends Controller
         Auth::user()->update([
             "last_login" => now(),
         ]);
-        return redirect()->intended(route('dashboard', absolute: false));
+        // return redirect()->intended(route('dashboard', absolute: false));
+        return redirect()->back();
     }
 
     /**
