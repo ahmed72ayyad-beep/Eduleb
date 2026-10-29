@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-#[Fillable(['type', "instructor_id", 'title', 'sub_title', 'star_num', 'outer_image', 'inner_image', 'duration', 'date', 'price', 'total_lectures', 'description', 'overview', 'curriculum', 'available_seats'])]
+#[Fillable(['type', "instructor_id", 'title', 'sub_title', 'star_num', 'outer_image', 'inner_image', 'duration', 'date', 'price', 'total_lectures', 'description', 'overview', 'curriculum', 'available_seats',"status"])]
 
 class Course extends Model
 {

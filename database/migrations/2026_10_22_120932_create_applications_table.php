@@ -15,11 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId("user_id")->constrained("users")->cascadeOnDelete();
             $table->enum("state", ["pending", "Accpted", "rejected"])->default("pending");
-            $table->enum("type", ["course_support", "instructor_application"]);
+            $table->enum("type", ["course_support", "instructor_application", "create_course"]);
             $table->string("target_id")->nullable();
             $table->json("content")->nullable();
             $table->timestamps();
-    
         });
     }
 

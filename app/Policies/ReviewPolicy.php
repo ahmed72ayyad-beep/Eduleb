@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\Course;
 use App\Models\Review;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
@@ -28,9 +29,12 @@ class ReviewPolicy
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(User $user, Course $course): bool
     {
-        return false;
+        return $user->hasRole('student')
+            && $user->courses()
+            ->where('courses.id', $course->id)
+            ->exists();
     }
 
     /**
@@ -65,7 +69,6 @@ class ReviewPolicy
 
 
         return false;
-
     }
 
     /**

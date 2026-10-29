@@ -284,6 +284,21 @@
                                 <span><i class="fa fa-table"></i><strong>{{ $course->available_seats ?? 'Not available' }}
                                         Seats
                                         Available</strong></span>
+
+                                @if (auth()->user()->hasRole('admin') |
+                                        (auth()->user()->hasRole('instructor') & (auth()->id() == $course->instructor->user_id)))
+                                    <span style="display: flex;align-items: center;"><svg xmlns="http://www.w3.org/2000/svg"
+                                            width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                            <path
+                                                d="M19 9C19 12.866 15.866 16 12 16C8.13401 16 5 12.866 5 9C5 5.13401 8.13401 2 12 2C15.866 2 19 5.13401 19 9Z"
+                                                fill="#94a3b8" />
+                                            <path
+                                                d="M7.09301 15.9414L6.71424 17.323C6.0859 19.6148 5.77173 20.7607 6.19097 21.3881C6.3379 21.6079 6.535 21.7844 6.76372 21.9008C7.41634 22.2331 8.424 21.7081 10.4393 20.658C11.1099 20.3086 11.4452 20.1339 11.8014 20.0959C11.9335 20.0818 12.0665 20.0818 12.1986 20.0959C12.5548 20.1339 12.8901 20.3086 13.5607 20.658C15.576 21.7081 16.5837 22.2331 17.2363 21.9008C17.465 21.7844 17.6621 21.6079 17.809 21.3881C18.2283 20.7607 17.9141 19.6148 17.2858 17.323L16.907 15.9414C15.5208 16.9231 13.8278 17.5 12 17.5C10.1722 17.5 8.47915 16.9231 7.09301 15.9414Z"
+                                                fill="#94a3b8" />
+                                        </svg>Status :<strong style="text-transform: capitalize"> {{ $course->status }}
+                                        </strong></span>
+                                @endif
+
                             </div>
                             <p>
                                 {{ $course->description ?? 'Not available' }}
@@ -317,67 +332,75 @@
                                     <p>{{ $course->overview ?? 'Not available' }}</p>
                                     <div class="details-buttons-area">
                                         @auth
-                                            @if (!auth()->user()->courses->contains($course->id))
-                                                @if (!$course->available_seats <= 0)
-                                                    <div style="display: flex;flex-flow: column nowrap">
-
-
-                                                        <form action="{{ route('courses.enroll', $course->id) }}"
-                                                            method="POST">
-                                                            <button class="custom-button theme-one">Enroll Now <svg
-                                                                    style="margin-bottom: 3px"
-                                                                    xmlns="http://www.w3.org/2000/svg" width="23"
-                                                                    height="23" viewBox="0 0 24 24" fill="none"
-                                                                    stroke="currentColor" stroke-width="1.6"
-                                                                    stroke-linecap="round" stroke-linejoin="round">
-                                                                    <circle cx="9" cy="7" r="3.5" />
-                                                                    <path d="M2.5 20v-1.5a6.5 6.5 0 0 1 13 0V20z" />
-                                                                    <circle cx="18" cy="17" r="4" />
-                                                                    <path d="M18 15v4M16 17h4" />
-                                                                </svg></button>
-                                                        </form>
-
-                                                        <button style="margin-left: 20px" type="button"
-                                                            id="open-course-support" class="course-support-trigger"
-                                                            aria-haspopup="dialog" aria-controls="course-support-modal">
-                                                            Need Support?
-                                                        </button>
-
-                                                        <div class="course-support-overlay" id="course-support-modal" hidden>
-                                                            <section class="course-support-dialog" role="dialog"
-                                                                aria-modal="true" aria-labelledby="course-support-title">
-
-                                                                <form class="course-support-form" method="POST"
-                                                                    action="{{ route('student.applications.store') }}">
-                                                                    @csrf
-                                                                    <input type="hidden" name="course_id"
-                                                                        value="{{ $course->id }}">
-                                                                    <input type="hidden" name="type"
-                                                                        value="course_support">
-                                                                    <div id="textareCounter">
-
-                                                                        <x-textarea
-                                                                            label="in Short ,Why You Need This Support ?"
-                                                                            style="margin-top: 7px" id="support-message"
-                                                                            rows="5" name="msg" required
-                                                                            minlength="5" />
-                                                                    </div>
-                                                                    <button onclick="submit_review2(event)" type="submit"
-                                                                        style="" class="custom-button theme-one">Send
-                                                                        message</button>
+                                            @role('student')
+                                                @if (!auth()->user()->courses->contains($course->id))
+                                                    @if (!$course->available_seats <= 0)
+                                                        @if ($course->status == 'published')
+                                                            <div style="display: flex;flex-flow: column nowrap">
+                                                                <form action="{{ route('courses.enroll', $course->id) }}"
+                                                                    method="POST">
+                                                                    <button class="custom-button theme-one">Enroll Now <svg
+                                                                            style="margin-bottom: 3px"
+                                                                            xmlns="http://www.w3.org/2000/svg" width="23"
+                                                                            height="23" viewBox="0 0 24 24" fill="none"
+                                                                            stroke="currentColor" stroke-width="1.6"
+                                                                            stroke-linecap="round" stroke-linejoin="round">
+                                                                            <circle cx="9" cy="7" r="3.5" />
+                                                                            <path d="M2.5 20v-1.5a6.5 6.5 0 0 1 13 0V20z" />
+                                                                            <circle cx="18" cy="17" r="4" />
+                                                                            <path d="M18 15v4M16 17h4" />
+                                                                        </svg></button>
                                                                 </form>
-                                                            </section>
-                                                        </div>
 
-                                                    </div>
+                                                                <button style="margin-left: 20px" type="button"
+                                                                    id="open-course-support" class="course-support-trigger"
+                                                                    aria-haspopup="dialog" aria-controls="course-support-modal">
+                                                                    Need Support?
+                                                                </button>
+
+                                                                <div class="course-support-overlay" id="course-support-modal"
+                                                                    hidden>
+                                                                    <section class="course-support-dialog" role="dialog"
+                                                                        aria-modal="true" aria-labelledby="course-support-title">
+
+                                                                        <form class="course-support-form" method="POST"
+                                                                            action="{{ route('student.applications.store') }}">
+                                                                            @csrf
+                                                                            <input type="hidden" name="course_id"
+                                                                                value="{{ $course->id }}">
+                                                                            <input type="hidden" name="type"
+                                                                                value="course_support">
+                                                                            <div id="textareCounter">
+
+                                                                                <x-textarea
+                                                                                    label="in Short ,Why You Need This Support ?"
+                                                                                    style="margin-top: 7px" id="support-message"
+                                                                                    rows="5" name="msg" required
+                                                                                    minlength="5" />
+                                                                            </div>
+                                                                            <button onclick="submit_review2(event)" type="submit"
+                                                                                style=""
+                                                                                class="custom-button theme-one">Send
+                                                                                message</button>
+                                                                        </form>
+                                                                    </section>
+                                                                </div>
+
+                                                            </div>
+                                                        @else
+                                                            <div
+                                                                style="font-weight: bold;color: rgb(130, 0, 0);font-size: large;text-decoration: underline;">
+                                                                Not published Yet</div>
+                                                        @endif
+                                                    @else
+                                                        <div
+                                                            style="font-weight: bold;color: rgb(130, 0, 0);font-size: large;text-decoration: underline;">
+                                                            No More Seats</div>
+                                                    @endif
                                                 @else
-                                                    <div
-                                                        style="font-weight: bold;color: rgb(130, 0, 0);font-size: large;text-decoration: underline;">
-                                                        No More Seats</div>
+                                                    <div class="course-enrollment-status" role="status">Already enrolled</div>
                                                 @endif
-                                            @else
-                                                <div class="course-enrollment-status" role="status">Already enrolled</div>
-                                            @endif
+                                            @endrole
                                         @endauth
                                         @guest
                                             <p class="course-login-prompt">Sign in to enroll in this course.
@@ -404,28 +427,37 @@
                                     <div class="details-buttons-area">
                                         {{-- @dd(!auth()->user()->courses->contains($course->id)) --}}
                                         @auth
-                                            @if (!auth()->user()->courses->contains($course->id))
-                                                @if (!$course->available_seats <= 0)
-                                                    <form action="{{ route('courses.enroll', $course->id) }}" method="POST">
+                                            @role('student')
+                                                @if (!auth()->user()->courses->contains($course->id))
+                                                    @if (!$course->available_seats <= 0)
+                                                        @if ($course->status == 'published')
+                                                            <form action="{{ route('courses.enroll', $course->id) }}"
+                                                                method="POST">
 
-                                                        <button class="custom-button theme-one">Enroll Now <svg
-                                                                style="margin-bottom: 3px" xmlns="http://www.w3.org/2000/svg"
-                                                                width="23" height="23" viewBox="0 0 24 24"
-                                                                fill="none" stroke="currentColor" stroke-width="1.6"
-                                                                stroke-linecap="round" stroke-linejoin="round">
-                                                                <circle cx="9" cy="7" r="3.5" />
-                                                                <path d="M2.5 20v-1.5a6.5 6.5 0 0 1 13 0V20z" />
-                                                                <circle cx="18" cy="17" r="4" />
-                                                                <path d="M18 15v4M16 17h4" />
-                                                            </svg></button>
-                                                    </form>
+                                                                <button class="custom-button theme-one">Enroll Now <svg
+                                                                        style="margin-bottom: 3px"
+                                                                        xmlns="http://www.w3.org/2000/svg" width="23"
+                                                                        height="23" viewBox="0 0 24 24" fill="none"
+                                                                        stroke="currentColor" stroke-width="1.6"
+                                                                        stroke-linecap="round" stroke-linejoin="round">
+                                                                        <circle cx="9" cy="7" r="3.5" />
+                                                                        <path d="M2.5 20v-1.5a6.5 6.5 0 0 1 13 0V20z" />
+                                                                        <circle cx="18" cy="17" r="4" />
+                                                                        <path d="M18 15v4M16 17h4" />
+                                                                    </svg></button>
+                                                            </form>
+                                                        @else
+                                                            <div style="font-weight: bold;color: rgb(130, 0, 0);font-size: large;">
+                                                                Not published Yet</div>
+                                                        @endif
+                                                    @else
+                                                        <div style="font-weight: bold;color: rgb(130, 0, 0);font-size: large;">
+                                                            No More Seats</div>
+                                                    @endif
                                                 @else
-                                                    <div style="font-weight: bold;color: rgb(130, 0, 0);font-size: large;">
-                                                        No More Seats</div>
+                                                    <div class="course-enrollment-status" role="status">Already enrolled</div>
                                                 @endif
-                                            @else
-                                                <div class="course-enrollment-status" role="status">Already enrolled</div>
-                                            @endif
+                                            @endrole
                                         @endauth
                                         @guest
                                             <p class="course-login-prompt">Sign in to enroll in this course.
@@ -462,7 +494,8 @@
                                                 <span class="details">{{ $course->instructor->major }}</span>
                                             </div>
                                         </div>
-                                        <p>{{ $course->instructor->description }}</p>
+                                        <div style="overflow-wrap: break-word">{{ $course->instructor->description }}
+                                        </div>
                                         <div class="details-buttons-area">
                                             <ul class="social-icons justify-content-center w-100">
                                                 <li>
@@ -538,37 +571,39 @@
                                         </ul>
                                     </div>
                                     @auth
-                                        <div class="review-form">
-                                            <h6 class="review-title">Add a Review</h6>
-                                            <form id="rev-form" action="{{ route('courses.review.store', $course->id) }}"
-                                                method="POST" class="row client-form align-items-center">
+                                        @can('create', [\App\Models\Review::class, $course])
+                                            <div class="review-form">
+                                                <h6 class="review-title">Add a Review</h6>
+                                                <form id="rev-form" action="{{ route('courses.review.store', $course->id) }}"
+                                                    method="POST" class="row client-form align-items-center">
 
-                                                <div class="col-md-4 col-12">
-                                                    <div class="rating">
-                                                        <span class="rating-title">Your Rating : </span>
-                                                        <ul class="ratings">
-                                                            @for ($i = 0; $i <= 5; $i++)
-                                                                <li>
-                                                                    <a style="color: #eee" data-rating="{{ $i }}"
-                                                                        href="#0" title="Give Me One Star"><i
-                                                                            class="fa fa-star"></i></a>
-                                                                </li>
-                                                            @endfor
-                                                        </ul>
+                                                    <div class="col-md-4 col-12">
+                                                        <div class="rating">
+                                                            <span class="rating-title">Your Rating : </span>
+                                                            <ul class="ratings">
+                                                                @for ($i = 0; $i <= 5; $i++)
+                                                                    <li>
+                                                                        <a style="color: #eee" data-rating="{{ $i }}"
+                                                                            href="#0" title="Give Me One Star"><i
+                                                                                class="fa fa-star"></i></a>
+                                                                    </li>
+                                                                @endfor
+                                                            </ul>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div id="text-area-countiner" class="col-md-12 col-12 ">
-                                                    <x-textarea label="Your Comment :"
-                                                        style="background-color: whitesmoke;height: 100%;" id="comment"
-                                                        name="content" rows="5" placeholder="Type Here Comment" />
-                                                </div>
-                                                <div class="col-12">
-                                                    <button onclick="submit_review(event)" type="submit"
-                                                        class="custom-button rounded">Submit
-                                                        Review</button>
-                                                </div>
-                                            </form>
-                                        </div>
+                                                    <div id="text-area-countiner" class="col-md-12 col-12 ">
+                                                        <x-textarea label="Your Comment :"
+                                                            style="background-color: whitesmoke;height: 100%;" id="comment"
+                                                            name="content" rows="5" placeholder="Type Here Comment" />
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <button onclick="submit_review(event)" type="submit"
+                                                            class="custom-button rounded">Submit
+                                                            Review</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        @endcan
                                     @endauth
                                 </div>
                             </div>

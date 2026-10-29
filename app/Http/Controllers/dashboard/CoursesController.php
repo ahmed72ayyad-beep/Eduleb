@@ -75,6 +75,7 @@ class coursesController extends Controller
             'outer_image'    => $outer_path,
             'inner_image'    => $inner_path,
             'star_num'    => 0,
+            "status" => "published",
 
         ]);
         $course->tags()->attach($request->tags);
@@ -99,8 +100,8 @@ class coursesController extends Controller
     public function edit(Course $course)
     {
         $course->load(["instructor", "tags"]);
-        $tags=Tag::all();
-        return view("dashboard.courseManagement.edit", compact("course","tags"));
+        $tags = Tag::all();
+        return view("dashboard.courseManagement.edit", compact("course", "tags"));
     }
 
     /**

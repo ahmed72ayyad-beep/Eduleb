@@ -19,7 +19,7 @@ class CourseController extends Controller
      */
     public function index()
     {
-        $courses = Course::with(["reviews.user", "tags", "instructor"])->latest()->get();
+        $courses = Course::with(["reviews.user", "tags", "instructor"])->where("status", "published")->latest()->get();
 
         foreach ($courses as $course) {
             $total = 0;

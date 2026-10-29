@@ -10,6 +10,7 @@ use App\Models\Course;
 use App\Models\Instructor;
 use App\Models\User;
 use App\Notifications\newRole;
+use App\Notifications\Course_published;
 use App\Notifications\Support;
 use App\Rules\minWords;
 use DateTime;
@@ -35,8 +36,8 @@ class ApplicationController extends Controller
                 ->value('average_time');
             // dd($averageReviewTime);
             return view("application.applicationsAdmin", compact("applications", "approvedCount", "approvedThisMonthCount", "awaitingReview", "averageReviewTime"));
-        } elseif (Auth::user()->hasRole("student")) {
-            $applications = Application::latest()->get();
+        } elseif (Auth::user()->hasRole("student") | Auth::user()->hasRole("instructor")) {
+            $applications = Auth::user()->applications;
             $pendingCount = Auth::user()->applications->where("state", "pending")->count();
             return view("application.applicationsStudent", compact("applications", "pendingCount"));
         }
@@ -56,7 +57,9 @@ class ApplicationController extends Controller
     public function store(Request $request)
     {
         // dd($request);
-        switch ($request->type) {
+        $type = $request->input('application_type', $request->input('type'));
+        // dd($type);
+        switch ($type) {
             case 'instructor_application':
                 $request->validate([
                     "type" => ["required", "in:course_support,instructor_application"],
@@ -100,9 +103,71 @@ class ApplicationController extends Controller
 
                 ]);
                 break;
+            case 'create_course':
+                // Valdate the request
+                // dd("dddddddddd");
+                $request->validate([
+                    'title'           => ['required', 'string', 'max:255', "unique:courses,title"],
+                    'sub_title'       => ['nullable', 'string', 'max:255'],
+                    'type'            => ['required', 'in:online,recorded'],
+                    'price'           => ['required', 'numeric', 'min:0'],
+                    'duration'        => ['nullable', 'string', 'max:100'],
+                    'total_lectures'  => ['nullable', 'integer', 'min:0'],
+                    'date'            => ['required_if:type,online', "after:+1 week"],
+                    'available_seats' => ['nullable', 'integer', 'min:0'],
+                    'certification'   => ['required', 'in:yes,no'],
+                    'overview'        => ['nullable', 'string'],
+                    'description'     => ['nullable', 'string'],
+                    'curriculum'      => ['nullable', 'string'],
+                    'outer_image'     => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:4048', "required_without:inner_image"], // بحد أقصى 2 ميجابايت
+                    'inner_image'     => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:4048', "required_without:outer_image"],
+
+                ]);
+                // 1 : Store the files :
+                if ($request->hasFile("inner_image") && $request->hasFile("outer_image")) {
+                    $inner_path = $request->file("inner_image")->store("uploads/courses");
+                    $outer_path = $request->file("outer_image")->store("uploads/courses");
+                } elseif ($request->hasFile("inner_image")) {
+                    $inner_path = $request->file("inner_image")->store("uploads/courses");
+                    $outer_path = $inner_path;
+                } else {
+                    $outer_path = $request->file("outer_image")->store("uploads/courses");
+                    $inner_path = $outer_path;
+                }
+
+
+
+                // 2: Create the course :
+                $course = Course::create([
+                    'title'          => $request->title,
+                    'sub_title'      => $request->sub_title,
+                    'instructor_id'  => Instructor::where("user_id", Auth::id())->first()->id,
+                    'type'           => $request->type,
+                    'price'          => $request->price,
+                    'duration'       => $request->duration,
+                    'total_lectures' => $request->total_lectures,
+                    'date'           => $request->date,
+                    'available_seats' => $request->available_seats,
+                    'certification'  => $request->certification,
+                    'overview'       => $request->overview,
+                    'description'    => $request->description,
+                    'curriculum'     => $request->curriculum,
+                    'outer_image'    => $outer_path,
+                    'inner_image'    => $inner_path,
+                    'star_num'    => 0,
+                    "status" => "pending",
+
+                ]);
+                $course->tags()->attach($request->tags);
+                Application::create([
+                    "target_id" => $course->id,
+                    "user_id" => Auth::id(),
+                    "type" => $type,
+                ]);
+                break;
 
             default:
-                //
+                abort(404);
                 break;
         }
         flash()->success("Sended To The Admins Sucssesfully");
@@ -145,6 +210,15 @@ class ApplicationController extends Controller
             }
 
             File::delete($application->content["CV"]);
+        } elseif ($application->type == "create_course") {
+            $course = Course::findOrFail($application->target_id);
+            if ($course->inner_image == $course->outer_image) {
+                File::delete($course->inner_image);
+            } else {
+                File::delete($course->inner_image);
+                File::delete($course->outer_image);
+            }
+            $course->delete();
         }
         $application->delete();
         flash()->success("Deleted Sucssesfully");
@@ -202,6 +276,22 @@ class ApplicationController extends Controller
                 return redirect()->back();
 
                 break;
+
+
+            case 'create_course':
+                $course = Course::findOrFail($application->target_id);
+                $course->update([
+                    "status" => "published",
+                ]);
+                $application->update([
+                    "state" => "Accpted",
+                    "reviewed_at" => now(),
+                ]);
+                $user = $application->user;
+                $user->notify(new Course_published($user, $course, route("courses.show", $course->id)));
+                flash()->success("Accpted Sucssesfully");
+                return redirect()->back();
+                break;
             default:
                 abort(404);
                 break;
@@ -212,13 +302,18 @@ class ApplicationController extends Controller
     {
         $application->load("user");
         $user = User::find($application->user->id);
-
+        if ($application->type == "create_course") {
+            $course = Course::findOrFail($application->target_id);
+            $course->update([
+                "status" => "drafted",
+            ]);
+        }
         $application->update([
             "state" => "rejected",
             "reviewed_at" => now(),
         ]);
 
-        $user->notify(new newRole("instructor", $user));
+        // $user->notify(new newRole("instructor", $user));
         flash()->success("rejected Sucssesfully");
         return redirect()->back();
     }

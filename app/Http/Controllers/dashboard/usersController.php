@@ -96,6 +96,7 @@ class usersController extends Controller
             }
         } else {
             $user->syncRoles([$request->role]);
+            DatabaseNotification::where('type', 'App\Notifications\newRole')->where("notifiable_id", $request->user_id)->delete();
             $user->notify(new newRole($request->role, $user));
         }
     }

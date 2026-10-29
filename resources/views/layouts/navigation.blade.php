@@ -30,7 +30,7 @@
                             <x-nav-link :href="route('dashboard.FAQs.index')" :active="request()->routeIs('dashboard.FAQs.index')">
                                 {{ __('FAQs Management') }}
                             </x-nav-link>
-                                 <x-nav-link :href="route('student.applications.index')" :active="request()->routeIs('student.applications.index')">
+                            <x-nav-link :href="route('student.applications.index')" :active="request()->routeIs('student.applications.index')">
                                 {{ __(' Applications Managment') }}
                             </x-nav-link>
                         </div>
@@ -55,6 +55,32 @@
                             <x-nav-link :href="route('student.applications.index')" :active="request()->routeIs('student.applications.index')">
                                 {{ __('My Applications') }}
                             </x-nav-link>
+                        </div>
+                        @elseif (auth()->user()->hasRole('instructor'))
+                        <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+
+                            <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                                {{ __('Dashboard') }}
+                            </x-nav-link>
+
+                            <x-nav-link :href="route('instructor.reviews')" :active="request()->routeIs('instructor.reviews')">
+                                {{ __('reviews') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('instructor.courses')" :active="request()->routeIs('instructor.courses')">
+                                {{ __('Courses') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('instructor.students')" :active="request()->routeIs('instructor.students')">
+                                {{ __('Students') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('instructor.lesson_studio')" :active="request()->routeIs('instructor.lesson_studio')">
+                                {{ __('Lesson Studio') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('student.applications.index')" :active="request()->routeIs('student.applications.index')">
+                                {{ __('My Applications') }}
+                            </x-nav-link>
+
+
+
                         </div>
                     @endif
                 @endauth

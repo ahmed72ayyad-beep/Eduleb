@@ -7,22 +7,23 @@
                 </h1>
                 <p class="text-sm text-gray-500 mt-1">
                     Update course details and specifications for
-                    <span class="text-indigo-600 font-semibold text-lg">EduLeb</span>.
+                    <span class="text-emerald-700 font-semibold text-lg">EduLeb</span>.
                 </p>
             </div>
 
             <a href="{{ route('dashboard.courses.index') }}"
-                class="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-slate-100 text-gray-700 text-xs font-semibold hover:bg-slate-200 transition">
+                class="inline-flex items-center gap-2 rounded-md bg-white px-4 py-2 text-xs font-semibold text-slate-700 ring-1 ring-slate-200 transition hover:bg-slate-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700">
                 ← Back to Courses
             </a>
         </div>
     </x-slot>
 
-    <div class="py-8 bg-gradient-to-br from-slate-50 via-indigo-50/20 to-purple-50/30 min-h-screen">
+    <div class="min-h-screen bg-gradient-to-br from-slate-50 via-emerald-50/40 to-amber-50/30 py-8">
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8 space-y-8">
 
             <form action="{{ route('dashboard.courses.update', $course->id) }}" method="POST"
-                enctype="multipart/form-data" class="space-y-8">
+                enctype="multipart/form-data"
+                class="space-y-8 [&_input]:rounded-md [&_select]:rounded-md [&_textarea]:rounded-md [&_input:focus]:border-emerald-600 [&_input:focus]:ring-emerald-600 [&_select:focus]:border-emerald-600 [&_select:focus]:ring-emerald-600 [&_textarea:focus]:border-emerald-600 [&_textarea:focus]:ring-emerald-600 [&>div:not(:last-child)]:rounded-lg [&>div:not(:last-child)]:border-slate-200">
                 @csrf
                 @method('PUT')
 
@@ -193,12 +194,12 @@
                                     Thumbnail Image</label>
                                 <input id="sss" type="file" name="outer_image"
                                     value="{{ $course->outer_image }}"
-                                    class="block w-full text-xs text-gray-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100" />
+                                    class="block w-full text-xs text-slate-500 file:mr-4 file:rounded-md file:border-0 file:bg-emerald-50 file:px-4 file:py-2.5 file:text-xs file:font-semibold file:text-emerald-800 hover:file:bg-emerald-100" />
                                 @if ($course->outer_image)
                                     <div
-                                        class="mt-2 flex items-center gap-3 p-2 bg-slate-50 rounded-2xl border border-slate-100 w-fit">
+                                        class="mt-2 flex w-fit items-center gap-3 rounded-md border border-slate-200 bg-slate-50 p-2">
                                         <img src="{{ asset($course->outer_image) }}" alt="Current Outer Image"
-                                            class="w-16 h-12 object-cover rounded-xl border border-gray-200 shadow-xs">
+                                            class="h-12 w-16 rounded-md border border-slate-200 object-cover">
                                         <div>
                                             <span class="text-[10px] font-bold text-gray-500 uppercase block">Current
                                                 Outer Image</span>
@@ -215,12 +216,12 @@
                                     Image</label>
                                 <input id="ss" type="file" name="inner_image"
                                     value="{{ $course->inner_image }}"
-                                    class="block w-full text-xs text-gray-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100" />
+                                    class="block w-full text-xs text-slate-500 file:mr-4 file:rounded-md file:border-0 file:bg-emerald-50 file:px-4 file:py-2.5 file:text-xs file:font-semibold file:text-emerald-800 hover:file:bg-emerald-100" />
                                 @if ($course->inner_image)
                                     <div
-                                        class="mt-2 flex items-center gap-3 p-2 bg-slate-50 rounded-2xl border border-slate-100 w-fit">
+                                        class="mt-2 flex w-fit items-center gap-3 rounded-md border border-slate-200 bg-slate-50 p-2">
                                         <img src="{{ asset($course->inner_image) }}" alt="Current Inner Image"
-                                            class="w-16 h-12 object-cover rounded-xl border border-gray-200 shadow-xs">
+                                            class="h-12 w-16 rounded-md border border-slate-200 object-cover">
                                         <div>
                                             <span class="text-[10px] font-bold text-gray-500 uppercase block">Current
                                                 Inner Image</span>
@@ -258,11 +259,11 @@
                 <!-- Submit Button Bar -->
                 <div class="flex items-center justify-end gap-4">
                     <a onclick="confirm()" href="{{ route('dashboard.courses.index') }}"
-                        class="px-6 py-3 rounded-2xl bg-slate-100 text-gray-600 text-xs font-bold hover:bg-slate-200 transition">
+                        class="px-6 py-3 rounded-md bg-slate-100 text-gray-600 text-xs font-bold hover:bg-slate-200 transition">
                         Cancel
                     </a>
                     <button type="submit"
-                        class="px-8 py-3 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-xs font-bold shadow-md shadow-indigo-200 hover:shadow-lg hover:opacity-95 transition-all">
+                        class="px-8 py-3 rounded-md bg-emerald-800 text-xs font-bold text-white transition hover:bg-emerald-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-800">
                         Update Course
                     </button>
                 </div>
@@ -330,8 +331,8 @@
                     let subSpan = document.createElement("span");
                     subSpan.textContent = "Instructor";
                     subSpan.classList.add(
-                        "text-xs", "text-indigo-600", "font-semibold",
-                        "bg-indigo-50", "px-2", "py-1", "rounded-md"
+                        "text-xs", "text-emerald-800", "font-semibold",
+                        "bg-emerald-50", "px-2", "py-1", "rounded-md"
                     );
 
                     li.appendChild(nameSpan);

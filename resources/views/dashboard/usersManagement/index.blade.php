@@ -12,7 +12,7 @@
                     {{ __('Users Management') }}
                 </h1>
                 <p class="text-sm text-gray-500 mt-1">Change Roles, Delete, and monitor all Users on <span
-                        class="text-indigo-600 font-semibold text-lg">Eduleb</span>.</p>
+                        class="text-emerald-700 font-semibold text-lg">Eduleb</span>.</p>
             </div>
 
             {{-- @can('users.create')
@@ -24,16 +24,16 @@
         </div>
     </x-slot>
 
-    <div class="py-8 bg-gradient-to-br from-slate-50 via-indigo-50/20 to-purple-50/30 min-h-screen">
+    <div class="min-h-screen bg-gradient-to-br from-slate-50 via-emerald-50/40 to-amber-50/30 py-8">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-8">
 
             <!-- Filter & Search Bar Section -->
             <div
-                class="bg-white/80 backdrop-blur-sm p-6 rounded-3xl shadow-sm border border-gray-100 flex flex-col md:flex-row gap-4 items-center justify-between">
+                class="flex flex-col items-center justify-between gap-4 rounded-lg border border-slate-200 bg-white p-5 shadow-sm md:flex-row sm:p-6">
                 <!-- Search Input -->
                 <div id="search_counter" class="relative w-full md:w-96">
                     <input id="search" type="text" placeholder="Search users by title or instructor..."
-                        class="w-full pl-10 pr-4 py-2.5 rounded-2xl border border-gray-200 focus:border-indigo-500 focus:ring-indigo-500/20 text-sm placeholder-gray-400 transition-all">
+                        class="w-full rounded-md border-slate-300 py-2.5 pl-10 pr-4 text-sm placeholder-slate-400 transition focus:border-emerald-600 focus:ring-emerald-600">
                     <span class="absolute left-3.5 top-3 text-gray-400 text-sm"><svg xmlns="http://www.w3.org/2000/svg"
                             width="20" height="20" viewBox="0 0 24 24" fill="none">
                             <path fill-rule="evenodd" clip-rule="evenodd"
@@ -49,16 +49,16 @@
                 <!-- Filters -->
                 <div class="flex flex-wrap items-center gap-3 w-full md:w-auto justify-start md:justify-end">
 
-                    <form class="flex justify-between w-52" action="">
+                    <form class="flex w-full justify-between gap-2 sm:w-auto" action="">
                         <select onchange="select_Role(event)"
-                            class="px-4 py-2.5 rounded-2xl border border-gray-200 text-xs font-semibold text-gray-600 focus:border-indigo-500 focus:ring-indigo-500/20">
+                            class="rounded-md border-slate-300 px-4 py-2.5 text-xs font-semibold text-slate-700 focus:border-emerald-600 focus:ring-emerald-600">
                             <option value="role">Role</option>
                             @foreach ($roles as $role)
                                 <option value="{{ $role->name }}">{{ $role->name }}</option>
                             @endforeach
                         </select>
                         <div onclick="reset(event)"
-                            class="px-4 py-2.5 rounded-2xl bg-slate-100 text-gray-600 text-xs font-semibold hover:bg-slate-200 transition">
+                            class="rounded-md bg-slate-100 px-4 py-2.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-200">
                             Reset Filters
                         </div>
                     </form>
@@ -66,11 +66,11 @@
             </div>
 
             <!-- users Table Card -->
-            <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 space-y-6">
-                <div class="flex items-center justify-between border-b border-gray-100 pb-4">
+            <div class="space-y-6 rounded-lg border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-4">
                     <div>
-                        <h2 class=" font-semibold text-gray-800 text-3xl">All users</h2>
-                        <p class="text-xs text-gray-400">Total Users : <span class="text-indigo-600">
+                        <h2 class="text-2xl font-bold text-slate-900">All users</h2>
+                        <p class="text-xs text-slate-500">Total Users : <span class="font-semibold text-emerald-800">
                                 {{ $users->count() }}</span>
                         </p>
                     </div>
@@ -80,8 +80,8 @@
                 </div>
 
                 <div class="overflow-x-auto">
-                    <table class="w-full text-sm text-left text-gray-600">
-                        <thead class="text-xs text-gray-400 uppercase bg-slate-50 rounded-2xl">
+                    <table class="w-full text-left text-sm text-slate-600">
+                        <thead class="bg-emerald-50 text-xs uppercase text-emerald-900">
                             <tr>
                                 <th scope="col" class="py-3.5 px-4 rounded-l-2xl w-56 ">User Name
                                 </th>
@@ -97,12 +97,12 @@
                                     Actions</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-50">
+                        <tbody class="divide-y divide-slate-100">
                             @forelse ($users as $user)
                                 <!-- user Item 1 -->
                                 <tr datas="tr"
                                     title="{{ $user->roles->first() == null ? 'student' : $user->roles->first()->name }}"
-                                    id="user{{ $user->id }}" class="hover:bg-slate-50/60 transition-colors">
+                                    id="user{{ $user->id }}" class="transition-colors hover:bg-emerald-50/40">
                                     <td class="py-4 px-4 font-semibold text-gray-800 flex items-center gap-3  ">
                                         {{-- <div
                                         class="w-11 h-11 rounded-2xl bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-lg shrink-0">
@@ -117,7 +117,8 @@
                                         <div class="flex items-center gap-2">
 
                                             <select onchange="updateRole(event,{{ $user->id }})"
-                                                class="rounded-2xl py-2 pr-8 pl-4" name="role" id="role">
+                                                class="rounded-md border-slate-300 py-2 pl-3 pr-8 text-xs text-slate-700 focus:border-emerald-600 focus:ring-emerald-600"
+                                                name="role" id="role">
                                                 @foreach ($roles as $role)
                                                     <option class="rounded-3xl" @selected($user->hasRole($role->name))
                                                         value="{{ $role->name }}">
@@ -127,12 +128,12 @@
                                             </select>
                                         </div>
                                     </td>
-                                    <td class="py-4 px-4 font-bold text-indigo-600 "> {{ $user->email }}</td>
+                                    <td class="py-4 px-4 font-medium text-emerald-800"> {{ $user->email }}</td>
                                     <td class="py-4 px-4">
                                         <div class="flex flex-wrap gap-2 min-w-32">
                                             @forelse ($user->courses as $course)
                                                 <span
-                                                    class="inline-flex items-center rounded-lg bg-indigo-50 px-2.5 py-1 text-xs font-semibold text-indigo-700 border border-indigo-100">
+                                                    class="inline-flex items-center rounded-sm border border-emerald-100 bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-800">
                                                     {{ $course->title }}
                                                 </span>
                                             @empty
@@ -147,7 +148,7 @@
                                         {{ $user->created_at->format('Y M d') }} </td>
                                     <td class="py-4 px-4 ">
                                         <span
-                                            class="bg-emerald-50 text-emerald-600 text-s font-bold px-2 py-0.5 rounded-md border border-emerald-100">{{ $user->last_login == null ? 'not Avilable' : $user->last_login->diffForHumans() }}</span>
+                                            class="rounded-sm border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-xs font-bold text-emerald-800">{{ $user->last_login == null ? 'not Avilable' : $user->last_login->diffForHumans() }}</span>
                                     </td>
                                     <td class="py-4 px-4 text-right space-x-4 flex justify-end">
 
@@ -159,7 +160,7 @@
                                                 @method('delete')
 
                                                 <button c type="submit"
-                                                    class="flex gap-1 p-2 rounded-xl bg-red-50 text-gray-600 hover:bg-indigo-50 hover:text-red-600 transition text-sm font-semibold">
+                                                    class="flex items-center gap-1 rounded-md bg-rose-50 p-2 text-sm font-semibold text-rose-700 transition hover:bg-rose-100">
                                                     Delete <svg xmlns="http://www.w3.org/2000/svg" width="20"
                                                         height="20" viewBox="0 0 24 24" fill="none">
                                                         <path fill-rule="evenodd" clip-rule="evenodd"
@@ -183,7 +184,8 @@
                             @empty
 
                                 <tr>
-                                    <td colspan="100" class="text-center pt-10 pb-10 text-3xl">
+                                    <td colspan="7"
+                                        class="px-4 py-10 text-center text-sm font-medium text-slate-500">
                                         No users Yet
                                     </td>
                                 </tr>
@@ -193,7 +195,7 @@
                 </div>
 
                 <!-- Pagination Placeholder -->
-                <div class="flex items-center justify-between border-t border-gray-100 pt-4 text-xs text-gray-500">
+                <div class="flex items-center justify-between border-t border-slate-100 pt-4 text-xs text-slate-500">
                     {{-- <div>Showing 1 to 3 of 32 users</div>
                 <div class="flex gap-2">
                     <button class="px-3 py-1.5 rounded-xl border bg-slate-50 disabled:opacity-50"

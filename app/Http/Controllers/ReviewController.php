@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreReviewRequest;
 use App\Http\Requests\UpdateReviewRequest;
+use App\Models\Course;
 use App\Models\Review;
 use App\Notifications\reviewdelete;
 use Illuminate\Support\Facades\Auth;
@@ -33,6 +34,8 @@ class ReviewController extends Controller
     public function store(StoreReviewRequest $request, string $course_id)
     {
         // dd($request);
+        $course=Course::find($course_id);
+        Gate::authorize('create', [Review::class, $course]);
         Review::create([
             "user_id" => Auth::id(),
             "course_id" => $course_id,
@@ -65,8 +68,8 @@ class ReviewController extends Controller
     {
         // dd($request);
         $review->update([
-            "content"=>$request->content,
-            "star_num"=>$request->star_num,
+            "content" => $request->content,
+            "star_num" => $request->star_num,
         ]);
         flash()->success("Updated Sucssesfully");
         return redirect()->back();
@@ -82,7 +85,7 @@ class ReviewController extends Controller
         Gate::authorize("delete", $review);
 
         flash()->success("Deleted Sucssesfully");
-        $review->user->notify(new reviewdelete($review->user->name,$review->course->name));
+        $review->user->notify(new reviewdelete($review->user->name, $review->course->name));
         return redirect()->back();
     }
 }

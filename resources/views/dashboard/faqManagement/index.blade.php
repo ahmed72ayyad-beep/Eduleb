@@ -11,7 +11,7 @@
             </div>
             <div class="flex items-center gap-3">
                 <x-primary-button x-data="" x-on:click.prevent="$dispatch('open-modal', 'create-faq-modal')"
-                    class="bg-indigo-600 hover:bg-indigo-700 rounded-full px-6 py-2.5 shadow-lg flex gap-x-3">
+                    class="flex gap-x-3 rounded-md bg-emerald-800 px-6 py-2.5 shadow-sm transition hover:bg-emerald-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-800">
                     <span>
                         {{ __('Add New FAQ') }}
                     </span>
@@ -24,23 +24,23 @@
         </div>
     </x-slot>
 
-    <div class="py-12">
+    <div class="min-h-screen bg-gradient-to-br from-slate-50 via-emerald-50/40 to-amber-50/30 py-8">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
 
             <!-- Stats Overview Cards -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
                 <div
-                    class="bg-white overflow-hidden shadow-sm sm:rounded-3xl p-6 border border-gray-100 flex items-center justify-between transition-all hover:shadow-md">
+                    class="flex items-center justify-between overflow-hidden rounded-lg border border-slate-200 border-t-2 border-t-emerald-700 bg-white p-5 shadow-sm transition hover:shadow-md">
                     <div>
                         <p class="text-sm font-medium text-gray-500">{{ __('Total FAQs') }}</p>
                         <h3 class="text-2xl font-bold text-gray-800 mt-1">{{ $faqs->count() }}</h3>
                     </div>
                     <div
-                        class="w-14 h-14 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center font-bold text-xl shadow-inner">
+                        class="flex h-12 w-12 items-center justify-center rounded-md bg-emerald-50 text-xl font-bold text-emerald-800">
                         ❓</div>
                 </div>
                 {{-- <div
-                    class="bg-white overflow-hidden shadow-sm sm:rounded-3xl p-6 border border-gray-100 flex items-center justify-between transition-all hover:shadow-md">
+                    class="flex items-center justify-between overflow-hidden rounded-lg border border-slate-200 border-t-2 border-t-amber-500 bg-white p-5 shadow-sm transition hover:shadow-md">
                     <div>
                         <p class="text-sm font-medium text-gray-500">{{ __('Authors') }}</p>
                         <h3 class="text-2xl font-bold text-green-600 mt-1">{{ $authors_num ?? 0 }}</h3>
@@ -50,53 +50,53 @@
                         ✍️</div>
                 </div> --}}
                 <div
-                    class="bg-white overflow-hidden shadow-sm sm:rounded-3xl p-6 border border-gray-100 flex items-center justify-between transition-all hover:shadow-md">
+                    class="flex items-center justify-between overflow-hidden rounded-lg border border-slate-200 border-t-2 border-t-teal-700 bg-white p-5 shadow-sm transition hover:shadow-md">
                     <div>
                         <p class="text-sm font-medium text-gray-500">{{ __('Active Status') }}</p>
                         <h3 class="text-2xl font-bold text-blue-600 mt-1">{{ __('100% Online') }}</h3>
                     </div>
                     <div
-                        class="w-14 h-14 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center font-bold text-xl shadow-inner">
+                        class="flex h-12 w-12 items-center justify-center rounded-md bg-amber-50 text-xl font-bold text-amber-800">
                         ⚡</div>
                 </div>
             </div>
 
             <!-- Search Bar with Suggestions Counter Container -->
             <div
-                class="bg-white p-4 sm:p-6 shadow-sm sm:rounded-3xl border border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4">
+                class="flex flex-col items-center justify-between gap-4 rounded-lg border border-slate-200 bg-white p-5 shadow-sm md:flex-row sm:p-6">
                 <div class="w-full md:w-1/2 relative" id="search_counter">
                     <label for="search"
                         class="block text-sm font-medium text-gray-700 mb-1">{{ __('Search Questions') }}</label>
                     <input
-                        class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-full px-5 py-2.5 shadow-sm text-sm"
+                        class="mt-1 block w-full rounded-md border-slate-300 px-5 py-2.5 text-sm shadow-sm focus:border-emerald-600 focus:ring-emerald-600"
                         id="search" type="text" name="search" autocomplete="off"
                         placeholder="Search by question or author..." />
                 </div>
             </div>
 
             <!-- FAQs Table Card -->
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-3xl border border-gray-100">
+            <div class="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
                 <div class="p-6 text-gray-900 overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead>
                             <tr>
                                 <th
-                                    class="px-6 py-4 bg-gray-50 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider rounded-r-2xl">
+                                    class="rounded-l-md bg-emerald-50 px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-emerald-900">
                                     {{ __('Question & Answer') }}</th>
                                 <th
-                                    class="px-6 py-4 bg-gray-50 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                    class="bg-emerald-50 px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-emerald-900">
                                     {{ __('Author') }}</th>
                                 <th
                                     class="px-6 py-4 bg-gray-50 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
                                     {{ __('Date') }}</th>
                                 <th
-                                    class="px-6 py-4 bg-gray-50 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider rounded-l-2xl">
+                                    class="rounded-r-md bg-emerald-50 px-6 py-4 text-right text-xs font-semibold uppercase tracking-wider text-emerald-900">
                                     {{ __('Actions') }}</th>
                             </tr>
                         </thead>
-                        <tbody id="faqs-table-body" class="bg-white divide-y divide-gray-200 text-sm">
+                        <tbody id="faqs-table-body" class="divide-y divide-slate-100 bg-white text-sm">
                             @forelse($faqs ?? [] as $faq)
-                                <tr id="faq_row_{{ $faq->id }}" class="hover:bg-gray-50 transition-colors">
+                                <tr id="faq_row_{{ $faq->id }}" class="transition-colors hover:bg-emerald-50/40">
                                     <td class="px-6 py-4">
                                         <div class="font-bold text-gray-900">{{ $faq->question }}</div>
                                         <div class="text-xs text-gray-500 mt-1 truncate max-w-md">{{ $faq->answer }}
@@ -109,13 +109,15 @@
                                         {{ $faq->created_at == null ? 'Not Available' : $faq->created_at->format('Y-m-d') }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-                                        <button x-data="" x-on:click.prevent="$dispatch('open-modal', 'edit-faq-modal{{ $faq->id }}')"
-                                            class="text-indigo-600 hover:text-indigo-900 bg-indigo-50 px-3 py-1 rounded-full">{{ __('Edit') }}</button>
+                                        <button x-data=""
+                                            x-on:click.prevent="$dispatch('open-modal', 'edit-faq-modal{{ $faq->id }}')"
+                                            class="rounded-md bg-emerald-50 px-3 py-1.5 text-emerald-800 transition hover:bg-emerald-100">{{ __('Edit') }}</button>
                                         <x-modal name="edit-faq-modal{{ $faq->id }}" focusable>
-                                            <form method="POST" action="{{ route('dashboard.FAQs.update',$faq->id) }}"
-                                                class="p-8 space-y-5 rounded-3xl">
+                                            <form method="POST"
+                                                action="{{ route('dashboard.FAQs.update', $faq->id) }}"
+                                                class="space-y-5 rounded-lg p-6 sm:p-8">
                                                 @csrf
-                                                @method("PUT")
+                                                @method('PUT')
                                                 <h2 class="text-xl font-bold text-gray-900 mb-2">
                                                     {{ __('Edit FAQ') }}
                                                 </h2>
@@ -123,7 +125,7 @@
                                                 <div>
                                                     <x-input labelclass="block text-sm font-medium text-gray-700"
                                                         label="Question" value="{{ $faq->question }}"
-                                                        class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-full px-4 py-2 shadow-sm text-sm"
+                                                        class="mt-1 block w-full rounded-md border-slate-300 px-4 py-2 text-sm shadow-sm focus:border-emerald-600 focus:ring-emerald-600"
                                                         id="question" type="text" name="question"
                                                         placeholder="Enter question..." required />
                                                 </div>
@@ -131,19 +133,19 @@
                                                 <div>
                                                     <x-textarea label="Answer" value="{{ $faq->answer }}"
                                                         labelclass="block text-sm font-medium text-gray-700"
-                                                        class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-2xl p-4 shadow-sm text-sm"
+                                                        class="mt-1 block w-full rounded-md border-slate-300 p-4 text-sm shadow-sm focus:border-emerald-600 focus:ring-emerald-600"
                                                         id="answer" name="answer" rows="4"
                                                         placeholder="Write the detailed answer here..." required />
                                                 </div>
 
                                                 <div class="mt-8 flex justify-end gap-3">
                                                     <x-secondary-button x-on:click="$dispatch('close')"
-                                                        class="rounded-full px-6 py-2.5">
+                                                        class="rounded-md px-6 py-2.5">
                                                         {{ __('Cancel') }}
                                                     </x-secondary-button>
 
                                                     <x-primary-button
-                                                        class="bg-indigo-600 hover:bg-indigo-700 rounded-full px-6 py-2.5 shadow-lg">
+                                                        class="rounded-md bg-emerald-800 px-6 py-2.5 shadow-sm transition hover:bg-emerald-900">
                                                         {{ __('Save FAQ') }}
                                                     </x-primary-button>
                                                 </div>
@@ -155,7 +157,7 @@
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
-                                                class="text-red-600 hover:text-red-900 bg-red-50 px-3 py-1 rounded-full"
+                                                class="rounded-md bg-rose-50 px-3 py-1.5 text-rose-700 transition hover:bg-rose-100"
                                                 onclick="return confirm('Are you sure?')">{{ __('Delete') }}</button>
                                         </form>
                                     </td>
@@ -177,7 +179,7 @@
 
     <!-- Create FAQ Modal -->
     <x-modal name="create-faq-modal" focusable>
-        <form method="POST" action="{{ route('dashboard.FAQs.store') }}" class="p-8 space-y-5 rounded-3xl">
+        <form method="POST" action="{{ route('dashboard.FAQs.store') }}" class="space-y-5 rounded-lg p-6 sm:p-8">
             @csrf
             <h2 class="text-xl font-bold text-gray-900 mb-2">
                 {{ __('Create New FAQ') }}
@@ -185,23 +187,24 @@
 
             <div>
                 <x-input labelclass="block text-sm font-medium text-gray-700" label="Question"
-                    class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-full px-4 py-2 shadow-sm text-sm"
+                    class="mt-1 block w-full rounded-md border-slate-300 px-4 py-2 text-sm shadow-sm focus:border-emerald-600 focus:ring-emerald-600"
                     id="question" type="text" name="question" placeholder="Enter question..." required />
             </div>
 
             <div>
                 <x-textarea label="Answer" labelclass="block text-sm font-medium text-gray-700"
-                    class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-2xl p-4 shadow-sm text-sm"
+                    class="mt-1 block w-full rounded-md border-slate-300 p-4 text-sm shadow-sm focus:border-emerald-600 focus:ring-emerald-600"
                     id="answer" name="answer" rows="4" placeholder="Write the detailed answer here..."
                     required />
             </div>
 
             <div class="mt-8 flex justify-end gap-3">
-                <x-secondary-button x-on:click="$dispatch('close')" class="rounded-full px-6 py-2.5">
+                <x-secondary-button x-on:click="$dispatch('close')" class="rounded-md px-6 py-2.5">
                     {{ __('Cancel') }}
                 </x-secondary-button>
 
-                <x-primary-button class="bg-indigo-600 hover:bg-indigo-700 rounded-full px-6 py-2.5 shadow-lg">
+                <x-primary-button
+                    class="rounded-md bg-emerald-800 px-6 py-2.5 shadow-sm transition hover:bg-emerald-900">
                     {{ __('Save FAQ') }}
                 </x-primary-button>
             </div>
@@ -295,19 +298,19 @@
                     ul.innerHTML = "";
 
                     document.querySelectorAll("tr[id^='faq_row_']").forEach(row => {
-                        row.classList.remove("bg-indigo-50", "transition-colors", "duration-500");
+                        row.classList.remove("bg-emerald-50", "transition-colors", "duration-500");
                     });
 
                     let targetRow = document.querySelector("#faq_row_" + faqId);
                     if (targetRow) {
-                        targetRow.classList.add("bg-indigo-50", "transition-colors", "duration-500");
+                        targetRow.classList.add("bg-emerald-50", "transition-colors", "duration-500");
                         targetRow.scrollIntoView({
                             behavior: 'smooth',
                             block: 'center'
                         });
 
                         setTimeout(() => {
-                            targetRow.classList.remove("bg-indigo-50");
+                            targetRow.classList.remove("bg-emerald-50");
                         }, 3000);
                     }
                 };

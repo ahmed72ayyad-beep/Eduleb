@@ -6,6 +6,7 @@ use App\Http\Requests\ContactRequest;
 use App\Models\Blog;
 use App\Models\Course;
 use App\Models\Instructor;
+use App\Models\Review;
 use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -32,7 +33,9 @@ class mainController extends Controller
 
     public function about()
     {
-        return view("about");
+        $reviews=Review::with(["user","course"])->where("star_num",">=","4")->get();
+        // dd($review);
+        return view("about",compact("reviews"));
     }
     public function FAQ()
     {

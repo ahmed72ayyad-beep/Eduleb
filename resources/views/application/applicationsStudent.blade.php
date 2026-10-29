@@ -10,7 +10,7 @@
 
         </div>
     </x-slot>
-    {{-- @dd($applications) --}}
+    {{-- @dd(auth()->user()->applications) --}}
 
 
     <main class="min-h-screen relative bg-slate-50 px-4 py-8 sm:px-6 lg:px-8">
@@ -56,8 +56,12 @@
                                     @if ($application['type'] == 'instructor_application')
                                         Instructor Application
                                     @elseif ($application['type'] == 'course_support')
-                                        Course_Support <a
-                                            href="{{ route('courses.show', $application->target_id) }}">Show Course</a>
+                                        Course Support
+                                    @elseif ($application['type'] == 'create_course')
+                                        Create Course <a href="{{ route('courses.show', $application->target_id) }}"
+                                            style="font-size: 11px !important"
+                                            class="  text-red-600 hover:text-red-400 font-semibold  tracking-[1px]">Show
+                                            Course</a>
                                     @endif
                                 </p>
 
@@ -90,6 +94,9 @@
                                         class="rounded-md border border-slate-300 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-white">
                                         View
                                     </button>
+                                @elseif ($application->type == 'create_course')
+                                    <a href="{{ route('courses.show', $application->target_id) }}"
+                                        class="rounded-md border border-slate-300 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-white">View</a>
                                 @endif
                                 @if ($application->state === 'pending')
                                     <form method="POST"
@@ -167,18 +174,7 @@
                                             </div>
                                         </dl>
                                     </article>
-                                    <div class="flex justify-between p-4 flex-row-reverse">
-                                        <form method="POST"
-                                            action="{{ route('dashboard.application.approve', $application->id) }}">
-                                            @method('PUT')<button type="submit"
-                                                class="rounded-md bg-emerald-700 px-3 py-1.5 text-xs font-semibold text-white hover:bg-emerald-800">Approve</button>
-                                        </form>
-                                        <form method="POST"
-                                            action="{{ route('dashboard.application.reject', $application->id) }}">
-                                            @method('PUT')<button type="submit"
-                                                class="rounded-md border border-rose-200 px-3 py-1.5 text-xs font-semibold text-rose-700 hover:bg-rose-50">Decline</button>
-                                        </form>
-                                    </div>
+
                                 </section>
                             </x-modal>
                         @elseif ($application->type == 'course_support')
@@ -192,6 +188,17 @@
                                                 <div class="flex items-center gap-x-4">
                                                     <h2 class="text-xl font-bold text-slate-900">
                                                         {{ $application->user->name }}</h2>
+                                                    <a class="text-blue-900 text-sm mt-1 flex items-center gap-x-1"
+                                                        href="{{ asset($application->target_id) }}">Show Course Page<svg
+                                                            xmlns="http://www.w3.org/2000/svg" width="16"
+                                                            height="16" viewBox="0 0 24 24" fill="none">
+                                                            <path
+                                                                d="M21.25 12C21.25 17.1086 17.1086 21.25 12 21.25C6.89137 21.25 2.75 17.1086 2.75 12C2.75 6.89137 6.89137 2.75 12 2.75C12.4142 2.75 12.75 2.41421 12.75 2C12.75 1.58579 12.4142 1.25 12 1.25C6.06294 1.25 1.25 6.06294 1.25 12C1.25 17.9371 6.06294 22.75 12 22.75C17.9371 22.75 22.75 17.9371 22.75 12C22.75 11.5858 22.4142 11.25 22 11.25C21.5858 11.25 21.25 11.5858 21.25 12Z"
+                                                                fill="currentColor" />
+                                                            <path
+                                                                d="M12.4697 10.4697C12.1768 10.7626 12.1768 11.2374 12.4697 11.5303C12.7626 11.8232 13.2374 11.8232 13.5303 11.5303L21.25 3.81066V7.34375C21.25 7.75796 21.5858 8.09375 22 8.09375C22.4142 8.09375 22.75 7.75796 22.75 7.34375V2C22.75 1.58579 22.4142 1.25 22 1.25H16.6562C16.242 1.25 15.9062 1.58579 15.9062 2C15.9062 2.41421 16.242 2.75 16.6562 2.75H20.1893L12.4697 10.4697Z"
+                                                                fill="currentColor" />
+                                                        </svg></a>
                                                 </div>
                                             </div>
                                             <button type="button" x-data=""
@@ -219,18 +226,7 @@
                                             </div>
                                         </dl>
                                     </article>
-                                    <div class="flex justify-between p-4 flex-row-reverse">
-                                        <form method="POST"
-                                            action="{{ route('dashboard.application.approve', $application->id) }}">
-                                            @method('PUT')<button type="submit"
-                                                class="rounded-md bg-emerald-700 px-3 py-1.5 text-xs font-semibold text-white hover:bg-emerald-800">Approve</button>
-                                        </form>
-                                        <form method="POST"
-                                            action="{{ route('dashboard.application.reject', $application->id) }}">
-                                            @method('PUT')<button type="submit"
-                                                class="rounded-md border border-rose-200 px-3 py-1.5 text-xs font-semibold text-rose-700 hover:bg-rose-50">Decline</button>
-                                        </form>
-                                    </div>
+
                                 </section>
                             </x-modal>
                         @endif

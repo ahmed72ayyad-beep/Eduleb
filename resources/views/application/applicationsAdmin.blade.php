@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-                <p class="text-xs font-bold uppercase text-indigo-600">Eduleb workspace</p>
+                <p class="text-xs font-bold uppercase text-emerald-700">Eduleb workspace</p>
                 <h1 class="mt-1 text-2xl font-bold leading-tight text-slate-900">
                     {{ auth()->user()->hasRole('admin') ? 'Application review' : 'My applications' }}
                 </h1>
@@ -12,7 +12,7 @@
             </div>
             @unless (auth()->user()->hasRole('admin'))
                 <a href="{{ route('instructor.apply') }}"
-                    class="inline-flex items-center justify-center gap-2 rounded-md bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-700">
+                    class="inline-flex items-center justify-center gap-2 rounded-md bg-emerald-800 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-800">
                     <span aria-hidden="true">+</span> Apply to teach
                 </a>
             @endunless
@@ -21,21 +21,25 @@
 
     @php($isAdmin = auth()->user()->hasRole('admin'))
     {{-- @dd($applications) --}}
-    <main class="min-h-screen relative bg-slate-50 px-4 py-8 sm:px-6 lg:px-8">
+    <main
+        class="relative min-h-screen bg-gradient-to-br from-slate-50 via-emerald-50/40 to-amber-50/30 px-4 py-8 sm:px-6 lg:px-8">
         <div class="mx-auto max-w-7xl space-y-6">
             @if ($isAdmin)
                 <section class="grid grid-cols-1 gap-4 sm:grid-cols-3" aria-label="Application summary">
-                    <article class="rounded-lg border border-slate-200 bg-white p-5">
+                    <article
+                        class="rounded-lg border border-slate-200 border-t-2 border-t-amber-500 bg-white p-5 shadow-sm">
                         <p class="text-sm font-medium text-slate-500">Awaiting review</p>
                         <p id="pending-count" class="mt-2 text-3xl font-bold text-slate-900">{{ $awaitingReview }}</p>
                         <p class="mt-1 text-xs text-slate-500">Across all application types</p>
                     </article>
-                    <article class="rounded-lg border border-slate-200 bg-white p-5">
+                    <article
+                        class="rounded-lg border border-slate-200 border-t-2 border-t-emerald-700 bg-white p-5 shadow-sm">
                         <p class="text-sm font-medium text-slate-500">Approved this month</p>
                         <p class="mt-2 text-3xl font-bold text-slate-900">{{ $approvedThisMonthCount }}</p>
                         <p class="mt-1 text-xs text-emerald-700">Decisions completed</p>
                     </article>
-                    <article class="rounded-lg border border-slate-200 bg-white p-5">
+                    <article
+                        class="rounded-lg border border-slate-200 border-t-2 border-t-teal-700 bg-white p-5 shadow-sm">
                         <p class="text-sm font-medium text-slate-500">Average review time</p>
                         <p class="mt-2 text-3xl font-bold text-slate-900">{{ $averageReviewTime }} <span
                                 class="text-base font-semibold">days</span></p>
@@ -53,10 +57,10 @@
                         <div class="flex flex-col gap-3 sm:flex-row">
                             <label class="sr-only" for="application-search">Search applications</label>
                             <input id="application-search" type="search" placeholder="Search name or email"
-                                class="w-full rounded-md border-slate-300 text-sm focus:border-indigo-500 focus:ring-indigo-500 sm:w-64">
+                                class="w-full rounded-md border-slate-300 text-sm focus:border-emerald-600 focus:ring-emerald-600 sm:w-64">
                             <label class="sr-only" for="application-filter">Filter by status</label>
                             <select id="application-filter"
-                                class="rounded-md border-slate-300 text-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                class="rounded-md border-slate-300 text-sm focus:border-emerald-600 focus:ring-emerald-600">
                                 <option value="all">All statuses</option>
                                 <option value="pending">Pending</option>
                                 <option value="Accpted">Accpted</option>
@@ -66,7 +70,7 @@
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full min-w-[760px] text-left text-sm">
-                            <thead class="bg-slate-50 text-xs uppercase text-slate-500">
+                            <thead class="bg-emerald-50 text-xs uppercase text-emerald-900">
 
                                 <tr>
                                     <th class="px-5 py-3 font-semibold">Applicant</th>
@@ -121,7 +125,7 @@
                                                                         class="flex items-start justify-between border-b border-slate-200 p-5">
                                                                         <div>
                                                                             <p
-                                                                                class="text-xs font-bold uppercase text-indigo-600">
+                                                                                class="text-xs font-bold uppercase text-emerald-700">
                                                                                 {{ $application->type == 'instructor_application' ? 'Instructor application' : 'Course Support' }}
                                                                             </p>
                                                                             <div class="flex items-center gap-x-4">
@@ -129,7 +133,7 @@
                                                                                 <h2
                                                                                     class=" text-xl font-bold text-slate-900">
                                                                                     {{ $application->user->name }}</h2>
-                                                                                <a class="text-blue-900 text-lg flex items-center gap-x-1.5"
+                                                                                <a class="flex items-center gap-x-1.5 text-lg text-emerald-800"
                                                                                     href=" {{ asset($application->content['CV']) }}">CV<svg
                                                                                         xmlns="http://www.w3.org/2000/svg"
                                                                                         width="16" height="16"
@@ -264,7 +268,8 @@
                                                 @if ($application['type'] == 'instructor_application')
                                                     Instructor Application
                                                 @elseif ($application['type'] == 'course_support')
-                                                    Course_Support <a class="text-xs text-blue-600"
+                                                    Course_Support <a
+                                                        class="text-xs text-emerald-700 hover:text-emerald-900"
                                                         href="{{ route('courses.show', $application->target_id) }}">Show
                                                         Course</a>
                                                 @endif
@@ -288,7 +293,7 @@
                                                                         class="flex items-start justify-between border-b border-slate-200 p-5">
                                                                         <div>
                                                                             <p
-                                                                                class="text-xs font-bold uppercase text-indigo-600">
+                                                                                class="text-xs font-bold uppercase text-emerald-700">
                                                                                 {{ $application->type == 'instructor_application' ? 'Instructor application' : 'Course Support' }}
                                                                             </p>
                                                                             <div class="flex items-center gap-x-4">
@@ -380,6 +385,71 @@
                                                 @endif
                                             </td>
                                         </tr>
+                                    @elseif ($application->type == 'create_course')
+                                        <tr data-application
+                                            data-search="{{ $application->user->name }} {{ $application->user->email }}"
+                                            data-status="{{ $application->state }}"
+                                            data-name="{{ $application->user->name }}"
+                                            data-email="{{ $application->user->email }}"
+                                            data-type="{{ $application->type == 'instructor_application' ? 'Instructor application' : 'Course Support' }}"
+                                            data-submitted="{{ $application->created_at->format('M D Y') }}">
+                                            <td class="px-5 py-4">
+                                                <p class="font-semibold text-slate-900">{{ $application->user->name }}
+                                                </p>
+                                                <p class="mt-1 text-xs text-slate-500">{{ $application->user->email }}
+                                                </p>
+                                            </td>
+                                            <td class="px-5 py-4 text-slate-700">
+                                                @if ($application['type'] == 'instructor_application')
+                                                    Instructor Application
+                                                @elseif ($application['type'] == 'course_support')
+                                                    Course_Support <a
+                                                        class="text-xs text-emerald-700 hover:text-emerald-900"
+                                                        href="{{ route('courses.show', $application->target_id) }}">Show
+                                                        Course</a>
+                                                @elseif ($application->type == 'create_course')
+                                                    Course_Support <a
+                                                        class="text-xs text-emerald-700 hover:text-emerald-900"
+                                                        href="{{ route('courses.show', $application->target_id) }}">Show
+                                                        Course</a>
+                                                @endif
+                                            </td>
+                                            <td class="px-5 py-4 text-slate-500">
+                                                {{ $application->created_at->format('M D Y') }}</td>
+                                            <td class="px-5 py-4"><span data-status-label
+                                                    class="inline-flex rounded-full bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-800">{{ $application->state }}</span>
+                                            </td>
+                                            <td class="px-5 py-4">
+                                                @if ($application->state == 'pending')
+                                                    <div class="flex justify-end gap-2"><a
+                                                            href="{{ route('courses.show', $application->target_id) }}"
+                                                            class="rounded-md border border-slate-300 px-3 py-1.5 text-xs font-semibold text-splate-700 hover:bg-slate-50">Details</a>
+
+                                                        <form method="POST"
+                                                            action="{{ route('dashboard.application.approve', $application->id) }}">
+                                                            @method('PUT')
+
+                                                            <button type="submit"
+                                                                class="rounded-md bg-emerald-700 px-3 py-1.5 text-xs font-semibold text-white hover:bg-emerald-800">Approve</button>
+                                                        </form>
+                                                        <form method="POST"
+                                                            action="{{ route('dashboard.application.reject', $application->id) }}">
+                                                            @method('PUT')
+
+                                                            <button type="submit"
+                                                                class="rounded-md border border-rose-200 px-3 py-1.5 text-xs font-semibold text-rose-700 hover:bg-rose-50">Decline</button>
+                                                        </form>
+                                                    </div>
+                                                @else
+                                                    <div class="text-center font-semibold capitalize"
+                                                        style="{{ $application->state == 'Accpted' ? 'color:green' : 'color:red' }}">
+                                                        {{ $application->state }}
+                                                        <span
+                                                            class="text-emerald-900 text-xs">({{ $application->reviewed_at != null ? $application->reviewed_at->diffForHumans() : ' ' }})</span>
+                                                    </div>
+                                                @endif
+                                            </td>
+                                        </tr>
                                     @endif
                                 @empty
 
@@ -392,7 +462,7 @@
                                         <div id="my-applications" class="divide-y divide-slate-100">
                                             <div id="applications-empty" class="px-6 py-14 text-center">
                                                 <span
-                                                    class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-indigo-50 text-xl text-indigo-700"
+                                                    class="mx-auto flex h-12 w-12 items-center justify-center rounded-md bg-emerald-50 text-xl text-emerald-800"
                                                     aria-hidden="true">+</span>
                                                 <h3 class="mt-4 text-base font-bold text-slate-900">No applications yet
                                                 </h3>
@@ -402,7 +472,7 @@
                                                     their latest status.
                                                 </p>
                                                 <a href="{{ route('instructor.apply') }}"
-                                                    class="mt-5 inline-flex rounded-md bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-indigo-700">Start
+                                                    class="mt-5 inline-flex rounded-md bg-emerald-800 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-900">Start
                                                     an instructor application</a>
                                             </div>
                                         </div>
@@ -420,8 +490,6 @@
                                         }
                                     </style>
                                 @endforelse
-
-
                             </tbody>
                         </table>
                     </div>

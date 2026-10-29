@@ -18,6 +18,18 @@
             justify-content: center;
         }
 
+        .courses-grid .single_course h4 {
+            height: 64px;
+            overflow: hidden;
+        }
+
+        .courses-grid .single_course h4 a {
+            display: -webkit-box;
+            overflow: hidden;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+        }
+
         .courses-grid .single_c_img {
             aspect-ratio: 16 / 9 !important;
             overflow: hidden !important;
@@ -65,7 +77,7 @@
                                 {{-- <span style="bottom: none !important;top: none;">{{ $course->type }}</span> --}}
                             </div>
                             <div class="course-rating">
-                                @for ($i = 0; $i <= $course->star_num; $i++)
+                                @for ($i = 0; $i < $course->star_num; $i++)
                                     <i class="fa fa-star"></i>
                                 @endfor
                             </div>

@@ -88,7 +88,8 @@
                             </li>
                             <li><span class="ti-check"></span> Find the right instructor for you</li>
                         </ul>
-                        <a class="btn_one" href="{{ route("courses.index") }}">View All Courses <i class="ti-arrow-top-right"></i></a>
+                        <a class="btn_one" href="{{ route('courses.index') }}">View All Courses <i
+                                class="ti-arrow-top-right"></i></a>
                     </div>
                 </div><!--- END COL -->
             </div><!--- END ROW -->
@@ -154,30 +155,34 @@
     <section class="insfreecourse section-padding">
         <div class="container">
             <div class="row">
-                <div class="col-lg-6 col-sm-12 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.2s"
-                    data-wow-offset="0">
-                    <div class="single_ins"
-                        style="background-image: url(assets/img/ins1.png);  background-size:cover; background-position: center center;">
-                        <div class="single_ins_content">
-                            <h4>Build Your Career</h4>
-                            <h1>Become an Instructor</h1>
-                            <p>Learn at your own pace, move the between multiple courses. </p>
-                            <a class="btn_one" href="{{ route("instructor.apply") }}">Apply now <i class="ti-arrow-top-right"></i></a>
+                @role('student')
+                    <div class="col-lg-6 col-sm-12 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.2s"
+                        data-wow-offset="0">
+                        <div class="single_ins"
+                            style="background-image: url(assets/img/ins1.png);  background-size:cover; background-position: center center;">
+                            <div class="single_ins_content">
+                                <h4>Build Your Career</h4>
+                                <h1>Become an Instructor</h1>
+                                <p>Learn at your own pace, move the between multiple courses. </p>
+                                <a class="btn_one" href="{{ route('instructor.apply') }}">Apply now <i
+                                        class="ti-arrow-top-right"></i></a>
+                            </div>
                         </div>
-                    </div>
-                </div><!--- END COL -->
-                <div class="col-lg-6 col-sm-12 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.2s"
-                    data-wow-offset="0">
-                    <div class="single_ins"
-                        style="background-image: url(assets/img/ins2.png);  background-size:cover; background-position: center center;">
-                        <div class="single_ins_content">
-                            <h4>Build Your Career</h4>
-                            <h1>Get Free Courses</h1>
-                            <p>Learn at your own pace, move the between multiple courses. </p>
-                            <a class="btn_one" href="{{ route("contact") }}">Contact now <i class="ti-arrow-top-right"></i></a>
+                    </div><!--- END COL -->
+                    <div class="col-lg-6 col-sm-12 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.2s"
+                        data-wow-offset="0">
+                        <div class="single_ins"
+                            style="background-image: url(assets/img/ins2.png);  background-size:cover; background-position: center center;">
+                            <div class="single_ins_content">
+                                <h4>Build Your Career</h4>
+                                <h1>Get Free Courses</h1>
+                                <p>Learn at your own pace, move the between multiple courses. </p>
+                                <a class="btn_one" href="{{ route('contact') }}">Contact now <i
+                                        class="ti-arrow-top-right"></i></a>
+                            </div>
                         </div>
-                    </div>
-                </div><!--- END COL -->
+                    </div><!--- END COL -->
+                @endrole
             </div><!--- END ROW -->
         </div><!--- END CONTAINER -->
     </section>
@@ -191,97 +196,26 @@
             </div>
             <div class="row">
                 <div class="col-lg-12 col-sm-12 col-xs-12">
-                    <div id="testimonial-slider2" class="owl-carousel">
-                        <div class="testimonial">
-                            <img src="{{ asset('assets/img/quote.png') }}" alt="" />
-                            <div class="testimonial_content">
-                                <i class="ti-star"></i>
-                                <i class="ti-star"></i>
-                                <i class="ti-star"></i>
-                                <i class="ti-star"></i>
-                                <i class="ti-star"></i>
-                                <p>Aqestic optio amet a ququam saepe aliquid voluate dicta fuga dolor saerror sed earum a
-                                    magni soluta quam minus dolor dolor sed earum a magni soluta autem dolor error error sit
-                                    quam minus sint rem a rerum dolobus veritatis delectus.</p>
-                            </div>
-                            <div class="testi_pic_title">
-                                <img src="{{ asset('assets/img/testimonial/1.png') }}" alt="">
-                                <h4>Ajmain Adil</h4>
-                                <p>Groton Inc</p>
-                            </div>
-                        </div><!-- END TESTIMONIAL -->
-                        <div class="testimonial">
-                            <img src="{{ asset('assets/img/quote.png') }}" alt="" />
-                            <div class="testimonial_content">
-                                <i class="ti-star"></i>
-                                <i class="ti-star"></i>
-                                <i class="ti-star"></i>
-                                <i class="ti-star"></i>
-                                <i class="ti-star"></i>
-                                <p>Aqestic optio amet a ququam saepe aliquid voluate dicta fuga dolor saerror sed earum a
-                                    magni soluta quam minus dolor dolor sed earum a magni soluta autem dolor error error sit
-                                    quam minus sint rem a rerum dolobus veritatis delectus.</p>
-                            </div>
-                            <div class="testi_pic_title">
-                                <img src="{{ asset('assets/img/testimonial/2.png') }}" alt="">
-                                <h4>Sharukh Khan</h4>
-                                <p>Red Chili Inc</p>
-                            </div>
-                        </div><!-- END TESTIMONIAL -->
-                        <div class="testimonial">
-                            <img src="{{ asset('assets/img/quote.png') }}" alt="" />
-                            <div class="testimonial_content">
-                                <i class="ti-star"></i>
-                                <i class="ti-star"></i>
-                                <i class="ti-star"></i>
-                                <i class="ti-star"></i>
-                                <i class="ti-star"></i>
-                                <p>Aqestic optio amet a ququam saepe aliquid voluate dicta fuga dolor saerror sed earum a
-                                    magni soluta quam minus dolor dolor sed earum a magni soluta autem dolor error error sit
-                                    quam minus sint rem a rerum dolobus veritatis delectus.</p>
-                            </div>
-                            <div class="testi_pic_title">
-                                <img src="{{ asset('assets/img/testimonial/3.png') }}" alt="">
-                                <h4>Anushka sharma</h4>
-                                <p>Naika Company</p>
-                            </div>
-                        </div><!-- END TESTIMONIAL -->
-                        <div class="testimonial">
-                            <img src="{{ asset('assets/img/quote.png') }}" alt="" />
-                            <div class="testimonial_content">
-                                <i class="ti-star"></i>
-                                <i class="ti-star"></i>
-                                <i class="ti-star"></i>
-                                <i class="ti-star"></i>
-                                <i class="ti-star"></i>
-                                <p>Aqestic optio amet a ququam saepe aliquid voluate dicta fuga dolor saerror sed earum a
-                                    magni soluta quam minus dolor dolor sed earum a magni soluta autem dolor error error sit
-                                    quam minus sint rem a rerum dolobus veritatis delectus.</p>
-                            </div>
-                            <div class="testi_pic_title">
-                                <img src="{{ asset('assets/img/testimonial/4.png') }}" alt="">
-                                <h4>Ajmain Adil</h4>
-                                <p>Groton Inc</p>
-                            </div>
-                        </div><!-- END TESTIMONIAL -->
-                        <div class="testimonial">
-                            <img src="{{ asset('assets/img/quote.png') }}" alt="" />
-                            <div class="testimonial_content">
-                                <i class="ti-star"></i>
-                                <i class="ti-star"></i>
-                                <i class="ti-star"></i>
-                                <i class="ti-star"></i>
-                                <i class="ti-star"></i>
-                                <p>Aqestic optio amet a ququam saepe aliquid voluate dicta fuga dolor saerror sed earum a
-                                    magni soluta quam minus dolor dolor sed earum a magni soluta autem dolor error error sit
-                                    quam minus sint rem a rerum dolobus veritatis delectus.</p>
-                            </div>
-                            <div class="testi_pic_title">
-                                <img src="{{ asset('assets/img/testimonial/5.png') }}" alt="">
-                                <h4>Ajmain Adil</h4>
-                                <p>Groton Inc</p>
-                            </div>
-                        </div><!-- END TESTIMONIAL -->
+                    <div id="testimonial-slider2"  class="owl-carousel">
+                        @forelse ($reviews as $review )
+                            <div style="min-height: 400px" class="testimonial">
+                                <img src="{{ asset('assets/img/quote.png') }}" alt="" />
+                                <div class="testimonial_content">
+                                    @for ($i = 0; $i < $review->star_num; $i++)
+                                        ⭐
+                                    @endfor
+
+                                    <p>{{ $review->content }}</p>
+                                </div>
+                                <div class="testi_pic_title">
+                                    <img src="{{ asset($review->user->image) }}" alt="">
+                                    <h4>{{ $review->user->name}}</h4>
+                                    <p>{{ $review->course->title}}</p>
+                                </div>
+                            </div><!-- END TESTIMONIAL -->
+
+                        @empty
+                        @endforelse
                     </div><!-- END TESTIMONIAL SLIDER -->
                 </div><!-- END COL -->
             </div><!--- END ROW -->

@@ -8,28 +8,28 @@
                     {{ __('Courses Management') }}
                 </h1>
                 <p class="text-sm text-gray-500 mt-1">Create, update, and monitor all learning courses on <span
-                        class="text-indigo-600 font-semibold text-lg">EduLeb</span>.</p>
+                        class="text-emerald-700 font-semibold text-lg">EduLeb</span>.</p>
             </div>
 
             @can('courses.create')
                 <a href="{{ route('dashboard.courses.create') }}"
-                    class="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-sm font-semibold shadow-md shadow-indigo-200 hover:shadow-lg hover:opacity-95 transition-all">
+                    class="inline-flex items-center gap-2 rounded-md bg-emerald-800 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-800">
                     <span class="text-lg">+</span> Add New Course
                 </a>
             @endcan
         </div>
     </x-slot>
 
-    <div class="py-8 bg-gradient-to-br from-slate-50 via-indigo-50/20 to-purple-50/30 min-h-screen">
+    <div class="min-h-screen bg-gradient-to-br from-slate-50 via-emerald-50/40 to-amber-50/30 py-8">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-8">
 
             <!-- Filter & Search Bar Section -->
             <div
-                class="bg-white/80 backdrop-blur-sm p-6 rounded-3xl shadow-sm border border-gray-100 flex flex-col md:flex-row gap-4 items-center justify-between">
+                class="flex flex-col items-center justify-between gap-4 rounded-lg border border-slate-200 bg-white p-5 shadow-sm md:flex-row sm:p-6">
                 <!-- Search Input -->
                 <div id="search_counter" class="relative w-full md:w-96">
                     <input id="search" type="text" placeholder="Search courses by title or instructor..."
-                        class="w-full pl-10 pr-4 py-2.5 rounded-2xl border border-gray-200 focus:border-indigo-500 focus:ring-indigo-500/20 text-sm placeholder-gray-400 transition-all">
+                        class="w-full rounded-md border-slate-300 py-2.5 pl-10 pr-4 text-sm placeholder-slate-400 transition focus:border-emerald-600 focus:ring-emerald-600">
                     <span class="absolute left-3.5 top-3 text-gray-400 text-sm"><svg xmlns="http://www.w3.org/2000/svg"
                             width="20" height="20" viewBox="0 0 24 24" fill="none">
                             <path fill-rule="evenodd" clip-rule="evenodd"
@@ -56,10 +56,10 @@
                 <!-- Filters -->
                 <div class="flex flex-wrap items-center gap-3 w-full md:w-auto justify-start md:justify-end">
 
-                    <form action="">
-                        <select
-                            class="px-4 py-2.5 rounded-2xl border border-gray-200 text-xs font-semibold text-gray-600 focus:border-indigo-500 focus:ring-indigo-500/20">
-                            <option selected value=" ">All Tags</option>
+                    <form action="" onsubmit="return false;">
+                        <select id="course-tag-filter" onchange="filterManagedCourses()"
+                            class="rounded-md border-slate-300 px-4 py-2.5 text-xs font-semibold text-slate-700 focus:border-emerald-600 focus:ring-emerald-600">
+                            <option selected value="all">All Tags</option>
                             @forelse ($tags as $tag)
                                 <option value="{{ $tag->id }}">{{ $tag->name }}</option>
                             @empty
@@ -68,15 +68,15 @@
 
                         </select>
 
-                        <select
-                            class="px-4 py-2.5 rounded-2xl border border-gray-200 text-xs font-semibold text-gray-600 focus:border-indigo-500 focus:ring-indigo-500/20">
-                            <option value="">Course Type</option>
+                        <select id="course-type-filter" onchange="filterManagedCourses()"
+                            class="rounded-md border-slate-300 px-4 py-2.5 text-xs font-semibold text-slate-700 focus:border-emerald-600 focus:ring-emerald-600">
+                            <option selected value="all">Course Type</option>
                             <option value="online">Online</option>
                             <option value="recorded">Recorded</option>
                         </select>
 
-                        <button type="reset"
-                            class="px-4 py-2.5 rounded-2xl bg-slate-100 text-gray-600 text-xs font-semibold hover:bg-slate-200 transition">
+                        <button type="button" onclick="resetManagedCourseFilters()"
+                            class="rounded-md bg-slate-100 px-4 py-2.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-500">
                             Reset Filters
                         </button>
                     </form>
@@ -84,36 +84,42 @@
             </div>
 
             <!-- Courses Table Card -->
-            <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 space-y-6">
-                <div class="flex items-center justify-between border-b border-gray-100 pb-4">
+            <div class="space-y-6 rounded-lg border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-4">
                     <div>
-                        <h2 class=" font-semibold text-gray-800 text-3xl">All Courses</h2>
-                        <p class="text-xs text-gray-400">Total Courses Available: <span class="text-indigo-600">
+                        <h2 class="text-2xl font-bold text-slate-900">All Courses</h2>
+                        <p class="text-xs text-slate-500">Total Courses Available: <span
+                                class="font-semibold text-emerald-800">
                                 {{ $courses_num }}</span>
                         </p>
                     </div>
-                    <span class="text-xs font-bold bg-indigo-50 text-indigo-600 px-3 py-1.5 rounded-full">
+                    {{-- <span class="text-xs font-bold bg-indigo-50 text-indigo-600 px-3 py-1.5 rounded-full">
                         Page {{ $courses->currentPage() }} of {{ ceil($courses_num / 8) }}
-                    </span>
+                    </span> --}}
                 </div>
 
                 <div class="overflow-x-auto">
-                    <table class="w-full text-sm text-left text-gray-600">
-                        <thead class="text-xs text-gray-400 uppercase bg-slate-50 rounded-2xl">
+                    <table class="w-full text-left text-sm text-slate-600">
+                        <thead class="bg-emerald-50 text-xs uppercase text-emerald-900">
                             <tr>
-                                <th scope="col" class="py-3.5 px-4 rounded-l-2xl">Course Details</th>
+                                <th scope="col"
+                                    class="h-9 w-64 overflow-hidden text-ellipsis rounded-l-md px-4 py-3.5">Course
+                                    Details</th>
                                 <th scope="col" class="py-3.5 px-4">Instructor</th>
                                 <th scope="col" class="py-3.5 px-4">Price</th>
                                 <th scope="col" class="py-3.5 px-4">Rating</th>
                                 <th scope="col" class="py-3.5 px-4">Seats</th>
                                 <th scope="col" class="py-3.5 px-4">Cert.</th>
-                                <th scope="col" class="py-3.5 px-4 rounded-r-2xl text-right">Actions</th>
+                                <th scope="col" class="py-3.5 px-4">Status</th>
+                                <th scope="col" class="rounded-r-md px-4 py-3.5 text-right">Actions</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-50">
+                        <tbody class="divide-y divide-slate-100">
                             @forelse ($courses as $course)
                                 <!-- Course Item 1 -->
-                                <tr id="course{{ $course->id }}" class="hover:bg-slate-50/60 transition-colors">
+                                <tr id="course{{ $course->id }}" data-course-row data-type="{{ $course->type }}"
+                                    data-tags="{{ $course->tags->pluck('id')->implode(',') }}"
+                                    class="transition-colors hover:bg-emerald-50/40">
                                     <td class="py-4 px-4 font-semibold text-gray-800 flex items-center gap-3">
                                         {{-- <div
                                         class="w-11 h-11 rounded-2xl bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-lg shrink-0">
@@ -135,7 +141,7 @@
                                                 class="text-xs font-semibold text-gray-700">{{ $course->instructor->name }}</span>
                                         </div>
                                     </td>
-                                    <td class="py-4 px-4 font-bold text-indigo-600">{{ $course->price }} $</td>
+                                    <td class="py-4 px-4 font-bold text-emerald-800">{{ $course->price }} $</td>
                                     <td class="py-4 px-4">
                                         <span
                                             class="inline-flex items-center gap-1 text-xs font-bold text-amber-500 bg-amber-50 px-2.5 py-1 rounded-lg">
@@ -148,12 +154,16 @@
                                         <span
                                             class="bg-emerald-50 text-emerald-600 text-xs font-bold px-2 py-0.5 rounded-md border border-emerald-100">{{ $course->certification }}</span>
                                     </td>
+                                    <td class="py-4 px-4">
+                                        <span
+                                            class=" text-xs font-bold px-2 py-0.5 rounded-md ">{{ $course->status }}</span>
+                                    </td>
                                     <td class="py-4 px-4 text-right space-x-4 flex justify-end">
                                         @can('courses.update')
                                             <form method="GET"
                                                 action="{{ route('dashboard.courses.edit', $course->id) }}">
                                                 <button
-                                                    class="flex gap-1 p-2 rounded-xl bg-blue-100 text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 transition text-sm font-semibold">
+                                                    class="flex items-center gap-1 rounded-md bg-emerald-50 p-2 text-sm font-semibold text-emerald-800 transition hover:bg-emerald-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700">
                                                     Edit <svg xmlns="http://www.w3.org/2000/svg" width="15"
                                                         height="15" viewBox="0 0 24 24" fill="none">
                                                         <path fill-rule="evenodd" clip-rule="evenodd"
@@ -165,13 +175,14 @@
                                         @endcan
 
                                         @can('courses.delete')
-                                            <form method="POST" onsubmit="return confirm('هل أنت متأكد من رغبتك في حذف هذا الكورس نهائياً؟');"
+                                            <form method="POST"
+                                                onsubmit="return confirm('هل أنت متأكد من رغبتك في حذف هذا الكورس نهائياً؟');"
                                                 action="{{ route('dashboard.courses.destroy', $course->id) }}">
                                                 {{-- @csrf() --}}
                                                 @method('delete')
 
                                                 <button type="submit"
-                                                    class="flex gap-1 p-2 rounded-xl bg-red-50 text-gray-600 hover:bg-indigo-50 hover:text-red-600 transition text-sm font-semibold">
+                                                    class="flex items-center gap-1 rounded-md bg-rose-50 p-2 text-sm font-semibold text-rose-700 transition hover:bg-rose-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700">
                                                     Delete <svg xmlns="http://www.w3.org/2000/svg" width="20"
                                                         height="20" viewBox="0 0 24 24" fill="none">
                                                         <path fill-rule="evenodd" clip-rule="evenodd"
@@ -205,7 +216,7 @@
                 </div>
 
                 <!-- Pagination Placeholder -->
-                <div class="flex items-center justify-between border-t border-gray-100 pt-4 text-xs text-gray-500">
+                <div class="flex items-center justify-between border-t border-slate-100 pt-4 text-xs text-slate-500">
                     {{-- <div>Showing 1 to 3 of 32 courses</div>
                 <div class="flex gap-2">
                     <button class="px-3 py-1.5 rounded-xl border bg-slate-50 disabled:opacity-50"
@@ -294,7 +305,7 @@
 
         let subSpan = document.createElement("span");
         subSpan.textContent = subtitleText;
-        subSpan.classList.add("text-xs", "text-indigo-600", "font-semibold", "bg-indigo-50", "px-2", "py-1",
+        subSpan.classList.add("text-xs", "text-emerald-800", "font-semibold", "bg-emerald-50", "px-2", "py-1",
             "rounded-md");
 
         li.appendChild(titleSpan);
@@ -344,7 +355,7 @@
         }
 
         // استدعاء مسار البحث الخاص بك
-        fetch("{{ route('dashboard.courses.index.search',':value') }}".replace(":value",query))
+        fetch("{{ route('dashboard.courses.index.search', ':value') }}".replace(":value", query))
             .then((result) => result.json())
             .then((data) => {
                 ul.innerHTML = "";
@@ -398,7 +409,7 @@
 
         let subSpan = document.createElement("span");
         subSpan.textContent = subtitleText;
-        subSpan.classList.add("text-xs", "text-indigo-600", "font-semibold", "bg-indigo-50", "px-2", "py-1",
+        subSpan.classList.add("text-xs", "text-emerald-800", "font-semibold", "bg-emerald-50", "px-2", "py-1",
             "rounded-md");
 
         li.appendChild(titleSpan);
@@ -433,5 +444,26 @@
         };
 
         return li;
+    }
+</script>
+
+<script>
+    function filterManagedCourses() {
+        const selectedTag = document.getElementById("course-tag-filter").value;
+        const selectedType = document.getElementById("course-type-filter").value;
+
+        document.querySelectorAll("[data-course-row]").forEach((courseRow) => {
+            const tagIds = (courseRow.dataset.tags || "").split(",");
+            const matchesTag = selectedTag === "all" || tagIds.includes(selectedTag);
+            const matchesType = selectedType === "all" || courseRow.dataset.type === selectedType;
+
+            courseRow.hidden = !(matchesTag && matchesType);
+        });
+    }
+
+    function resetManagedCourseFilters() {
+        document.getElementById("course-tag-filter").value = "all";
+        document.getElementById("course-type-filter").value = "all";
+        filterManagedCourses();
     }
 </script>
