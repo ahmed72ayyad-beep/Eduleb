@@ -1,30 +1,32 @@
 <x-app-layout>
     <x-slot name="header">
-        <a href="{{ url('/student/courses') }}" class="text-sm font-semibold text-indigo-700 hover:text-indigo-900">&larr;
+        <a href="{{ route('student.myCourses') }}"
+            class="text-sm font-semibold text-emerald-800 hover:text-emerald-900">&larr;
             My courses</a>
-        <h1 class="mt-2 text-2xl font-bold text-slate-900">{{ $course->title }}</h1>
+        <h1 class="mt-2 text-2xl font-bold text-slate-950">{{ $course->title }}</h1>
     </x-slot>
 
-    <main class="min-h-screen bg-slate-50 px-4 py-8 sm:px-6 lg:px-8">
+    <main class="min-h-screen bg-gradient-to-b from-emerald-50 via-slate-50 to-[#f4f7f2] px-4 py-8 sm:px-6 lg:px-8">
         <div class="mx-auto max-w-7xl">
             <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
                 <div class="space-y-6 lg:col-span-2">
-                    <div class="overflow-hidden rounded-xl border border-slate-200 bg-white">
+                    <div
+                        class="overflow-hidden rounded-lg border border-slate-200 border-t-2 border-t-emerald-700 bg-white shadow-sm">
                         <div class="aspect-[16/8] bg-slate-200">
                             @if ($course->inner_image)
                                 <img src="{{ asset($course->inner_image) }}" alt="{{ $course->title }}"
                                     class="h-full w-full object-cover">
                             @else
                                 <div
-                                    class="flex h-full items-end bg-gradient-to-br from-indigo-800 via-indigo-700 to-slate-900 p-6 text-white">
+                                    class="flex h-full items-end bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-700 p-6 text-white">
                                     <span class="text-sm font-semibold uppercase tracking-widest">Eduleb learning</span>
                                 </div>
                             @endif
                         </div>
                         <div class="p-6 sm:p-8">
-                            <p class="text-sm font-semibold uppercase tracking-wide text-emerald-700">
+                            <p class="text-xs font-bold uppercase tracking-widest text-emerald-800">
                                 {{ $course->type ?? 'Course' }}</p>
-                            <h2 class="mt-2 text-2xl font-bold text-slate-900 sm:text-3xl">{{ $course->title }}</h2>
+                            <h2 class="mt-2 text-2xl font-bold text-slate-950 sm:text-3xl">{{ $course->title }}</h2>
                             @if ($course->sub_title)
                                 <p class="mt-2 text-lg text-slate-600">{{ $course->sub_title }}</p>
                             @endif
@@ -33,23 +35,27 @@
                                 <span>{{ $course->total_lectures ?? 'Multiple' }} lessons</span>
                                 <span>{{ $course->date ?? 'On demand' }}</span>
                             </div>
+                            <a href="{{route("student.myCourses.lessons",$course->id) }}"
+                                class="mt-6 inline-flex items-center gap-2 rounded-md bg-emerald-800 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-800">
+                                Go to lessons <span aria-hidden="true">&rarr;</span>
+                            </a>
                         </div>
                     </div>
 
-                    <section class="rounded-xl border border-slate-200 bg-white p-6 sm:p-8">
+                    <section class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
                         <h2 class="text-lg font-bold text-slate-900">About this course</h2>
                         <p class="mt-3 whitespace-pre-line text-sm leading-7 text-slate-600">
                             {{ $course->overview ?: ($course->description ?: 'Course information will appear here.') }}
                         </p>
                     </section>
 
-                    <section class="rounded-xl border border-slate-200 bg-white p-6 sm:p-8">
+                    <section class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
                         <h2 class="text-lg font-bold text-slate-900">Course outline</h2>
                         <p class="mt-3 whitespace-pre-line text-sm leading-7 text-slate-600">
                             {{ $course->curriculum ?: 'The course outline will be available soon.' }}</p>
                     </section>
 
-                    <section class="rounded-xl border border-slate-200 bg-white p-6 sm:p-8">
+                    <section class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
                         <div class="flex items-center justify-between gap-4">
                             <h2 class="text-lg font-bold text-slate-900">Learner reviews</h2>
                             <span class="text-sm text-slate-500">{{ $course->reviews->count() }} total</span>
@@ -72,7 +78,7 @@
                 </div>
 
                 <aside class="space-y-5">
-                    <section class="rounded-xl border border-slate-200 bg-white p-6">
+                    <section class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
                         <p class="text-sm font-semibold uppercase tracking-wide text-slate-500">Your instructor</p>
                         @if ($course->instructor)
                             <h2 class="mt-3 text-lg font-bold text-slate-900">{{ $course->instructor->name }}</h2>
@@ -82,7 +88,7 @@
                             <p class="mt-3 text-sm text-slate-600">Instructor details will be added soon.</p>
                         @endif
                     </section>
-                    <section class="rounded-xl border border-slate-200 bg-white p-6">
+                    <section class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
                         <p class="text-sm font-semibold uppercase tracking-wide text-slate-500">Course information</p>
                         <dl class="mt-4 space-y-3 text-sm">
                             <div class="flex justify-between gap-4">
@@ -99,7 +105,7 @@
                             </div>
                         </dl>
                         <a href="{{ route('courses.show', $course) }}"
-                            class="mt-6 inline-flex w-full justify-center rounded-lg border border-slate-300 px-4 py-2.5 text-sm font-bold text-slate-800 hover:border-indigo-400 hover:text-indigo-700">Open
+                            class="mt-6 inline-flex w-full justify-center rounded-md border border-emerald-700 px-4 py-2.5 text-sm font-bold text-emerald-900 transition hover:bg-emerald-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-800">Open
                             course page</a>
                     </section>
                 </aside>

@@ -36,7 +36,7 @@
                         </div>
                     @elseif (auth()->user()->hasRole('student'))
                         <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                            <x-nav-link :href="route('dashboard')" :active="request()->routeIs('student.dashboard')">
+                            <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                                 {{ __('Dashboard') }}
                             </x-nav-link>
 
@@ -72,9 +72,9 @@
                             <x-nav-link :href="route('instructor.students')" :active="request()->routeIs('instructor.students')">
                                 {{ __('Students') }}
                             </x-nav-link>
-                            <x-nav-link :href="route('instructor.lesson_studio')" :active="request()->routeIs('instructor.lesson_studio')">
+                            {{-- <x-nav-link :href="route('instructor.lesson_studio')" :active="request()->routeIs('instructor.lesson_studio')">
                                 {{ __('Lesson Studio') }}
-                            </x-nav-link>
+                            </x-nav-link> --}}
                             <x-nav-link :href="route('student.applications.index')" :active="request()->routeIs('student.applications.index')">
                                 {{ __('My Applications') }}
                             </x-nav-link>

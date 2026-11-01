@@ -25,6 +25,7 @@ class StoreFAQRequest extends FormRequest
         return [
             "question" => ["required"],
             "answer" => ["required"],
+            // "Sasas"=>[":tomorrow"]
         ];
     }
 }

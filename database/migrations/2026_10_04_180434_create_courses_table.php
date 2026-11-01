@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('courses', function (Blueprint $table) {
             $table->id();
-            $table->string('type');
+            $table->enum('type',["online","recorded"]);
             $table->string('title');
             $table->string('sub_title')->nullable();
 

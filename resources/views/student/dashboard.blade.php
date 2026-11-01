@@ -47,21 +47,21 @@
                 <div class="rounded-xl border border-slate-200 bg-white p-5">
                     <p class="text-sm font-medium text-slate-500">Enrolled courses</p>
                     <p class="mt-2 text-3xl font-bold text-slate-900">{{ $enrolledCourses->count() }}</p>
-                    <a href="{{ url('/student/courses') }}"
+                    <a href="{{ route("student.myCourses")}}"
                         class="mt-3 inline-block text-sm font-semibold text-indigo-700 hover:text-indigo-900">View
-                        learning plan &rarr;</a>
+                       My learning plan &rarr;</a>
                 </div>
                 <div class="rounded-xl border border-slate-200 bg-white p-5">
                     <p class="text-sm font-medium text-slate-500">Reviews written</p>
                     <p class="mt-2 text-3xl font-bold text-slate-900">{{ $studentReviews->count() }}</p>
-                    <a href="{{ url('/student/reviews') }}"
+                    <a href="{{route("student.reviews") }}"
                         class="mt-3 inline-block text-sm font-semibold text-indigo-700 hover:text-indigo-900">See your
                         reviews &rarr;</a>
                 </div>
                 <div class="rounded-xl border border-slate-200 bg-white p-5">
                     <p class="text-sm font-medium text-slate-500">Unread notifications</p>
                     <p class="mt-2 text-3xl font-bold text-slate-900">{{ $unreadCount }}</p>
-                    <a href="{{ url('/student/notifications') }}"
+                    <a href="{{route('notifications') }}"
                         class="mt-3 inline-block text-sm font-semibold text-indigo-700 hover:text-indigo-900">Open
                         notifications &rarr;</a>
                 </div>
@@ -73,7 +73,7 @@
                         <p class="text-sm font-semibold uppercase tracking-wide text-emerald-700">Your classroom</p>
                         <h2 class="mt-1 text-xl font-bold text-slate-900">Continue learning</h2>
                     </div>
-                    <a href="{{ url('/student/courses') }}"
+                    <a href="{{ route("student.myCourses") }}"
                         class="text-sm font-semibold text-indigo-700 hover:text-indigo-900">All courses &rarr;</a>
                 </div>
 
@@ -89,7 +89,8 @@
                                         <div
                                             class="flex h-full items-end bg-gradient-to-br from-indigo-700 to-slate-900 p-5 text-white">
                                             <span class="text-xs font-semibold uppercase tracking-widest">Eduleb
-                                                course</span></div>
+                                                course</span>
+                                        </div>
                                     @endif
                                 </div>
                                 <div class="p-5">
@@ -98,9 +99,10 @@
                                     <h3 class="mt-2 text-lg font-bold text-slate-900">{{ $course->title }}</h3>
                                     <p class="mt-2 line-clamp-2 text-sm leading-6 text-slate-600">
                                         {{ $course->sub_title ?? $course->description }}</p>
-                                    <a href="{{ url('/student/courses/' . $course->id) }}"
-                                        class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-indigo-700 hover:text-indigo-900">Open
-                                        course <span aria-hidden="true">&rarr;</span></a>
+                                    <a href="{{route("student.myCourses.lessons",$course->id) }}"
+                                        class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-indigo-700 hover:text-indigo-900">Continue
+                                        learning
+                                        <span aria-hidden="true">&rarr;</span></a>
                                 </div>
                             </article>
                         @endforeach

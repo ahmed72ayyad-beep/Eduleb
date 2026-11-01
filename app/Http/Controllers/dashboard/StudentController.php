@@ -4,7 +4,6 @@ namespace App\Http\Controllers\dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
-use Illuminate\Support\Facades\Auth;
 
 class StudentController extends Controller
 {
@@ -15,9 +14,14 @@ class StudentController extends Controller
 
     public function show(Course $course)
     {
+
         return view('student.courses.show', compact('course'));
     }
-
+    public function  lessons(Course $course)
+    {
+        $course->load(["LiveLectures", "Recordedlectures", "instructor"]);
+        return view("student.courses.lessons", compact("course"));
+    }
     public function reviews()
     {
 

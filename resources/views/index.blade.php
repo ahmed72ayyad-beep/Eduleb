@@ -486,7 +486,7 @@
                                     <span>{{ $blog->created_at }} | <span>Eduction</span></span>
                                 @endif
                                 <h2><a href="blog.html">Professional Mobile Painting and Sculpting</a></h2>
-                                <a class="btn_one" href="blog.html">Read More <i class="ti-arrow-top-right"></i></a>
+                                <a class="btn_one" href="{{ route("blogs.show",$blog->id) }}">Read More <i class="ti-arrow-top-right"></i></a>
                             </div>
                         </div>
                     </div><!-- END COL-->

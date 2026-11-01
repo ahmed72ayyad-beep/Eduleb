@@ -34,7 +34,7 @@
                 <div class="grid grid-cols-1 items-stretch gap-5 md:grid-cols-2 xl:grid-cols-3">
                     @foreach ($enrolledCourses as $course)
                         <article
-                            class="group flex h-full flex-col overflow-hidden rounded-lg border border-slate-200 border-t-2 border-t-emerald-700 bg-white shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-lg">
+                            class="group relative flex h-full flex-col overflow-hidden rounded-lg border border-slate-200 border-t-2 border-t-emerald-700 bg-white shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-lg">
                             <div class="relative aspect-[16/9] overflow-hidden bg-slate-200">
                                 @if ($course->outer_image)
                                     <img src="{{ asset($course->outer_image) }}" alt="{{ $course->title }}"
@@ -73,7 +73,7 @@
                                         class="text-xs font-medium text-slate-500">{{ $course->duration ?? 'Learn at your pace' }}</span>
                                     <div class="flex flex-wrap items-center gap-2">
                                         <a href="{{ route('student.myCourses.show', $course->id) }}"
-                                            class="inline-flex items-center gap-1 rounded-md bg-emerald-800 px-3 py-2 text-sm font-bold text-white transition hover:bg-emerald-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-800">
+                                            class="after:absolute after:inset-0 after:z-10 inline-flex items-center gap-1 rounded-md bg-emerald-800 px-3 py-2 text-sm font-bold text-white transition hover:bg-emerald-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-800">
                                             <span> Course details</span>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
                                                 viewBox="0 0 24 24" fill="none">
@@ -84,7 +84,7 @@
                                         {{-- @dd($course->pivot->id) --}}
                                         <form action="{{ route('enrollments.refund', $course->pivot->id) }}">
                                             <button type="button"
-                                                class="rounded-md border border-rose-200 px-3 py-2 text-sm font-semibold text-rose-700 transition hover:border-rose-300 hover:bg-rose-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700">
+                                                class="relative z-20 rounded-md border border-rose-200 px-3 py-2 text-sm font-semibold text-rose-700 transition hover:border-rose-300 hover:bg-rose-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700">
                                                 Cancel enrollment
                                             </button>
                                         </form>

@@ -50,7 +50,7 @@ Route::prefix('dashboard')->name('dashboard.')->middleware(['auth', 'role:admin'
 Route::prefix('dashboard')->name('dashboard.')->middleware(['auth'])->group(function () {
     Route::get('instructors/create', [InstructorController::class, 'create'])->name('instructors.create');
     Route::post('instructors/', [InstructorController::class, 'store'])->name('instructors.store');
-    Route::delete(' instructors/{instructor}', [InstructorController::class, 'desapplications/troy'])->name('instructors.destroy');
+    Route::delete('instructors/{instructor}', [InstructorController::class, 'destroy'])->name('instructors.destroy');
 });
 
 Route::middleware('auth')->group(function () {
@@ -68,6 +68,7 @@ Route::prefix('student')->name('student.')->middleware(['auth', 'role:student'])
     // Route::get("overview/",[StudentController::class,"overview"])->name("overview");
     Route::get('myCourses/', [StudentController::class, 'myCourses'])->name('myCourses');
     Route::get('myCourses/{course}/', [StudentController::class, 'show'])->name('myCourses.show');
+    Route::get('myCourses/{course}/lessons', [StudentController::class, 'lessons'])->name('myCourses.lessons');
     Route::get('reviews/', [StudentController::class, 'reviews'])->name('reviews');
 });
 // Route::get("applications/", [ApplicationController::class, "applications"])->name("applications")->middleware("auth");
@@ -84,6 +85,11 @@ Route::prefix('instructor')->name('instructor.')->middleware(['auth', 'role:inst
     Route::get('students/', 'students')->name('students');
     Route::get('reviews/', 'reviews')->name('reviews');
     Route::get('courses/', 'courses')->name('courses');
+    Route::get('courses/{course}/lessons/create','create_lesson')->name('courses.lessons.create');
+    Route::post('courses/{course}/lessons/','store_lesson')->name('courses.lessons.store');
+    Route::delete('courses/{course}/lessons/{lesson}','destroy_lesson')->name('courses.lessons.destroy');
+    Route::get('courses/{course}/lessons/{lesson}','edit_lesson')->name('courses.lessons.edit');
+    Route::put('courses/{course}/lessons/{lesson}','update_lesson')->name('courses.lessons.update');
     Route::get('courses/create', 'course_create')->name('courses.create');
     Route::get('courses/store', 'course_store')->name('courses.store');
     Route::get('lesson_studio/', 'lesson_studio')->name('lesson_studio');
