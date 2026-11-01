@@ -5,7 +5,6 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\dashboard\ApplicationController;
 use App\Http\Controllers\dashboard\blogController as dashboard_BlogController;
-use App\Http\Controllers\dashboard\coursesController;
 use App\Http\Controllers\dashboard\CoursesController as dashboard_CoursesController;
 use App\Http\Controllers\dashboard\dashboardController;
 use App\Http\Controllers\dashboard\FAQController as Dashboard_FAQController;
@@ -76,20 +75,20 @@ Route::get('notifications/', [StudentController::class, 'notifications'])->middl
 Route::middleware(['auth', 'role:student'])->controller(CourseController::class)->group(function () {
     Route::post('courses/{course}/enroll', 'course_enrollment')->name('courses.enroll');
     Route::get('/courses/payment/success', [CourseController::class, 'paymentSuccess'])->name('course.payment.success');
-    Route::delete('/enrollments/{enrollment}/refund', [coursesController::class, 'cancelAndRefund'])
+    Route::delete('/enrollments/{course}/refund', [CourseController::class, 'refundCourse'])
         ->name('enrollments.refund');
-    Route::get('/courses/payment/cancel', fn() => redirect()->route('dashboard')->with('error', 'Payment cancelled.'))->name('course.payment.cancel');
+    Route::get('/courses/payment/cancel', fn () => redirect()->route('dashboard')->with('error', 'Payment cancelled.'))->name('course.payment.cancel');
 });
 
 Route::prefix('instructor')->name('instructor.')->middleware(['auth', 'role:instructor'])->controller(instructorDashboardController::class)->group(function () {
     Route::get('students/', 'students')->name('students');
     Route::get('reviews/', 'reviews')->name('reviews');
     Route::get('courses/', 'courses')->name('courses');
-    Route::get('courses/{course}/lessons/create','create_lesson')->name('courses.lessons.create');
-    Route::post('courses/{course}/lessons/','store_lesson')->name('courses.lessons.store');
-    Route::delete('courses/{course}/lessons/{lesson}','destroy_lesson')->name('courses.lessons.destroy');
-    Route::get('courses/{course}/lessons/{lesson}','edit_lesson')->name('courses.lessons.edit');
-    Route::put('courses/{course}/lessons/{lesson}','update_lesson')->name('courses.lessons.update');
+    Route::get('courses/{course}/lessons/create', 'create_lesson')->name('courses.lessons.create');
+    Route::post('courses/{course}/lessons/', 'store_lesson')->name('courses.lessons.store');
+    Route::delete('courses/{course}/lessons/{lesson}', 'destroy_lesson')->name('courses.lessons.destroy');
+    Route::get('courses/{course}/lessons/{lesson}', 'edit_lesson')->name('courses.lessons.edit');
+    Route::put('courses/{course}/lessons/{lesson}', 'update_lesson')->name('courses.lessons.update');
     Route::get('courses/create', 'course_create')->name('courses.create');
     Route::get('courses/store', 'course_store')->name('courses.store');
     Route::get('lesson_studio/', 'lesson_studio')->name('lesson_studio');
@@ -141,7 +140,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';
 
 // Route::get("sssss/",function () {
 // return view('student.profile');

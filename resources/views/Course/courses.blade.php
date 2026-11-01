@@ -44,27 +44,150 @@
         .courses-grid .single_course .price {
             margin-top: auto;
         }
+
+        .courses-hero {
+            position: relative;
+            overflow: hidden;
+            padding: 150px 0 88px;
+            background:
+                radial-gradient(circle at 82% 18%, rgba(255, 255, 255, .13), transparent 25%),
+                linear-gradient(110deg, rgba(20, 33, 81, .94), rgba(82, 95, 225, .82)),
+                url('{{ asset('assets/img/bg/section-top.jpg') }}') center / cover;
+        }
+
+        .courses-hero__eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            margin-bottom: 15px;
+            color: #d7dcff;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: .13em;
+            text-transform: uppercase;
+        }
+
+        .courses-hero__eyebrow i {
+            font-size: 16px;
+        }
+
+        .courses-hero__title {
+            max-width: 720px;
+            margin: 0 0 16px;
+            color: #fff;
+            font-size: clamp(40px, 5vw, 60px);
+            font-weight: 700;
+            line-height: 1.1;
+        }
+
+        .courses-hero__description {
+            max-width: 650px;
+            margin: 0;
+            color: rgba(255, 255, 255, .84);
+            font-size: 17px;
+            line-height: 1.7;
+        }
+
+        .courses-hero__actions {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin-top: 28px;
+        }
+
+        .courses-hero__button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 22px;
+            border: 1px solid #fff;
+            border-radius: 6px;
+            background: #fff;
+            color: #1a2d62;
+            font-weight: 700;
+            text-decoration: none;
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+
+        .courses-hero__button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, .18);
+            color: #1a2d62;
+        }
+
+        .courses-hero__count {
+            color: rgba(255, 255, 255, .9);
+            font-size: 14px;
+        }
+
+        .courses-hero__count strong {
+            color: #fff;
+            font-size: 18px;
+        }
+
+        .courses-hero__breadcrumb {
+            margin-top: 28px;
+            color: rgba(255, 255, 255, .72);
+            font-size: 14px;
+        }
+
+        .courses-hero__breadcrumb a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .courses-hero__breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 575.98px) {
+            .courses-hero {
+                padding: 125px 0 64px;
+            }
+
+            .courses-hero__description {
+                font-size: 15px;
+            }
+
+            .courses-hero__actions {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 12px;
+            }
+        }
     </style>
 @endsection
 @section('content')
-    <!-- START SECTION TOP -->
-    <section class="section-top">
+    <section class="courses-hero">
         <div class="container">
-            <div class="col-lg-10 offset-lg-1 text-center">
-                <div class="section-top-title wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.3s" data-wow-offset="0">
-                    <h1>All Course</h1>
-                    <ul>
-                        <li><a href="{{ route('home') }}">Home</a></li>
-                        <li> / Courses</li>
-                    </ul>
-                </div><!-- //.HERO-TEXT -->
-            </div><!--- END COL -->
-        </div><!--- END CONTAINER -->
+            <div class="courses-hero__eyebrow">
+                <i class="ti-book" aria-hidden="true"></i>
+                Learn something new
+            </div>
+            <h1 class="courses-hero__title">Find the course that moves you forward.</h1>
+            <p class="courses-hero__description">
+                Explore expert-led courses designed to help you build practical skills, discover new interests, and reach
+                your goals.
+            </p>
+            <div class="courses-hero__actions">
+                <a class="courses-hero__button" href="#courses-list">
+                    Explore courses <i class="ti-arrow-down" aria-hidden="true"></i>
+                </a>
+                <span class="courses-hero__count">
+                    <strong>{{ $courses->count() }}</strong>
+                    {{ $courses->count() === 1 ? 'course' : 'courses' }} to explore
+                </span>
+            </div>
+            <nav class="courses-hero__breadcrumb" aria-label="Breadcrumb">
+                <a href="{{ route('home') }}">Home</a>
+                <span aria-hidden="true"> / </span>
+                <span aria-current="page">Courses</span>
+            </nav>
+        </div>
     </section>
-    <!-- END SECTION TOP -->
 
     <!-- START COURSE -->
-    <section class="home_course section-padding">
+    <section class="home_course section-padding" id="courses-list">
         <div class="container">
             <div class="row courses-grid">
                 {{-- <input type="time"> --}}

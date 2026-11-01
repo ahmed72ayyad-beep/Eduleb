@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::table('course_user', function (Blueprint $table) {
             $table->timestamp('enrolled_at')->nullable();
-            $table->text('notes')->nullable(); //
-            $table->string('enrollment_id')->nullable(); //
+            $table->text('notes')->nullable();
+            $table->string('enrollment_id')->nullable();
         });
     }
 

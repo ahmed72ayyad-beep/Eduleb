@@ -11,12 +11,12 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 
-#[Fillable(['name', 'email',"image", 'password', "last_login"])]
+#[Fillable(['name', 'email', 'image', 'password', 'last_login'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable, HasRoles;
+    use HasFactory, HasRoles, Notifiable;
 
     /**
      * Get the attributes that should be cast.
@@ -30,6 +30,7 @@ class User extends Authenticatable
     protected $casts = [
         'last_login' => 'datetime',
     ];
+
     protected function casts(): array
     {
         return [
@@ -37,20 +38,31 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
     public function reviews()
     {
 
         return $this->hasMany(Review::class);
     }
+
     public function blogs()
     {
 
         return $this->hasMany(Blog::class);
     }
+
     public function courses()
     {
-
-        return $this->belongsToMany(Course::class)->withPivot(['id', 'enrollment_id', 'enrolled_at', 'notes','state']);
+        return $this->belongsToMany(Course::class)
+            ->using(CourseUser::class)
+            ->withPivot([
+                'id',
+                'enrollment_id',
+                'enrolled_at',
+                'notes',
+                'state',
+            ])
+            ->withTimestamps();
     }
     // public function instructors()
     // {
@@ -60,8 +72,9 @@ class User extends Authenticatable
     public function FAQS()
     {
 
-        return $this->hasMany(FAQ::class, "author_id");
+        return $this->hasMany(FAQ::class, 'author_id');
     }
+
     public function applications()
     {
 

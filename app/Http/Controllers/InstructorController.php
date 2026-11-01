@@ -19,7 +19,7 @@ class InstructorController extends Controller
         $instructors = Instructor::with(['courses'])->get();
 
         // dd($instructor);
-        return view('instructor.instructors', compact('instructors'));
+        return view('instructores_public.instructors', compact('instructors'));
     }
 
     /**
@@ -75,7 +75,7 @@ class InstructorController extends Controller
         $instructor = Instructor::with(['courses'])->find($instructor);
 
         // dd($instructor);
-        return view('instructor.instructor_detail', compact('instructor'));
+        return view('instructores_public.instructor_detail', compact('instructor'));
     }
 
     /**

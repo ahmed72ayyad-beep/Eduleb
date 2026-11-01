@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Blog;
 use App\Models\Comment;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 
 class BlogsController extends Controller
@@ -13,9 +14,10 @@ class BlogsController extends Controller
      */
     public function index()
     {
-        $blogs = Blog::with(["comments.user", "author", "tags"])->latest()->get();
+        $blogs = Blog::with(["comments.user", "author", "tags"])->where("status","published")->latest()->get();
+        $availableTags=Tag::all();
         // dd($blogs);
-        return view("Blog.blogs", compact("blogs"));
+        return view("Blog.blogs", compact("blogs","availableTags"));
     }
 
     /**

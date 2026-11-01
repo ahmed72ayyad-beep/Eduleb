@@ -4,6 +4,7 @@ namespace App\Http\Controllers\dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
+use Illuminate\Support\Facades\Gate;
 
 class StudentController extends Controller
 {
@@ -14,14 +15,19 @@ class StudentController extends Controller
 
     public function show(Course $course)
     {
+        Gate::authorize('view_lesson', $course);
 
         return view('student.courses.show', compact('course'));
     }
-    public function  lessons(Course $course)
+
+    public function lessons(Course $course)
     {
-        $course->load(["LiveLectures", "Recordedlectures", "instructor"]);
-        return view("student.courses.lessons", compact("course"));
+        Gate::authorize('view_lesson', $course);
+        $course->load(['LiveLectures', 'Recordedlectures', 'instructor']);
+
+        return view('student.courses.lessons', compact('course'));
     }
+
     public function reviews()
     {
 

@@ -6,11 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreApplicationRequest;
 use App\Http\Requests\UpdateApplicationRequest;
 use App\Models\Application;
+use App\Models\Blog;
 use App\Models\Course;
 use App\Models\Instructor;
 use App\Models\User;
-use App\Notifications\newRole;
 use App\Notifications\Course_published;
+use App\Notifications\newRole;
+use App\Notifications\post_published;
 use App\Notifications\Support;
 use App\Rules\minWords;
 use DateTime;
@@ -165,6 +167,39 @@ class ApplicationController extends Controller
                     "type" => $type,
                 ]);
                 break;
+            case 'add_post':
+                $request->validate([
+                    "title" => ["required"],
+                    "sub_title" => ["required"],
+                    "subject" => ["required"],
+                    "image" => ["required", "image", "mimes:jpg,jpeg,png,webp", "max:5000"],
+                    "content" => ["required"],
+                    "tags" => ["sometimes", "array"],
+                    "tags.*" => ["exists:tags,id"],
+
+                ]);
+                $path = $request->file("image")->store("uploads/blogs");
+                $blog = Blog::create([
+                    "status" => "pending",
+                    "title" => $request->title,
+                    "sub_title" => $request->sub_title,
+                    "subject" => $request->subject,
+                    "image" => $path,
+                    "content" => $request->content,
+                    "author_id" => Auth::id(),
+                ]);
+                $blog->tags()->attach($request->tags);
+                // dd($blog);
+                Application::create([
+                    "target_id" => $blog->id,
+                    "user_id" => Auth::id(),
+                    "type" => $type,
+                ]);
+
+                break;
+
+
+
 
             default:
                 abort(404);
@@ -173,7 +208,6 @@ class ApplicationController extends Controller
         flash()->success("Sended To The Admins Sucssesfully");
         return redirect(route("student.applications.index"));
     }
-
     /**
      * Display the specified resource.
      */
@@ -219,6 +253,10 @@ class ApplicationController extends Controller
                 File::delete($course->outer_image);
             }
             $course->delete();
+        } elseif ($application->type == "add_post") {
+            $blog = Course::findOrFail($application->target_id);
+            File::delete($blog->image);
+            $blog->delete();
         }
         $application->delete();
         flash()->success("Deleted Sucssesfully");
@@ -292,6 +330,20 @@ class ApplicationController extends Controller
                 flash()->success("Accpted Sucssesfully");
                 return redirect()->back();
                 break;
+            case 'add_post':
+                $blog = Blog::findOrFail($application->target_id);
+                $blog->update([
+                    "status" => "published",
+                ]);
+                $application->update([
+                    "state" => "Accpted",
+                    "reviewed_at" => now(),
+                ]);
+                $user = $application->user;
+                $user->notify(new post_published($user, $blog, route("blogs.show", $blog->id)));
+                flash()->success("Accpted Sucssesfully");
+                return redirect()->back();
+                break;
             default:
                 abort(404);
                 break;
@@ -305,6 +357,11 @@ class ApplicationController extends Controller
         if ($application->type == "create_course") {
             $course = Course::findOrFail($application->target_id);
             $course->update([
+                "status" => "drafted",
+            ]);
+        } elseif ($application->type == "add_post") {
+            $blog = Blog::findOrFail($application->target_id);
+            $blog->update([
                 "status" => "drafted",
             ]);
         }

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Override;
-#[Fillable(['title','subject', 'sub_title', 'content',"image","author_id"])]
+#[Fillable(['title','subject', 'sub_title', 'content',"image","author_id","status"])]
 
 class Blog extends Model
 {

@@ -1,39 +1,86 @@
-@extends('layouts.website')
-@section('title', 'Eduleb - Not Found')
-@section('content')
-    <!-- START SECTION TOP -->
-    <section class="section-top">
-        <div class="container">
-            <div class="col-lg-10 offset-lg-1 text-center">
-                <div class="section-top-title wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.3s" data-wow-offset="0">
-                    <h1>Page Not Found</h1>
-                    <ul>
-                        <li><a href="{{ route('home') }}">Home</a></li>
-                        <li> / 404</li>
-                    </ul>
-                </div><!-- //.HERO-TEXT -->
-            </div><!--- END COL -->
-        </div><!--- END CONTAINER -->
-    </section>
-    <!-- END SECTION TOP -->
+<!DOCTYPE html>
+<html lang="en">
 
-    <!-- START 404 -->
-    <section class="zero_area section-padding">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Arvo">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<style>
+    /*======================
+    404 page
+=======================*/
+
+
+    .page_404 {
+        padding: 40px 0;
+        background: #fff;
+        font-family: 'Arvo', serif;
+    }
+
+    .page_404 img {
+        width: 100%;
+    }
+
+    .four_zero_four_bg {
+
+        background-image: url(https://cdn.dribbble.com/users/285475/screenshots/2083086/dribbble_1.gif);
+        height: 400px;
+        background-position: center;
+    }
+
+
+    .four_zero_four_bg h1 {
+        font-size: 80px;
+    }
+
+    .four_zero_four_bg h3 {
+        font-size: 80px;
+    }
+
+    .link_404 {
+        color: #fff !important;
+        padding: 10px 20px;
+        background: #39ac31;
+        margin: 20px 0;
+        display: inline-block;
+    }
+
+    .contant_box_404 {
+        margin-top: -50px;
+    }
+</style>
+
+<body>
+    <section class="page_404">
         <div class="container">
             <div class="row">
-                <div class="col-lg-12 col-sm-12 col-xs-12 text-center">
-                    <div class="error_page">
-                        <img src="assets/img/404.svg" class="img-fluid" alt="404 error" />
-                        <h2>Oops! Page not found</h2>
-                        <p>Hmm. We’re having trouble finding that site. Try again later or Check your network connection.
-                        </p>
-                        <div class="home_btn">
-                            <a href="{{ route('home') }}" class="btn_one">Back to Home</a>
+                <div class="col-sm-12 ">
+                    <div class="col-sm-10 col-sm-offset-1  text-center">
+                        <div class="four_zero_four_bg">
+                            <h1 class="text-center ">404</h1>
+
+
+                        </div>
+
+                        <div class="contant_box_404">
+                            <h3 class="h2">
+                                Look like you're lost
+                            </h3>
+
+                            <p>the page you are looking for not avaible!</p>
+
+                            <a href="{{ route("home") }}" class="link_404">Go to Home</a>
                         </div>
                     </div>
-                </div><!--- END COL -->
-            </div><!--- END ROW -->
-        </div><!--- END CONTAINER -->
+                </div>
+            </div>
+        </div>
     </section>
-    <!-- END 404 -->
-@endsection()
+
+</body>
+
+</html>

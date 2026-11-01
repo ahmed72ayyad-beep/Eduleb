@@ -62,6 +62,11 @@
                                             style="font-size: 11px !important"
                                             class="  text-red-600 hover:text-red-400 font-semibold  tracking-[1px]">Show
                                             Course</a>
+                                    @elseif ($application->type == 'add_post')
+                                        Add Blog <a href="{{ route('blogs.show', $application->target_id) }}"
+                                            style="font-size: 11px !important"
+                                            class="  text-red-600 hover:text-red-400 font-semibold  tracking-[1px]">Show
+                                            Blog</a>
                                     @endif
                                 </p>
 
@@ -96,6 +101,9 @@
                                     </button>
                                 @elseif ($application->type == 'create_course')
                                     <a href="{{ route('courses.show', $application->target_id) }}"
+                                        class="rounded-md border border-slate-300 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-white">View</a>
+                                @elseif ($application->type == 'add_post')
+                                    <a href="{{ route('blogs.show', $application->target_id) }}"
                                         class="rounded-md border border-slate-300 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-white">View</a>
                                 @endif
                                 @if ($application->state === 'pending')
@@ -189,8 +197,8 @@
                                                     <h2 class="text-xl font-bold text-slate-900">
                                                         {{ $application->user->name }}</h2>
                                                     <a class="text-blue-900 text-sm mt-1 flex items-center gap-x-1"
-                                                        href="{{ asset($application->target_id) }}">Show Course Page<svg
-                                                            xmlns="http://www.w3.org/2000/svg" width="16"
+                                                        href="{{ asset($application->target_id) }}">Show Course
+                                                        Page<svg xmlns="http://www.w3.org/2000/svg" width="16"
                                                             height="16" viewBox="0 0 24 24" fill="none">
                                                             <path
                                                                 d="M21.25 12C21.25 17.1086 17.1086 21.25 12 21.25C6.89137 21.25 2.75 17.1086 2.75 12C2.75 6.89137 6.89137 2.75 12 2.75C12.4142 2.75 12.75 2.41421 12.75 2C12.75 1.58579 12.4142 1.25 12 1.25C6.06294 1.25 1.25 6.06294 1.25 12C1.25 17.9371 6.06294 22.75 12 22.75C17.9371 22.75 22.75 17.9371 22.75 12C22.75 11.5858 22.4142 11.25 22 11.25C21.5858 11.25 21.25 11.5858 21.25 12Z"

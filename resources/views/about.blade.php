@@ -1,21 +1,7 @@
 @extends('layouts.website')
 @section('title', 'Eduleb - About US ')
 @section('content')
-    <!-- START SECTION TOP -->
-    <section class="section-top">
-        <div class="container">
-            <div class="col-lg-10 offset-lg-1 text-center">
-                <div class="section-top-title wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.3s" data-wow-offset="0">
-                    <h1>About</h1>
-                    <ul>
-                        <li><a href="index.html">Home</a></li>
-                        <li> / About</li>
-                    </ul>
-                </div><!-- //.HERO-TEXT -->
-            </div><!--- END COL -->
-        </div><!--- END CONTAINER -->
-    </section>
-    <!-- END SECTION TOP -->
+ 
 
     <!-- START CATEGORY -->
     <section class="top_cat__area section-padding"

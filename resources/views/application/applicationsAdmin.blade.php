@@ -386,6 +386,8 @@
                                             </td>
                                         </tr>
                                     @elseif ($application->type == 'create_course')
+
+                                    @elseif ($application->type == 'add_post')
                                         <tr data-application
                                             data-search="{{ $application->user->name }} {{ $application->user->email }}"
                                             data-status="{{ $application->state }}"
@@ -403,15 +405,19 @@
                                                 @if ($application['type'] == 'instructor_application')
                                                     Instructor Application
                                                 @elseif ($application['type'] == 'course_support')
-                                                    Course_Support <a
+                                                    Course Support <a
                                                         class="text-xs text-emerald-700 hover:text-emerald-900"
                                                         href="{{ route('courses.show', $application->target_id) }}">Show
                                                         Course</a>
                                                 @elseif ($application->type == 'create_course')
-                                                    Course_Support <a
+                                                    Create Course <a
                                                         class="text-xs text-emerald-700 hover:text-emerald-900"
                                                         href="{{ route('courses.show', $application->target_id) }}">Show
                                                         Course</a>
+                                                @elseif ($application->type == 'add_post')
+                                                    Add Post <a class="text-xs text-emerald-700 hover:text-emerald-900"
+                                                        href="{{ route('blogs.show', $application->target_id) }}">Show
+                                                        Blog</a>
                                                 @endif
                                             </td>
                                             <td class="px-5 py-4 text-slate-500">
@@ -422,7 +428,7 @@
                                             <td class="px-5 py-4">
                                                 @if ($application->state == 'pending')
                                                     <div class="flex justify-end gap-2"><a
-                                                            href="{{ route('courses.show', $application->target_id) }}"
+                                                            href="{{ route('blogs.show', $application->target_id) }}"
                                                             class="rounded-md border border-slate-300 px-3 py-1.5 text-xs font-semibold text-splate-700 hover:bg-slate-50">Details</a>
 
                                                         <form method="POST"
