@@ -85,7 +85,7 @@
         <div class="container">
             <div class="col-lg-10 offset-lg-1 text-center">
                 <div class="section-top-title wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.3s" data-wow-offset="0">
-                    <h1 class="mb-4">Category Courses " {{ $tag->name }} "</h1>
+                    <h1 class="mb-4">Result of Category  " {{ $tag->name }} "</h1>
                     <ul>
                         <li><a href="{{ route('home') }}">Home</a></li>
                         <li> / Category</li>
@@ -160,7 +160,7 @@
                         </div><!-- END COL -->
                     @endforeach
                 @else
-                    <div style="font-size:30px" class="col-12 font-semibold text-center p-12">No Related Courses Found
+                    <div style="font-size:30px;text-align: center">No Related Courses Found
                         in
                         This Category!</div>
                 @endif

@@ -1,5 +1,5 @@
 @if (isset($label))
-    <label class="{{ $labelclass ?? '' }}" for="{{ $id ?? '' }}">{{ __("site.$label") ?? '' }}
+    <label class="{{ $labelclass ?? '' }}" for="{{ $id ?? '' }}">{{$label ?? '' }}
         <br>
         <small style=" {{ $spicialmsgstyle ?? '' }} " class="{{ $spicialmsgclass ?? '' }}">{{ $spicialmsg ?? '' }}</small>
     </label>

@@ -14,6 +14,118 @@
 
         }
 
+        .course-detail-hero {
+            position: relative;
+            overflow: hidden;
+            padding: 150px 0 88px;
+            background:
+                radial-gradient(circle at 82% 18%, rgba(255, 255, 255, .13), transparent 25%),
+                linear-gradient(110deg, rgba(20, 33, 81, .94), rgba(82, 95, 225, .82)),
+                url('{{ asset('assets/img/bg/section-top.jpg') }}') center / cover;
+        }
+
+        .course-detail-hero__eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            margin-bottom: 15px;
+            color: #d7dcff;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: .13em;
+            text-transform: uppercase;
+        }
+
+        .course-detail-hero__eyebrow i {
+            font-size: 16px;
+        }
+
+        .course-detail-hero__title {
+            max-width: 820px;
+            margin: 0 0 16px;
+            color: #fff;
+            font-size: clamp(40px, 5vw, 60px);
+            font-weight: 700;
+            line-height: 1.1;
+            overflow-wrap: anywhere;
+        }
+
+        .course-detail-hero__description {
+            max-width: 650px;
+            margin: 0;
+            color: rgba(255, 255, 255, .84);
+            font-size: 17px;
+            line-height: 1.7;
+        }
+
+        .course-detail-hero__actions {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin-top: 28px;
+        }
+
+        .course-detail-hero__button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 22px;
+            border: 1px solid #fff;
+            border-radius: 6px;
+            background: #fff;
+            color: #1a2d62;
+            font-weight: 700;
+            text-decoration: none;
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+
+        .course-detail-hero__button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, .18);
+            color: #1a2d62;
+        }
+
+        .course-detail-hero__duration {
+            color: rgba(255, 255, 255, .9);
+            font-size: 14px;
+        }
+
+        .course-detail-hero__duration strong {
+            color: #fff;
+            font-size: 18px;
+        }
+
+        .course-detail-hero__breadcrumb {
+            margin-top: 28px;
+            color: rgba(255, 255, 255, .72);
+            font-size: 14px;
+        }
+
+        .course-detail-hero__breadcrumb a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .course-detail-hero__breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 575.98px) {
+            .course-detail-hero {
+                padding: 125px 0 64px;
+            }
+
+            .course-detail-hero__description {
+                font-size: 15px;
+            }
+
+            .course-detail-hero__actions {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 12px;
+            }
+        }
+
         .course-detail-image-frame {
             aspect-ratio: 16 / 9;
             overflow: hidden;
@@ -249,25 +361,37 @@
 
 @endsection
 @section('content')
-
-    <!-- START SECTION TOP -->
-    <section class="section-top">
+    <section class="course-detail-hero">
         <div class="container">
-            <div class="col-lg-10 offset-lg-1 text-center">
-                <div class="section-top-title wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.3s" data-wow-offset="0">
-                    <h1>Course details</h1>
-                    <ul>
-                        <li><a href="index.html">Home</a></li>
-                        <li> / Course details</li>
-                    </ul>
-                </div><!-- //.HERO-TEXT -->
-            </div><!--- END COL -->
+            <div class="course-detail-hero__eyebrow">
+                <i class="ti-book" aria-hidden="true"></i>
+                Course details
+            </div>
+            <h1 class="course-detail-hero__title">{{ $course->title }}</h1>
+            <p class="course-detail-hero__description">
+                {{ $course->description ?? 'Explore the course content, meet your instructor, and read learner reviews.' }}
+            </p>
+            <div class="course-detail-hero__actions">
+                <a class="course-detail-hero__button" href="#course-content">
+                    View course details <i class="ti-arrow-down" aria-hidden="true"></i>
+                </a>
+                <span class="course-detail-hero__duration">
+                    <strong>{{ $course->duration ?? 'Self-paced' }}</strong>
+                    course duration
+                </span>
+            </div>
+            <nav class="course-detail-hero__breadcrumb" aria-label="Breadcrumb">
+                <a href="{{ route('home') }}">Home</a>
+                <span aria-hidden="true"> / </span>
+                <a href="{{ route('courses.index') }}">Courses</a>
+                <span aria-hidden="true"> / </span>
+                <span aria-current="page">{{ $course->title }}</span>
+            </nav>
         </div><!--- END CONTAINER -->
     </section>
-    <!-- END SECTION TOP -->
 
     <!-- START COURSE -->
-    <section class="our_event section-padding">
+    <section class="our_event section-padding" id="course-content">
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-sm-8 col-xs-12">
