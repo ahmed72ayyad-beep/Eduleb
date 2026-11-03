@@ -7,7 +7,11 @@ use App\Models\Course;
 use App\Models\Instructor;
 use App\Models\Live_lectures;
 use App\Models\Recordedlectures;
+use App\Models\Review;
 use App\Models\Tag;
+use App\Models\User;
+use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -18,9 +22,40 @@ class instructorDashboardController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
-        //
+        $instructor = Instructor::query()
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
+        $courses = $instructor->courses()
+            ->orderByDesc('courses.created_at')
+            ->limit(3)
+            ->get();
+
+        $reviewQuery = Review::query()
+            ->whereHas('course', fn (Builder $query) => $query->where('instructor_id', $instructor->id));
+        $reviewStats = (clone $reviewQuery)
+            ->selectRaw('COUNT(*) as total, AVG(star_num) as average')
+            ->first();
+
+        $studentNum = User::query()
+            ->whereHas('courses', fn (Builder $query) => $query->where('instructor_id', $instructor->id))
+            ->count();
+        $reviews = $reviewQuery
+            ->with('user')
+            ->latest()
+            ->limit(5)
+            ->get();
+
+        return view('instructor.dashboard', [
+            'courses' => $courses,
+            'courses_num' => $instructor->courses()->count(),
+            'student_num' => $studentNum,
+            'review_num' => (int) $reviewStats->total,
+            'instructor_rate' => round((float) ($reviewStats->average ?? 0), 2),
+            'reviews' => $reviews,
+        ]);
     }
 
     /**
@@ -82,11 +117,15 @@ class instructorDashboardController extends Controller
 
     public function reviews()
     {
-        $courses = Instructor::where('user_id', Auth::id())->first()->courses;
+        $courses = Instructor::where('user_id', Auth::id())
+            ->first()
+            ->courses;
 
-        //    dd($courses);
+        $reviews = $courses->flatMap(function ($course) {
+            return $course->reviews;
+        });
 
-        return view('instructor.pages.reviews');
+        return view('instructor.pages.reviews', compact('reviews'));
     }
 
     public function courses()

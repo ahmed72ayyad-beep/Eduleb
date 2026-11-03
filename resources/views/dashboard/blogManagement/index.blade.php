@@ -79,44 +79,60 @@
 
             <!-- Search Bar with Suggestions Counter Container -->
             <div
-                class="flex flex-col items-center justify-between gap-4 rounded-lg border border-slate-200 bg-white p-5 shadow-sm md:flex-row sm:p-6">
-                <div class="w-full md:w-1/2 relative" id="search_counter">
+                class="flex flex-col items-end justify-between gap-4 rounded-lg border border-slate-200 bg-white p-5 shadow-sm md:flex-row sm:p-6">
+                <div class="relative w-full md:flex-1" id="search_counter">
                     <label for="search"
                         class="block text-sm font-medium text-gray-700 mb-1">{{ __('Search Posts') }}</label>
                     <input
                         class="mt-1 block w-full rounded-md border-slate-300 px-5 py-2.5 text-sm shadow-sm focus:border-emerald-600 focus:ring-emerald-600"
                         id="search" type="text" name="search" placeholder="Search by post title or author..." />
                 </div>
+                <div class="w-full md:w-56">
+                    <label for="blog-status-filter"
+                        class="mb-1 block text-sm font-medium text-gray-700">{{ __('Filter by status') }}</label>
+                    <select id="blog-status-filter"
+                        class="block w-full rounded-md border-slate-300 px-4 py-2.5 text-sm text-slate-700 shadow-sm focus:border-emerald-600 focus:ring-emerald-600">
+                        <option value="all">{{ __('All statuses') }}</option>
+                        <option value="published">{{ __('Published') }}</option>
+                        <option value="pending">{{ __('Pending') }}</option>
+                        <option value="drafted">{{ __('Drafted') }}</option>
+                        <option value="unknown">{{ __('Unknown') }}</option>
+                    </select>
+                </div>
             </div>
 
             <!-- Posts Table Card -->
-            <div class="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
-                <div class="p-6 text-gray-900 overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead>
+            <div class="space-y-5 rounded-lg border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900">{{ __('All Posts') }}</h2>
+                        <p class="text-xs text-slate-500">
+                            {{ __('Total Posts') }}:
+                            <span class="font-semibold text-emerald-800">{{ $blogs->count() }}</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full min-w-[48rem] text-left text-sm text-slate-600">
+                        <thead class="bg-emerald-50 text-xs uppercase text-emerald-900">
                             <tr>
-                                <th
-                                    class="rounded-l-md bg-emerald-50 px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-emerald-900">
-                                    {{ __('Post Details') }}</th>
-                                <th
-                                    class="bg-emerald-50 px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-emerald-900">
-                                    {{ __('Subject') }}</th>
-                                <th
-                                    class="px-6 py-4 bg-gray-50 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                                    {{ __('Author') }}</th>
-                                <th
-                                    class="px-6 py-4 bg-gray-50 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                                    {{ __('Date') }}</th>
-                                <th
-                                    class="rounded-r-md bg-emerald-50 px-6 py-4 text-right text-xs font-semibold uppercase tracking-wider text-emerald-900">
-                                    {{ __('Actions') }}</th>
+                                <th scope="col" class="w-64 rounded-l-md px-4 py-3.5">{{ __('Post Details') }}</th>
+                                <th scope="col" class="px-4 py-3.5">{{ __('Subject') }}</th>
+                                <th scope="col" class="px-4 py-3.5">{{ __('Author') }}</th>
+                                <th scope="col" class="px-4 py-3.5">{{ __('Status') }}</th>
+                                <th scope="col" class="px-4 py-3.5">{{ __('Date') }}</th>
+                                <th scope="col" class="rounded-r-md px-4 py-3.5 text-right">{{ __('Actions') }}</th>
                             </tr>
                         </thead>
-                        <tbody id="blogs-table-body" class="divide-y divide-slate-100 bg-white text-sm">
+                        <tbody id="blogs-table-body" class="divide-y divide-slate-100">
                             @forelse($blogs as $blog)
-                                <tr id="blog_row_{{ $blog->id }}" class="transition-colors hover:bg-emerald-50/40">
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center space-x-3">
+                                @php($status = $blog->status ?? 'unknown')
+                                <tr id="blog_row_{{ $blog->id }}" data-blog-row
+                                    data-status="{{ strtolower($status) }}"
+                                    class="transition-colors hover:bg-emerald-50/40">
+                                    <td class="whitespace-nowrap px-4 py-4">
+                                        <div class="flex items-center gap-3">
                                             @if ($blog->image)
                                                 <img src="{{ asset($blog->image) }}" alt="Post Image"
                                                     class="h-10 w-10 flex-shrink-0 rounded-md object-cover">
@@ -126,23 +142,36 @@
                                                     📄</div>
                                             @endif
                                             <div>
-                                                <div class="font-bold text-gray-900">{{ $blog->title }}</div>
-                                                <div class="text-xs text-gray-500 truncate max-w-xs">
+                                                <div class="font-semibold text-slate-900">{{ $blog->title }}</div>
+                                                <div class="max-w-xs truncate text-xs text-slate-500">
                                                     {{ $blog->sub_title }}</div>
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
+                                    <td class="whitespace-nowrap px-4 py-4">
                                         <span
-                                            class="rounded-sm bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-800">{{ $blog->subject }}</span>
+                                            class="inline-flex rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-800">{{ $blog->subject }}</span>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-gray-600">
+                                    <td class="whitespace-nowrap px-4 py-4 text-slate-600">
                                         {{ $blog->author->name ?? 'Admin' }}
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-gray-500 text-xs">
+                                    <td class="whitespace-nowrap px-4 py-4">
+                                        <span
+                                            class="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold
+                                            {{ $status === 'published'
+                                                ? 'bg-emerald-50 text-emerald-700'
+                                                : ($status === 'pending'
+                                                    ? 'bg-amber-50 text-amber-700'
+                                                    : ($status === 'drafted'
+                                                        ? 'bg-slate-100 text-slate-700'
+                                                        : 'bg-gray-100 text-gray-600')) }}">
+                                            {{ __(ucfirst($status)) }}
+                                        </span>
+                                    </td>
+                                    <td class="whitespace-nowrap px-4 py-4 text-xs text-slate-500">
                                         {{ $blog->created_at->format('Y-m-d') }}
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
+                                    <td class="whitespace-nowrap px-4 py-4 text-right text-sm font-medium">
                                         <button x-data=""
                                             x-on:click.prevent="$dispatch('open-modal', 'edit-post-modal{{ $blog->id }}')"
                                             class="rounded-md bg-emerald-50 px-3 py-1.5 text-emerald-800 transition hover:bg-emerald-100">{{ __('Edit') }}</button>
@@ -249,11 +278,16 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" class="px-6 py-4 text-center text-gray-500">
+                                    <td colspan="6" class="px-4 py-8 text-center text-slate-500">
                                         {{ __('No blog posts found.') }}
                                     </td>
                                 </tr>
                             @endforelse
+                            <tr id="blog-status-empty" class="hidden">
+                                <td colspan="6" class="px-4 py-8 text-center text-slate-500">
+                                    {{ __('No posts match this status.') }}
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -338,6 +372,27 @@
 </x-app-layout>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        const statusFilter = document.querySelector("#blog-status-filter");
+        const blogRows = document.querySelectorAll("[data-blog-row]");
+        const statusEmptyRow = document.querySelector("#blog-status-empty");
+
+        function applyBlogStatusFilter() {
+            const selectedStatus = statusFilter.value;
+            let hasVisibleBlogs = false;
+
+            blogRows.forEach(row => {
+                const matchesStatus = selectedStatus === "all" || row.dataset.status === selectedStatus;
+                row.classList.toggle("hidden", !matchesStatus);
+                hasVisibleBlogs = hasVisibleBlogs || matchesStatus;
+            });
+
+            statusEmptyRow.classList.toggle("hidden", hasVisibleBlogs || blogRows.length === 0);
+        }
+
+        if (statusFilter) {
+            statusFilter.addEventListener("change", applyBlogStatusFilter);
+        }
+
         let myInput = document.querySelector("#search");
         let search_counter = document.querySelector("#search_counter");
 
@@ -419,6 +474,11 @@
                 e.preventDefault();
                 myInput.value = titleText;
                 ul.innerHTML = "";
+
+                if (statusFilter && statusFilter.value !== "all") {
+                    statusFilter.value = "all";
+                    applyBlogStatusFilter();
+                }
 
                 document.querySelectorAll("tr[id^='blog_row_']").forEach(row => {
                     row.classList.remove("bg-emerald-50", "transition-colors", "duration-500");

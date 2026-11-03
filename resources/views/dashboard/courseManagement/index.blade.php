@@ -54,12 +54,12 @@
                 </div>
 
                 <!-- Filters -->
-                <div class="flex flex-wrap items-center gap-3 w-full md:w-auto justify-start md:justify-end">
+                <div class="flex w-full flex-wrap items-center justify-start gap-3 md:w-auto md:justify-end">
 
-                    <form action="" onsubmit="return false;">
+                    <form class="flex flex-wrap items-center gap-2" action="" onsubmit="return false;">
                         <select id="course-tag-filter" onchange="filterManagedCourses()"
                             class="rounded-md border-slate-300 px-4 py-2.5 text-xs font-semibold text-slate-700 focus:border-emerald-600 focus:ring-emerald-600">
-                            <option selected value="all">All Tags</option>
+                            <option selected value="all">{{ __('All Tags') }}</option>
                             @forelse ($tags as $tag)
                                 <option value="{{ $tag->id }}">{{ $tag->name }}</option>
                             @empty
@@ -70,21 +70,31 @@
 
                         <select id="course-type-filter" onchange="filterManagedCourses()"
                             class="rounded-md border-slate-300 px-4 py-2.5 text-xs font-semibold text-slate-700 focus:border-emerald-600 focus:ring-emerald-600">
-                            <option selected value="all">Course Type</option>
-                            <option value="online">Online</option>
-                            <option value="recorded">Recorded</option>
+                            <option selected value="all">{{ __('All Types') }}</option>
+                            <option value="online">{{ __('Online') }}</option>
+                            <option value="recorded">{{ __('Recorded') }}</option>
+                        </select>
+
+                        <select id="course-status-filter" onchange="filterManagedCourses()"
+                            aria-label="{{ __('Filter courses by status') }}"
+                            class="rounded-md border-slate-300 px-4 py-2.5 text-xs font-semibold text-slate-700 focus:border-emerald-600 focus:ring-emerald-600">
+                            <option selected value="all">{{ __('All statuses') }}</option>
+                            <option value="published">{{ __('Published') }}</option>
+                            <option value="pending">{{ __('Pending') }}</option>
+                            <option value="drafted">{{ __('Drafted') }}</option>
+                            <option value="unknown">{{ __('Unknown') }}</option>
                         </select>
 
                         <button type="button" onclick="resetManagedCourseFilters()"
                             class="rounded-md bg-slate-100 px-4 py-2.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-500">
-                            Reset Filters
+                            {{ __('Reset Filters') }}
                         </button>
                     </form>
                 </div>
             </div>
 
             <!-- Courses Table Card -->
-            <div class="space-y-6 rounded-lg border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+            <div class="space-y-5 rounded-lg border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
                 <div class="flex items-center justify-between border-b border-slate-100 pb-4">
                     <div>
                         <h2 class="text-2xl font-bold text-slate-900">All Courses</h2>
@@ -99,7 +109,7 @@
                 </div>
 
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left text-sm text-slate-600">
+                    <table class="w-full min-w-[64rem] text-left text-sm text-slate-600">
                         <thead class="bg-emerald-50 text-xs uppercase text-emerald-900">
                             <tr>
                                 <th scope="col"
@@ -114,51 +124,61 @@
                                 <th scope="col" class="rounded-r-md px-4 py-3.5 text-right">Actions</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-slate-100">
+                        <tbody id="courses-table-body" class="divide-y divide-slate-100">
                             @forelse ($courses as $course)
-                                <!-- Course Item 1 -->
+                                @php($status = $course->status ?? 'unknown')
                                 <tr id="course{{ $course->id }}" data-course-row data-type="{{ $course->type }}"
+                                    data-status="{{ strtolower($status) }}"
                                     data-tags="{{ $course->tags->pluck('id')->implode(',') }}"
                                     class="transition-colors hover:bg-emerald-50/40">
-                                    <td class="py-4 px-4 font-semibold text-gray-800 flex items-center gap-3">
-                                        {{-- <div
-                                        class="w-11 h-11 rounded-2xl bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-lg shrink-0">
-
-                                    </div> --}}
-                                        <div>
-                                            <div class="font-bold text-gray-900">{{ $course->title }}</div>
-                                            <div class="text-xs text-gray-400 font-normal">Duration:
-                                                {{ $course->duration }} • {{ $course->total_lectures }} Lectures</div>
+                                    <td class="whitespace-nowrap px-4 py-4">
+                                        <div class="flex items-center gap-3">
+                                            <div>
+                                                <div class="font-semibold text-slate-900">{{ $course->title }}</div>
+                                                <div class="text-xs text-slate-500">Duration:
+                                                    {{ $course->duration }} • {{ $course->total_lectures }} Lectures
+                                                </div>
+                                            </div>
                                         </div>
                                     </td>
-                                    <td class="py-4 px-4">
+                                    <td class="whitespace-nowrap px-4 py-4">
                                         <div class="flex items-center gap-2">
 
                                             <img src="{{ asset($course->instructor->personal_image) }}"
                                                 class="w-8 h-8 rounded-full bg-purple-100 text-purple-700 font-bold flex items-center justify-center text-xs transition-all hover:scale-150"
                                                 alt="">
                                             <span
-                                                class="text-xs font-semibold text-gray-700">{{ $course->instructor->name }}</span>
+                                                class="text-xs font-semibold text-slate-700">{{ $course->instructor->name }}</span>
                                         </div>
                                     </td>
-                                    <td class="py-4 px-4 font-bold text-emerald-800">{{ $course->price }} $</td>
-                                    <td class="py-4 px-4">
+                                    <td class="whitespace-nowrap px-4 py-4 font-bold text-emerald-800">{{ $course->price }} $</td>
+                                    <td class="whitespace-nowrap px-4 py-4">
                                         <span
                                             class="inline-flex items-center gap-1 text-xs font-bold text-amber-500 bg-amber-50 px-2.5 py-1 rounded-lg">
                                             ⭐ {{ $course->star_num }}
                                         </span>
                                     </td>
-                                    <td class="py-4 px-4 text-xs font-semibold text-gray-600">
+                                    <td class="whitespace-nowrap px-4 py-4 text-xs font-semibold text-slate-600">
                                         {{ $course->available_seats }} Seats</td>
-                                    <td class="py-4 px-4">
+                                    <td class="whitespace-nowrap px-4 py-4">
                                         <span
-                                            class="bg-emerald-50 text-emerald-600 text-xs font-bold px-2 py-0.5 rounded-md border border-emerald-100">{{ $course->certification }}</span>
+                                            class="inline-flex rounded-full border border-emerald-100 bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700">{{ $course->certification }}</span>
                                     </td>
-                                    <td class="py-4 px-4">
+                                    <td class="whitespace-nowrap px-4 py-4">
                                         <span
-                                            class=" text-xs font-bold px-2 py-0.5 rounded-md ">{{ $course->status }}</span>
+                                            class="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold
+                                            {{ $status === 'published'
+                                                ? 'bg-emerald-50 text-emerald-700'
+                                                : ($status === 'pending'
+                                                    ? 'bg-amber-50 text-amber-700'
+                                                    : ($status === 'drafted'
+                                                        ? 'bg-slate-100 text-slate-700'
+                                                        : 'bg-gray-100 text-gray-600')) }}">
+                                            {{ __(ucfirst($status)) }}
+                                        </span>
                                     </td>
-                                    <td class="py-4 px-4 text-right space-x-4 flex justify-end">
+                                    <td class="whitespace-nowrap px-4 py-4 text-right">
+                                        <div class="flex justify-end gap-3">
                                         @can('courses.update')
                                             <form method="GET"
                                                 action="{{ route('dashboard.courses.edit', $course->id) }}">
@@ -201,16 +221,22 @@
                                                 </button>
                                             </form>
                                         @endcan
+                                        </div>
                                     </td>
                                 </tr>
                             @empty
 
                                 <tr>
-                                    <td colspan="100" class="text-center pt-10 pb-10 text-3xl">
-                                        No Courses Yet
+                                    <td colspan="8" class="px-4 py-10 text-center text-slate-500">
+                                        {{ __('No courses yet.') }}
                                     </td>
                                 </tr>
                             @endforelse
+                            <tr id="course-filter-empty" hidden>
+                                <td colspan="8" class="px-4 py-10 text-center text-slate-500">
+                                    {{ __('No courses match these filters.') }}
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -420,6 +446,7 @@
             e.preventDefault();
             myInput.value = titleText;
             ul.innerHTML = "";
+            resetManagedCourseFilters();
 
             // إزالة اللون الأحمر من أي صف سابق تم تمييزه
             document.querySelectorAll("tr[id^='course']").forEach(row => {
@@ -451,19 +478,29 @@
     function filterManagedCourses() {
         const selectedTag = document.getElementById("course-tag-filter").value;
         const selectedType = document.getElementById("course-type-filter").value;
+        const selectedStatus = document.getElementById("course-status-filter").value;
+        const courseRows = document.querySelectorAll("[data-course-row]");
+        const emptyRow = document.getElementById("course-filter-empty");
+        let hasVisibleCourses = false;
 
-        document.querySelectorAll("[data-course-row]").forEach((courseRow) => {
+        courseRows.forEach((courseRow) => {
             const tagIds = (courseRow.dataset.tags || "").split(",");
             const matchesTag = selectedTag === "all" || tagIds.includes(selectedTag);
             const matchesType = selectedType === "all" || courseRow.dataset.type === selectedType;
+            const matchesStatus = selectedStatus === "all" || courseRow.dataset.status === selectedStatus;
+            const isVisible = matchesTag && matchesType && matchesStatus;
 
-            courseRow.hidden = !(matchesTag && matchesType);
+            courseRow.hidden = !isVisible;
+            hasVisibleCourses = hasVisibleCourses || isVisible;
         });
+
+        emptyRow.hidden = hasVisibleCourses || courseRows.length === 0;
     }
 
     function resetManagedCourseFilters() {
         document.getElementById("course-tag-filter").value = "all";
         document.getElementById("course-type-filter").value = "all";
+        document.getElementById("course-status-filter").value = "all";
         filterManagedCourses();
     }
 </script>

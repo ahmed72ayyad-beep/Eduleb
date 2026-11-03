@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\BlogsController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CourseController;
@@ -19,6 +20,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\TagController;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/auth/google', [GoogleController::class, 'redirectToGoogle'])->name('auth.google');
+Route::get('/auth/google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('auth.google.callback');
 
 Route::get('/', function () {
     return view('welcome');
